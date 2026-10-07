@@ -1,0 +1,330 @@
+{% capture announcements %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% assign announcements = announcements | replace: 'aria-hidden="true"', 'aria-hidden="false"' %}
+
+<div
+  class="fom-marquee"
+  style="--fom-duration: {{ section.settings.duration }}s;"
+>
+  <input
+    class="fom-marquee__toggle"
+    type="checkbox"
+    id="fom-pause-{{ section.id }}"
+    aria-label="{{ section.settings.pause_label | escape }}"
+  >
+
+  <label
+    class="fom-marquee__control"
+    for="fom-pause-{{ section.id }}"
+  >
+    <svg
+      class="fom-marquee__pause"
+      viewBox="0 0 20 20"
+      aria-hidden="true"
+    >
+      <path
+        d="M6 4v12M14 4v12"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+      />
+    </svg>
+
+    <svg
+      class="fom-marquee__play"
+      viewBox="0 0 20 20"
+      aria-hidden="true"
+    >
+      <path d="M6 3l11 7-11 7z" fill="currentColor"/>
+    </svg>
+  </label>
+
+  <div class="fom-marquee__viewport">
+    <div class="fom-marquee__track">
+      <div class="fom-marquee__group">
+        {{ announcements }}
+      </div>
+
+      <div
+        class="fom-marquee__group fom-marquee__copy"
+        aria-hidden="true"
+        inert
+      >
+        {{ announcements }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .fom-marquee {
+    position: relative;
+    background: #18572e;
+    color: #fff;
+    padding: 8px 40px 8px 0;
+  }
+
+  .fom-marquee__viewport {
+    overflow: hidden;
+  }
+
+  .fom-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: fom-announcement-scroll
+      var(--fom-duration, 30s) linear infinite;
+  }
+
+  .fom-marquee__group {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-shrink: 0;
+    gap: 40px;
+    min-width: calc(100vw - 40px);
+    padding-inline: 20px;
+    box-sizing: border-box;
+  }
+
+  .fom-marquee__group > .announcement-bar__slide {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+    opacity: 1;
+    visibility: visible;
+    transition: none;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .fom-marquee .announcement-bar__text {
+    margin: 0;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .fom-marquee .announcement-bar__link {
+    position: absolute;
+    inset: 0;
+  }
+
+  .fom-marquee__toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    opacity: 0;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  .fom-marquee__control {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+  }
+
+  .fom-marquee__control svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .fom-marquee__play {
+    display: none;
+  }
+
+  .fom-marquee__toggle:checked
+    + .fom-marquee__control
+    .fom-marquee__pause {
+    display: none;
+  }
+
+  .fom-marquee__toggle:checked
+    + .fom-marquee__control
+    .fom-marquee__play {
+    display: block;
+  }
+
+  .fom-marquee__toggle:focus-visible
+    + .fom-marquee__control {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  .fom-marquee:hover .fom-marquee__track,
+  .fom-marquee:focus-within .fom-marquee__track,
+  .fom-marquee__toggle:checked
+    ~ .fom-marquee__viewport
+    .fom-marquee__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes fom-announcement-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fom-marquee {
+      padding: 8px 16px;
+    }
+
+    .fom-marquee__toggle,
+    .fom-marquee__control,
+    .fom-marquee__copy {
+      display: none;
+    }
+
+    .fom-marquee__track {
+      animation: none;
+      width: 100%;
+    }
+
+    .fom-marquee__group {
+      min-width: 0;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      padding: 0;
+    }
+
+    .fom-marquee .announcement-bar__text {
+      white-space: normal;
+    }
+  }
+    .fom-marquee {
+    padding: 8px 0;
+  }
+
+  .fom-marquee__toggle,
+  .fom-marquee__control {
+    display: none;
+  }
+
+  .fom-marquee__group {
+    gap: 0;
+    padding-inline: 0;
+    min-width: 100vw;
+  }
+
+  .fom-marquee__group > .announcement-bar__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+    padding-inline: 24px;
+  }
+
+  .fom-marquee .announcement-bar__slide,
+  .fom-marquee .announcement-bar__text {
+    font-size: 11px !important;
+  }
+
+  @media (max-width: 749px) {
+    .fom-marquee__group > .announcement-bar__slide {
+      padding-inline: 18px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fom-marquee__group {
+      min-width: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.announcement_bar",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "_announcement"
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "t:settings.scroll_speed",
+      "min": 15,
+      "max": 60,
+      "step": 1,
+      "unit": "sec",
+      "default": 30
+    },
+    {
+      "type": "text",
+      "id": "pause_label",
+      "label": "t:settings.text",
+      "default": "Pause announcements"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.announcement_bar",
+      "blocks": {
+        "announcement_1": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Freshly Packed On Order"
+          }
+        },
+        "announcement_2": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Premium Quality Ingredients"
+          }
+        },
+        "announcement_3": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Sourced From Local Farms"
+          }
+        },
+        "announcement_4": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Washed & Cleaned"
+          }
+        },
+        "announcement_5": {
+          "type": "_announcement",
+          "settings": {
+            "text": "No Preservatives Or Adulterants"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_1",
+        "announcement_2",
+        "announcement_3",
+        "announcement_4",
+        "announcement_5"
+      ]
+    }
+  ]
+}
+{% endschema %}

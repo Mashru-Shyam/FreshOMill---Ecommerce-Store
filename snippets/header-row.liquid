@@ -1,0 +1,110 @@
+{% doc %}
+  Renders the Fresh O Mill desktop header and a compact mobile header.
+  @param {string} row - Header row.
+  @param {string} order - Original item order.
+  @param {object} settings - Header section settings.
+  @param {object} section - Header section.
+  @param {string} [first] - Native mobile menu.
+  @param {string} [logo] - Existing logo block.
+  @param {string} [menu] - Native menu.
+  @param {string} [actions] - Native account and cart controls.
+  @param {string} [localization] - Native localization.
+  @param {string} [search] - Native mobile search.
+  @param {string} [drawer_search] - Native drawer search.
+{% enddoc %}
+
+{% if row == 'top' %}
+  {% liquid
+    assign contact_url = settings.fom_contact_link | default: '/pages/contact'
+    assign store_url = settings.fom_store_link | default: routes.all_products_collection_url
+  %}
+  <div class="header__column header__column--left fom-header-layout" data-testid="header-top-left">
+    <div class="fom-header-mobile-menu">{{ first }}</div>
+    <div class="fom-header-brand">{{ logo }}</div>
+    <form class="fom-header-search" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="fom-header-search-{{ section.id }}">{{ 'fom_header.search_placeholder' | t }}</label>
+      <svg class="fom-header-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+      <input id="fom-header-search-{{ section.id }}" type="search" name="q" placeholder="{{ 'fom_header.search_placeholder' | t }}">
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" aria-label="{{ 'fom_header.search_button' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
+    </form>
+    <nav class="fom-header-nav" aria-label="{{ 'fom_header.navigation' | t }}">
+      <a href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>{{ 'fom_header.home' | t }}</a>
+      <a href="{{ routes.all_products_collection_url }}" {% if request.page_type == 'collection' or request.page_type == 'product' %}aria-current="{% if request.path == routes.all_products_collection_url %}page{% else %}location{% endif %}"{% endif %}>{{ 'fom_header.all_products' | t }}</a>
+      <a href="{{ contact_url }}" {% if request.path == contact_url %}aria-current="page"{% endif %}>{{ 'fom_header.contact' | t }}</a>
+    </nav>
+    <div class="fom-header-mobile-search">{{ search }}{{ drawer_search }}</div>
+    <div class="fom-header-actions">{{ actions }}</div>
+    <a class="fom-header-store" href="{{ store_url }}">{{ 'fom_header.visit_store' | t }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
+  </div>
+{% else %}
+  {% liquid
+    assign order = order | split: ','
+    assign columns = 'left,center,right' | split: ','
+  %}
+  {% for column in columns %}
+    {% capture items %}
+      {% for item in order %}
+        {% liquid
+          assign column_key = item | append: '_position'
+          assign row_key = item | append: '_row'
+          assign item_row = settings[row_key] | default: 'top'
+          assign item_column = settings[column_key] | default: 'left'
+          if item == 'actions'
+            assign item_column = 'right'
+          endif
+        %}
+        {% if item_row == row and item_column == column %}
+          {% case item %}
+            {% when 'logo' %}{{ logo }}
+            {% when 'menu' %}{{ menu }}
+            {% when 'localization' %}{{ localization }}
+            {% when 'search' %}{{ search }}
+            {% when 'drawer_search' %}{{ drawer_search }}
+            {% when 'actions' %}{{ actions }}
+          {% endcase %}
+        {% endif %}
+      {% endfor %}
+    {% endcapture %}
+    {% assign items = items | strip %}
+    {% if items != blank %}<div class="header__column header__column--{{ column }}">{{ items }}</div>{% endif %}
+  {% endfor %}
+{% endif %}
+
+{% stylesheet %}
+  #header-component .header__columns:has(.fom-header-layout) { display: block !important; }
+  #header-component .fom-header-layout { display: flex !important; align-items: center; gap: 12px; width: 100%; }
+  .fom-header-brand { flex: 1; min-width: 0; }
+  .fom-header-brand .header-logo { display: flex; justify-content: flex-start; }
+  .fom-header-search, .fom-header-nav, .fom-header-store { display: none; }
+  .fom-header-mobile-menu, .fom-header-mobile-search, .fom-header-actions { display: flex; align-items: center; }
+  @media (min-width: 990px) {
+    #header-component .header__columns:has(.fom-header-layout) { grid-column: 2 !important; padding-inline: 0 !important; }
+    #header-component .fom-header-layout { display: grid !important; grid-template-columns: 100px minmax(160px, 1fr) auto auto auto; gap: 24px; min-height: 88px; color: #17251b; }
+    #header-component .header__row--top:has(.fom-header-layout) { background: #fff; }
+    .fom-header-mobile-menu, .fom-header-mobile-search { display: none; }
+    .fom-header-search { display: flex; align-items: center; min-width: 0; height: 46px; border: 1px solid #dfe4dd; border-radius: 8px; background: #fafbf9; overflow: hidden; }
+    .fom-header-search svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
+    .fom-header-search-icon { margin-inline: 14px 10px; }
+    .fom-header-search input[type='search'] { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; padding: 0; color: #17251b; font: inherit; font-size: 14px; box-shadow: none; }
+    .fom-header-search:focus-within { outline: 2px solid #216b3a; outline-offset: 2px; }
+    .fom-header-search button { display: grid; place-items: center; align-self: stretch; flex: 0 0 52px; border: 0; background: #216b3a; color: #fff; cursor: pointer; }
+    .fom-header-nav { display: flex; align-items: center; gap: 26px; height: 46px; }
+    .fom-header-nav a { position: relative; padding-block: 12px; color: #17251b; text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap; }
+    .fom-header-nav a[aria-current] { color: #216b3a; font-weight: 700; }
+    .fom-header-nav a[aria-current]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 3px; height: 2px; background: #216b3a; }
+    .fom-header-store { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; padding-inline: 18px; border: 1px solid #216b3a; border-radius: 8px; background: #18572e; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .fom-header-store svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+    .fom-header-nav a:hover { color: #216b3a; }
+    .fom-header-store:hover, .fom-header-search button:hover { background: #12351f; }
+    .fom-header-nav a:focus-visible, .fom-header-store:focus-visible, .fom-header-search button:focus-visible { outline: 2px solid #216b3a; outline-offset: 3px; }
+  }
+  @media (min-width: 990px) and (max-width: 1199px) {
+    #header-component .fom-header-layout { gap: 16px; grid-template-columns: 90px minmax(140px, 1fr) auto auto auto; }
+    .fom-header-nav { gap: 16px; }
+    .fom-header-nav a { font-size: 13px; }
+    .fom-header-store { padding-inline: 12px; font-size: 12px; }
+    .fom-header-search-icon { margin-inline: 10px 6px; }
+  }
+{% endstylesheet %}

@@ -1,0 +1,37 @@
+{% doc %}
+  Renders the Fresh O Mill mobile bottom navigation and enables native search and cart bottom sheets.
+  @example
+  {% render 'fom-mobile-navigation' %}
+{% enddoc %}
+
+{{ 'fom-mobile-navigation.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fom-mobile-navigation.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<fom-mobile-navigation
+  data-cart-url="{{ routes.root_url }}cart.js"
+  data-search-url="{{ routes.search_url }}"
+  data-resize-label="{{ 'fom_mobile.resize_sheet' | t }}"
+>
+  <nav class="fom-bottom-nav" aria-label="{{ 'fom_mobile.navigation' | t }}">
+    <a class="fom-bottom-nav__item" href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>
+      <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span>
+      <span>{{ 'fom_mobile.home' | t }}</span>
+    </a>
+    <a class="fom-bottom-nav__item" href="{{ routes.all_products_collection_url }}" {% if request.page_type == 'collection' or request.page_type == 'product' %}aria-current="{% if request.path == routes.all_products_collection_url %}page{% else %}location{% endif %}"{% endif %}>
+      <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+      <span>{{ 'fom_mobile.shop' | t }}</span>
+    </a>
+    <button class="fom-bottom-nav__item" type="button" data-fom-action="search" aria-haspopup="dialog" aria-controls="search-modal" aria-expanded="false" {% if request.page_type == 'search' %}aria-current="page"{% endif %}>
+      <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span>
+      <span>{{ 'fom_mobile.search' | t }}</span>
+    </button>
+    <a class="fom-bottom-nav__item" href="{{ routes.account_url }}" {% if request.page_type contains 'customers/' %}aria-current="page"{% endif %}>
+      <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2z"/></svg></span>
+      <span>{{ 'fom_mobile.account' | t }}</span>
+    </a>
+    <a class="fom-bottom-nav__item" href="{{ routes.cart_url }}" data-fom-action="cart" {% if settings.cart_type == 'drawer' and template.name != 'cart' %}aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded="false"{% endif %} {% if request.page_type == 'cart' %}aria-current="page"{% endif %}>
+      <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18l-1.5 15h-15zM8 6V5a4 4 0 0 1 8 0v1"/></svg><span class="fom-bottom-nav__badge" data-fom-cart-count aria-hidden="true">{{ cart.item_count }}</span></span>
+      <span>{{ 'fom_mobile.cart' | t }}</span>
+    </a>
+  </nav>
+</fom-mobile-navigation>
