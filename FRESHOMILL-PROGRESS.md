@@ -6,7 +6,8 @@
 - Task 16 — Build Search Experience: Implemented locally; Shopify store review pending.
 - Task 17 — Build Footer: Complete per client confirmation.
 - Task 18 — Build Homepage Hero/Slider: Complete per client confirmation; final image remains merchant-editable in Shopify.
-- Next task after approval: Task 19 — Build Shop-by-Category Section.
+- Task 19 — Build Shop-by-Category Section: Implemented locally; Shopify category images, product data, and Search & Discovery filter setup pending.
+- Next task after approval: Task 20 — Build Featured/Best-Selling Products.
 
 ## Task 16 changes
 
@@ -64,3 +65,17 @@ The client will commit and verify the implementation directly on the Shopify dev
 
 - `sections/fom-home-hero.liquid`
 - `layout/theme.liquid`
+
+## Task 19 changes
+
+- Added all 20 approved categories in the required order.
+- Added editable category labels and images.
+- Added a five-column desktop grid, three-column tablet grid, and two-column mobile grid with no horizontal scrolling.
+- Added responsive images, placeholders, accessible category links, keyboard focus states, and reduced-motion behavior.
+- Added a configurable All Products category-filter parameter for later Search & Discovery verification.
+
+## Task 19 files
+
+- `sections/fom-category-grid.liquid`
+- `layout/theme.liquid`
+- `locales/en.default.json`

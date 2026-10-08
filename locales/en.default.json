@@ -43,6 +43,10 @@
     "rights_reserved": "All rights reserved."
   },
 
+  "fom_categories": {
+    "shop_category": "Shop {{ category }}"
+  },
+
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",
