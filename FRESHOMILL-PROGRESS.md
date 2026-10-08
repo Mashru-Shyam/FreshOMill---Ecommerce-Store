@@ -7,7 +7,7 @@
 - Task 17 — Build Footer: Complete per client confirmation.
 - Task 18 — Build Homepage Hero/Slider: Complete per client confirmation; final image remains merchant-editable in Shopify.
 - Task 19 — Build Shop-by-Category Section: Implemented locally; Shopify category images, product data, and Search & Discovery filter setup pending.
-- Task 20 — Build Featured/Best-Selling Products: Implemented locally; approved Shopify collection and real product data pending.
+- Task 20 — Build Featured/Best-Selling Products: Implemented locally with visible development preview cards; approved Shopify collection and real product data pending for the later Admin phase.
 - Next task after approval: Task 21 — Build Promotional Sections.
 
 ## Task 16 changes
@@ -88,7 +88,7 @@ The client will commit and verify the implementation directly on the Shopify dev
 - Added real Shopify images, product type, title, variant or weight, price, compare-at price, and availability rendering.
 - Added native product-form handling for available single-variant products.
 - Added Choose options behavior for multi-variant products and disabled sold-out behavior.
-- Kept the storefront section hidden until a real approved collection is selected.
+- Added six clearly marked development preview cards so the complete homepage design remains visible before the later Shopify Admin data phase.
 
 ## Task 20 files
 

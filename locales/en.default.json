@@ -50,7 +50,13 @@
   "fom_products": {
     "add_to_cart": "Add to cart",
     "choose_options": "Choose options",
-    "select_collection": "Select an approved product collection to display this section."
+    "select_collection": "Select an approved product collection to display this section.",
+    "preview_label": "Development product previews",
+    "preview_badge": "Preview",
+    "category_preview": "Product category",
+    "product_preview": "Product preview {{ number }}",
+    "details_pending": "Product details pending",
+    "price_pending": "Price pending"
   },
 
   "accessibility": {
