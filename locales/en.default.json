@@ -29,6 +29,18 @@
     "sold_out": "Sold out"
   },
 
+  "fom_footer": {
+    "title": "Fresh O Mill footer",
+    "shop": "Shop",
+    "shop_links": "Footer shop links",
+    "contact_details": "Contact details",
+    "social_profiles": "Social profiles",
+    "whatsapp_label": "Contact Fresh O Mill on WhatsApp",
+    "instagram_label": "Visit Fresh O Mill on Instagram",
+    "payments": "We accept",
+    "rights_reserved": "All rights reserved."
+  },
+
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",

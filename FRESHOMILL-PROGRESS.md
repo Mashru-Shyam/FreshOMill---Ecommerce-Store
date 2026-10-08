@@ -4,7 +4,8 @@
 
 - Tasks 1–15: Complete per client confirmation and handoff.
 - Task 16 — Build Search Experience: Implemented locally; Shopify store review pending.
-- Next task after approval: Task 17 — Build Footer.
+- Task 17 — Build Footer: Implemented locally; Shopify store review pending.
+- Next task after approval: Task 18 — Build Homepage Hero/Slider.
 
 ## Task 16 changes
 
@@ -30,3 +31,19 @@
 ## Pending verification
 
 The client will commit and verify the implementation directly on the Shopify development theme. No local validation, build, test, Git, or preview commands were run for this task by request.
+
+## Task 17 changes
+
+- Added a responsive Fresh O Mill footer using the configured transparent logo.
+- Added approved address, email, WhatsApp number, and Instagram URL.
+- Limited social profiles to WhatsApp and Instagram.
+- Added Home, All Products, and My Account navigation only.
+- Excluded Recipes, About, Contact, FAQ, Shipping, Returns/Refunds, Privacy, Terms, and Cancellation links.
+- Added enabled Shopify payment icons and responsive mobile spacing above the fixed bottom navigation.
+- Made business content editable through section settings.
+
+## Task 17 files
+
+- `sections/fom-footer.liquid`
+- `layout/theme.liquid`
+- `locales/en.default.json`

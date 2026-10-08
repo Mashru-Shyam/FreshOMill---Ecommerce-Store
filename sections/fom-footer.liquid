@@ -1,0 +1,351 @@
+{% liquid
+  assign footer_logo = section.settings.logo | default: settings.logo
+  assign whatsapp_digits = section.settings.whatsapp_number | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')'
+  assign whatsapp_url = 'https://wa.me/' | append: whatsapp_digits
+%}
+
+<footer class="fom-footer" aria-labelledby="fom-footer-title-{{ section.id }}">
+  <div class="fom-footer__main page-width">
+    <div class="fom-footer__brand">
+      <h2 id="fom-footer-title-{{ section.id }}" class="visually-hidden">{{ 'fom_footer.title' | t }}</h2>
+      <a class="fom-footer__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {% if footer_logo != blank %}
+          {{ footer_logo | image_url: width: 520 | image_tag: loading: 'lazy', widths: '180, 260, 360, 520', alt: shop.name }}
+        {% else %}
+          <span class="fom-footer__wordmark">Fresh O Mill</span>
+        {% endif %}
+      </a>
+      <p class="fom-footer__description">{{ section.settings.description | escape }}</p>
+      <div class="fom-footer__social" aria-label="{{ 'fom_footer.social_profiles' | t }}">
+        {% if section.settings.whatsapp_number != blank %}
+          <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ 'fom_footer.whatsapp_label' | t }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L.2 24l6.5-1.7a11.8 11.8 0 0 0 5.4 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.2-3.5-8.4Zm-8.3 18.2h-.1c-1.7 0-3.5-.5-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.6 4.8Zm5.4-7.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-1.7-.8-2.8-1.5-3.9-3.4-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.9 5.2.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.2-.3-.3-.6-.4Z" fill="currentColor"/></svg>
+            <span>WhatsApp</span>
+          </a>
+        {% endif %}
+        {% if section.settings.instagram_url != blank %}
+          <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ 'fom_footer.instagram_label' | t }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm9.75 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" fill="currentColor"/></svg>
+            <span>Instagram</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <nav class="fom-footer__column" aria-label="{{ 'fom_footer.shop_links' | t }}">
+      <h3>{{ 'fom_footer.shop' | t }}</h3>
+      <a href="{{ routes.root_url }}">{{ 'fom_header.home' | t }}</a>
+      <a href="{{ routes.all_products_collection_url }}">{{ 'fom_header.all_products' | t }}</a>
+      {% if shop.customer_accounts_enabled %}
+        <a href="{{ routes.account_url }}">{{ 'fom_header.my_account' | t }}</a>
+      {% endif %}
+    </nav>
+
+    <div class="fom-footer__column fom-footer__contact">
+      <h3>{{ 'fom_footer.contact_details' | t }}</h3>
+      {% if section.settings.address != blank %}
+        <p>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.1 7-13A7 7 0 1 0 5 9c0 6.9 7 13 7 13Zm0-9.5A3.5 3.5 0 1 1 12 5a3.5 3.5 0 0 1 0 7.5Z" fill="currentColor"/></svg>
+          <span>{{ section.settings.address | escape | newline_to_br }}</span>
+        </p>
+      {% endif %}
+      {% if section.settings.email != blank %}
+        <a href="mailto:{{ section.settings.email | escape }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm9 7 8-5H4l8 5Zm0 2.4L3 8.8V17h18V8.8l-9 5.6Z" fill="currentColor"/></svg>
+          <span>{{ section.settings.email | escape }}</span>
+        </a>
+      {% endif %}
+      {% if section.settings.whatsapp_number != blank %}
+        <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.5 3 3.6 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2Z" fill="currentColor"/></svg>
+          <span>{{ section.settings.whatsapp_number | escape }}</span>
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_payments and shop.enabled_payment_types.size > 0 %}
+      <div class="fom-footer__column fom-footer__payments">
+        <h3>{{ 'fom_footer.payments' | t }}</h3>
+        <div class="fom-footer__payment-icons" role="list">
+          {% for type in shop.enabled_payment_types %}
+            <span role="listitem">{{ type | payment_type_svg_tag }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="fom-footer__bottom">
+    <div class="page-width">
+      <p>&copy; {{ 'now' | date: '%Y' }} Fresh O Mill. {{ 'fom_footer.rights_reserved' | t }}</p>
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .fom-footer {
+    margin-block-start: 0;
+    background: linear-gradient(135deg, #12351f 0%, #18572e 55%, #0d4323 100%);
+    color: #fff;
+  }
+
+  .fom-footer__main {
+    display: grid;
+    grid-template-columns: minmax(240px, 1.45fr) minmax(140px, .7fr) minmax(260px, 1.2fr) minmax(180px, .8fr);
+    gap: 48px;
+    padding-block: 52px 42px;
+  }
+
+  .fom-footer__brand,
+  .fom-footer__column {
+    min-width: 0;
+  }
+
+  .fom-footer__logo {
+    display: inline-flex;
+    max-width: 210px;
+  }
+
+  .fom-footer__logo img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 72px;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .fom-footer__wordmark {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .fom-footer__description {
+    max-width: 360px;
+    margin: 18px 0 22px;
+    color: rgb(255 255 255 / .8);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .fom-footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .fom-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding-inline: 13px;
+    border: 1px solid rgb(255 255 255 / .28);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .fom-footer__social svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .fom-footer__column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11px;
+  }
+
+  .fom-footer__column h3 {
+    margin: 0 0 7px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .fom-footer__column a,
+  .fom-footer__contact p {
+    margin: 0;
+    color: rgb(255 255 255 / .8);
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+
+  .fom-footer__column > a:hover,
+  .fom-footer__column > a:focus-visible,
+  .fom-footer__social a:hover,
+  .fom-footer__social a:focus-visible {
+    color: #fff;
+  }
+
+  .fom-footer__column > a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .fom-footer a:focus-visible {
+    outline: 2px solid #ee9d1c;
+    outline-offset: 3px;
+  }
+
+  .fom-footer__contact p,
+  .fom-footer__contact a {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .fom-footer__contact svg {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin-block-start: 2px;
+    color: #c9e8b7;
+  }
+
+  .fom-footer__payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fom-footer__payment-icons span {
+    display: inline-flex;
+    padding: 5px 7px;
+    border-radius: 5px;
+    background: #fff;
+  }
+
+  .fom-footer__payment-icons svg {
+    width: 38px;
+    height: 24px;
+  }
+
+  .fom-footer__bottom {
+    border-top: 1px solid rgb(255 255 255 / .14);
+  }
+
+  .fom-footer__bottom .page-width {
+    padding-block: 18px;
+  }
+
+  .fom-footer__bottom p {
+    margin: 0;
+    color: rgb(255 255 255 / .68);
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .fom-footer__main {
+      grid-template-columns: 1.2fr 1fr;
+      gap: 36px 48px;
+      padding-block: 44px 34px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .fom-footer {
+      padding-block-end: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .fom-footer__main {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding-block: 38px 30px;
+    }
+
+    .fom-footer__brand {
+      text-align: center;
+    }
+
+    .fom-footer__logo,
+    .fom-footer__social {
+      justify-content: center;
+    }
+
+    .fom-footer__description {
+      margin-inline: auto;
+    }
+
+    .fom-footer__column {
+      align-items: center;
+      padding-block-start: 26px;
+      border-top: 1px solid rgb(255 255 255 / .14);
+      text-align: center;
+    }
+
+    .fom-footer__contact p,
+    .fom-footer__contact a {
+      justify-content: center;
+      text-align: start;
+    }
+
+    .fom-footer__payment-icons {
+      justify-content: center;
+    }
+
+    .fom-footer__bottom p {
+      text-align: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Freshly milled staples and everyday essentials for wholesome meals at home."
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address",
+      "default": "GF 3/4, Nexus Complex, White House Lane, Bhayli TP 1, Vadodara - 391410"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "mashrushyam37@gmail.com"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp number with country code",
+      "default": "+91 76000 62637"
+    },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "Instagram URL",
+      "default": "https://www.instagram.com/freshomill/"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payments",
+      "label": "Show enabled payment methods",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fresh O Mill footer"
+    }
+  ]
+}
+{% endschema %}
