@@ -103,9 +103,16 @@
             %}
           {% endif %}
         {%- elsif predictive_search.resources.queries.size == 0 -%}
-          <p class="predictive-search-results__no-results">
-            {{ 'content.search_results_no_results' | t: terms: predictive_search.terms }}
-          </p>
+          <div class="predictive-search-results__no-results fom-search-empty">
+            <span class="fom-search-empty__icon" aria-hidden="true">
+              {{ 'icon-search.svg' | inline_asset_content }}
+            </span>
+            <h3>{{ 'fom_search.no_results_title' | t }}</h3>
+            <p>{{ 'content.search_results_no_results' | t: terms: predictive_search.terms }}</p>
+            <a class="button button-secondary" href="{{ routes.all_products_collection_url }}">
+              {{ 'fom_search.browse_products' | t }}
+            </a>
+          </div>
         {% endif %}
       {% else %}
         {%- liquid

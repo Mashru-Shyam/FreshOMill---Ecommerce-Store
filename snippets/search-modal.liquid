@@ -113,6 +113,29 @@
           </button>
         </div>
 
+        <div
+          class="fom-search-activity"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span
+            class="fom-search-loading"
+            ref="loadingState"
+            hidden
+          >
+            <span class="fom-search-spinner" aria-hidden="true"></span>
+            {{ 'fom_search.loading' | t }}
+          </span>
+          <span
+            class="fom-search-error"
+            ref="errorState"
+            role="alert"
+            hidden
+          >
+            {{ 'fom_search.error' | t }}
+          </span>
+        </div>
+
         <div class="predictive-search-form__content-wrapper">
           <div
             class="predictive-search-form__content"
@@ -128,6 +151,7 @@
 
           <div class="predictive-search-form__footer">
             <button
+              type="submit"
               class="button predictive-search__search-button"
               ref="viewAllButton"
             >
@@ -515,5 +539,76 @@
   .predictive-search__close-modal-button:hover {
     --button-color: var(--color-foreground);
     --button-background-color: transparent;
+  }
+
+  .fom-search-activity {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    z-index: calc(var(--layer-raised) + 1);
+    pointer-events: none;
+  }
+
+  .fom-search-loading,
+  .fom-search-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dfe4dd;
+    background: #fbfcf7;
+    color: #526057;
+    font-size: 14px;
+  }
+
+  .fom-search-loading[hidden],
+  .fom-search-error[hidden] {
+    display: none;
+  }
+
+  .fom-search-error {
+    pointer-events: auto;
+    color: #9b2c2c;
+    background: #fff7f5;
+  }
+
+  .fom-search-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #cfe0d2;
+    border-top-color: #216b3a;
+    border-radius: 50%;
+    animation: fom-search-spin 700ms linear infinite;
+  }
+
+  .search-modal__content {
+    --color-background: #fbfcf7;
+    --color-foreground: #17251b;
+    --color-border: #dfe4dd;
+  }
+
+  .search-modal__content .predictive-search-form__header {
+    background: #fff;
+  }
+
+  .search-modal__content .predictive-search__search-button {
+    min-width: min(280px, calc(100% - 32px));
+    border-radius: 8px;
+    background: #216b3a;
+    color: #fff;
+  }
+
+  .search-modal__content .predictive-search__search-button:hover {
+    background: #18572e;
+  }
+
+  @keyframes fom-search-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fom-search-spinner { animation-duration: 1.4s; }
   }
 {% endstylesheet %}

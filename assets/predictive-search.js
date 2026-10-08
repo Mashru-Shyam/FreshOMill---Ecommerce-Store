@@ -13,6 +13,8 @@ import { SearchUpdateEvent } from '@shopify/events';
  * @property {HTMLInputElement} searchInput - The search input element.
  * @property {HTMLElement} predictiveSearchResults - The predictive search results container.
  * @property {HTMLElement} resetButton - The reset button element.
+ * @property {HTMLElement} [loadingState] - The loading status message.
+ * @property {HTMLElement} [errorState] - The error status message.
  * @property {HTMLElement[]} [resultsItems] - The search results items elements.
  * @property {HTMLElement} [recentlyViewedWrapper] - The recently viewed products wrapper.
  * @property {HTMLElement[]} [recentlyViewedTitle] - The recently viewed title elements.
@@ -169,6 +171,14 @@ class PredictiveSearchComponent extends Component {
       }
     }
 
+    if (activeItem) {
+      if (!activeItem.id) activeItem.id = `predictive-search-option-${index}`;
+      activeItem.setAttribute('role', 'option');
+      this.refs.searchInput.setAttribute('aria-activedescendant', activeItem.id);
+    } else {
+      this.refs.searchInput.removeAttribute('aria-activedescendant');
+    }
+
     activeItem?.scrollIntoView({ behavior: prefersReducedMotion() ? 'instant' : 'smooth', block: 'nearest' });
     this.refs.searchInput.focus();
   }
@@ -296,6 +306,8 @@ class PredictiveSearchComponent extends Component {
     }
 
     this.#showResetButton();
+    this.#setError(false);
+    this.#setLoading(true);
     this.#getSearchResults(searchTerm);
   }, 200);
 
@@ -339,6 +351,7 @@ class PredictiveSearchComponent extends Component {
       .getSectionHTML(this.dataset.sectionId, false, url)
       .then((resultsMarkup) => {
         if (!resultsMarkup) {
+          this.#setLoading(false);
           deferredPromise.resolve({ totalCount: 0 });
           return;
         }
@@ -349,6 +362,9 @@ class PredictiveSearchComponent extends Component {
         }
 
         morph(predictiveSearchResults, resultsMarkup);
+        this.refs.searchInput.setAttribute('aria-expanded', 'true');
+        this.#setLoading(false);
+        this.#setError(false);
 
         this.#resetScrollPositions();
 
@@ -359,7 +375,9 @@ class PredictiveSearchComponent extends Component {
       .catch((error) => {
         deferredPromise.reject(error);
         if (abortController.signal.aborted) return;
-        throw error;
+        this.#setLoading(false);
+        this.#setError(true);
+        this.refs.searchInput.setAttribute('aria-expanded', 'false');
       });
   }
 
@@ -392,6 +410,17 @@ class PredictiveSearchComponent extends Component {
     resetButton.hidden = false;
   }
 
+  #setLoading(isLoading) {
+    const { loadingState, predictiveSearchResults } = this.refs;
+    if (loadingState) loadingState.hidden = !isLoading;
+    predictiveSearchResults.setAttribute('aria-busy', String(isLoading));
+  }
+
+  #setError(hasError) {
+    const { errorState } = this.refs;
+    if (errorState) errorState.hidden = !hasError;
+  }
+
   #createAbortController() {
     const abortController = new AbortController();
     if (this.#activeFetch) {
@@ -407,7 +436,11 @@ class PredictiveSearchComponent extends Component {
 
     this.#currentIndex = -1;
     searchInput.value = '';
+    searchInput.setAttribute('aria-expanded', 'false');
+    searchInput.removeAttribute('aria-activedescendant');
     this.#hideResetButton();
+    this.#setLoading(false);
+    this.#setError(false);
 
     const abortController = this.#createAbortController();
     const url = new URL(window.location.href);
