@@ -31,9 +31,11 @@
 
   "fom_footer": {
     "title": "Fresh O Mill footer",
-    "shop": "Shop",
+    "quick_links": "Quick Links",
     "shop_links": "Footer shop links",
-    "contact_details": "Contact details",
+    "customer_support": "Customer Support",
+    "order_tracking": "Order Tracking",
+    "contact_details": "Contact Us",
     "social_profiles": "Social profiles",
     "whatsapp_label": "Contact Fresh O Mill on WhatsApp",
     "instagram_label": "Visit Fresh O Mill on Instagram",

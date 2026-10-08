@@ -41,6 +41,7 @@ The client will commit and verify the implementation directly on the Shopify dev
 - Excluded Recipes, About, Contact, FAQ, Shipping, Returns/Refunds, Privacy, Terms, and Cancellation links.
 - Added enabled Shopify payment icons and responsive mobile spacing above the fixed bottom navigation.
 - Made business content editable through section settings.
+- Revised the layout to match the homepage reference structure: brand/social, Quick Links, Customer Support, Contact Us, We Accept, and a separate copyright bar.
 
 ## Task 17 files
 
