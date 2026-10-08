@@ -1,0 +1,170 @@
+{% liquid
+  assign featured_collection = section.settings.collection
+  assign view_all_url = routes.all_products_collection_url
+  if featured_collection != blank
+    assign view_all_url = featured_collection.url
+  endif
+%}
+
+<section class="fom-featured-products" aria-labelledby="fom-featured-products-title-{{ section.id }}">
+  <div class="fom-featured-products__inner">
+    <div class="fom-featured-products__header">
+      <div>
+        <p class="fom-featured-products__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 id="fom-featured-products-title-{{ section.id }}">{{ section.settings.heading }}</h2>
+      </div>
+      <a class="fom-featured-products__view-all" href="{{ view_all_url }}">
+        {{ section.settings.link_label }}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="fom-featured-products__grid">
+      {% if featured_collection != blank and featured_collection.products_count > 0 %}
+        {% for product in featured_collection.products limit: section.settings.products_to_show %}
+          {% render 'fom-unified-product-card', product: product %}
+        {% endfor %}
+      {% else %}
+        {% for index in (1..6) %}
+          {% render 'fom-unified-sample-product-card', index: index %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-featured-products {
+    padding: 28px var(--fom-page-gutter, 24px) 34px;
+    background: #fff;
+  }
+
+  .fom-featured-products__inner {
+    width: min(100%, var(--fom-content-width, 1440px));
+    margin-inline: auto;
+  }
+
+  .fom-featured-products__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
+  }
+
+  .fom-featured-products__eyebrow {
+    margin: 0 0 4px;
+    color: #176b36;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .fom-featured-products__eyebrow::before {
+    content: '◒';
+    margin-right: 7px;
+  }
+
+  .fom-featured-products h2 {
+    margin: 0;
+    color: #07391e;
+    font-size: clamp(27px, 2.35vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .fom-featured-products__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    flex: 0 0 auto;
+    padding-block: 8px;
+    color: #07391e;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .fom-featured-products__view-all span {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .fom-featured-products__grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  @media screen and (max-width: 1199px) {
+    .fom-featured-products__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .fom-featured-products {
+      padding-block: 24px 28px;
+    }
+
+    .fom-featured-products__header {
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .fom-featured-products__view-all {
+      font-size: 12px;
+    }
+
+    .fom-featured-products__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill best sellers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Most loved"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Best sellers this month"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "View all label",
+      "default": "View all products"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fresh O Mill best sellers"
+    }
+  ]
+}
+{% endschema %}

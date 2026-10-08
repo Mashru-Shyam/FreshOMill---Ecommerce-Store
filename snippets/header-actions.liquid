@@ -115,7 +115,7 @@
       <a class="fom-account-label" href="{{ routes.account_url }}">{{ 'fom_header.my_account' | t }}</a>
     </div>
   {% endif %}
-  {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
+  {% if settings.cart_type == 'drawer' %}
     <button
       class="header-actions__action button-unstyled{% if display_style == 'text' %} header-actions__text-style{% endif %}"
       on:click="#cart-drawer/toggle"

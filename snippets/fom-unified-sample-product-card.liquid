@@ -1,0 +1,90 @@
+{% liquid
+  case sample_index
+    when 1
+      assign sample_title = 'Whole Wheat Flour (Chakki Atta)'
+      assign sample_type = 'Flours & Atta'
+      assign sample_weight = '1 kg'
+      assign sample_price = 8500
+      assign sample_placeholder = 'product-1'
+    when 2
+      assign sample_title = 'Jowar Flour (Sorghum)'
+      assign sample_type = 'Flours & Atta'
+      assign sample_weight = '500 g'
+      assign sample_price = 7000
+      assign sample_placeholder = 'product-2'
+    when 3
+      assign sample_title = 'Bajra Flour (Pearl Millet)'
+      assign sample_type = 'Flours & Atta'
+      assign sample_weight = '500 g'
+      assign sample_price = 6500
+      assign sample_placeholder = 'product-3'
+    when 4
+      assign sample_title = 'Besan (Gram Flour)'
+      assign sample_type = 'Flours & Atta'
+      assign sample_weight = '500 g'
+      assign sample_price = 9000
+      assign sample_placeholder = 'product-4'
+    when 5
+      assign sample_title = 'Cold Pressed Groundnut Oil'
+      assign sample_type = 'Oils & Ghee'
+      assign sample_weight = '1 L'
+      assign sample_price = 32000
+      assign sample_placeholder = 'product-5'
+    when 6
+      assign sample_title = 'Turmeric Powder'
+      assign sample_type = 'Spices & Masala'
+      assign sample_weight = '200 g'
+      assign sample_price = 9500
+      assign sample_placeholder = 'product-6'
+    when 7
+      assign sample_title = 'Red Chilli Powder'
+      assign sample_type = 'Spices & Masala'
+      assign sample_weight = '200 g'
+      assign sample_price = 11000
+      assign sample_placeholder = 'product-1'
+    when 8
+      assign sample_title = 'Coriander Powder'
+      assign sample_type = 'Spices & Masala'
+      assign sample_weight = '200 g'
+      assign sample_price = 8000
+      assign sample_placeholder = 'product-2'
+    when 9
+      assign sample_title = 'Cumin Seeds'
+      assign sample_type = 'Whole Spices'
+      assign sample_weight = '200 g'
+      assign sample_price = 14500
+      assign sample_placeholder = 'product-3'
+    when 10
+      assign sample_title = 'Toor Dal'
+      assign sample_type = 'Pulses & Lentils'
+      assign sample_weight = '1 kg'
+      assign sample_price = 19000
+      assign sample_placeholder = 'product-4'
+    when 11
+      assign sample_title = 'Basmati Rice'
+      assign sample_type = 'Rice & Grains'
+      assign sample_weight = '1 kg'
+      assign sample_price = 21000
+      assign sample_placeholder = 'product-5'
+    else
+      assign sample_title = 'Black Pepper Whole'
+      assign sample_type = 'Whole Spices'
+      assign sample_weight = '100 g'
+      assign sample_price = 17500
+      assign sample_placeholder = 'product-6'
+  endcase
+%}
+
+<article class="fom-product-card fom-product-card--preview">
+  <div class="fom-product-card__media">
+    {{ sample_placeholder | placeholder_svg_tag: 'fom-product-card__placeholder' }}
+    <span class="fom-product-card__badge">Preview</span>
+  </div>
+  <div class="fom-product-card__body">
+    <div class="fom-product-card__meta"><span class="fom-product-card__type">{{ sample_type }}</span><span class="fom-product-card__stock">Sample</span></div>
+    <h3 class="fom-product-card__title">{{ sample_title }}</h3>
+    <p class="fom-product-card__variant">{{ sample_weight }}</p>
+    <div class="fom-product-card__price"><strong>{{ sample_price | money }}</strong></div>
+    <div class="fom-product-card__action"><button class="fom-product-card__button" type="button" disabled><span class="svg-wrapper" aria-hidden="true">{{ 'icon-cart.svg' | inline_asset_content }}</span><span>Preview product</span></button></div>
+  </div>
+</article>

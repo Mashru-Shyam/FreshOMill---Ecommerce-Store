@@ -24,6 +24,7 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+    <link rel="preload" href="{{ 'fom-product-card.css' | asset_url }}" as="style">
     <link rel="preload" href="{{ 'fom-layout-consistency.css' | asset_url }}" as="style">
 
     {% if request.design_mode %}
@@ -162,7 +163,7 @@
       {% section 'fom-home-hero' %}
       {% section 'fom-hero-trust' %}
       {% section 'fom-category-grid' %}
-      {% section 'fom-featured-products' %}
+        {% section 'fom-featured-products-unified' %}
       {% section 'fom-promotion' %}
       {% section 'fom-benefits' %}
       {% section 'fom-customer-stories' %}
@@ -197,7 +198,9 @@
     {% endif %}
     {% render 'fom-mobile-navigation' %}
 
+    {{ 'fom-product-card.css' | asset_url | stylesheet_tag }}
     {{ 'fom-layout-consistency.css' | asset_url | stylesheet_tag }}
+    {{ 'fom-interface-lock.css' | asset_url | stylesheet_tag }}
 
   </body>
 </html>
