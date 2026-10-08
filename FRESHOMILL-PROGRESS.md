@@ -4,8 +4,9 @@
 
 - Tasks 1–15: Complete per client confirmation and handoff.
 - Task 16 — Build Search Experience: Implemented locally; Shopify store review pending.
-- Task 17 — Build Footer: Implemented locally; Shopify store review pending.
-- Next task after approval: Task 18 — Build Homepage Hero/Slider.
+- Task 17 — Build Footer: Complete per client confirmation.
+- Task 18 — Build Homepage Hero/Slider: Implemented locally; Shopify store review and final image assignment pending.
+- Next task after approval: Task 19 — Build Shop-by-Category Section.
 
 ## Task 16 changes
 
@@ -42,9 +43,23 @@ The client will commit and verify the implementation directly on the Shopify dev
 - Added enabled Shopify payment icons and responsive mobile spacing above the fixed bottom navigation.
 - Made business content editable through section settings.
 - Revised the layout to match the homepage reference structure: brand/social, Quick Links, Customer Support, Contact Us, We Accept, and a separate copyright bar.
+- Refined desktop, tablet, and mobile footer padding, column gaps, heading rhythm, contact spacing, and copyright-bar spacing.
 
 ## Task 17 files
 
 - `sections/fom-footer.liquid`
 - `layout/theme.liquid`
 - `locales/en.default.json`
+
+## Task 18 changes
+
+- Added a static homepage hero matching the supplied homepage reference structure.
+- Added editable desktop and mobile images, alternative text, heading lines, description, CTA labels and links, badge text, height, and overlay controls.
+- Added responsive desktop and mobile layouts with optimized Shopify image output and high-priority hero loading.
+- Added accessible heading, CTA focus states, optional badge labeling, and reduced-motion behavior.
+- Kept the future trust/service strip outside this task to avoid duplicating Task 24.
+
+## Task 18 files
+
+- `sections/fom-home-hero.liquid`
+- `layout/theme.liquid`

@@ -1,0 +1,443 @@
+{% liquid
+  assign primary_url = section.settings.primary_url | default: routes.all_products_collection_url
+  assign secondary_url = section.settings.secondary_url | default: '#fom-benefits'
+  assign desktop_image = section.settings.desktop_image
+  assign mobile_image = section.settings.mobile_image | default: desktop_image
+%}
+
+<section
+  class="fom-home-hero"
+  style="--fom-hero-min-height: {{ section.settings.desktop_height }}px; --fom-hero-overlay: {{ section.settings.image_overlay | divided_by: 100.0 }};"
+  aria-labelledby="fom-home-hero-title-{{ section.id }}"
+>
+  <div class="fom-home-hero__inner page-width">
+    <div class="fom-home-hero__content">
+      {% if section.settings.eyebrow != blank %}
+        <p class="fom-home-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      <h1 id="fom-home-hero-title-{{ section.id }}" class="fom-home-hero__title">
+        <span>{{ section.settings.heading_primary | escape }}</span>
+        <strong>{{ section.settings.heading_secondary | escape }}</strong>
+      </h1>
+
+      {% if section.settings.description != blank %}
+        <div class="fom-home-hero__description">{{ section.settings.description }}</div>
+      {% endif %}
+
+      <div class="fom-home-hero__actions">
+        {% if section.settings.primary_label != blank %}
+          <a class="fom-home-hero__button fom-home-hero__button--primary" href="{{ primary_url }}">
+            <span>{{ section.settings.primary_label | escape }}</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.secondary_label != blank %}
+          <a class="fom-home-hero__button fom-home-hero__button--secondary" href="{{ secondary_url }}">
+            {{ section.settings.secondary_label | escape }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="fom-home-hero__visual">
+      {% if desktop_image != blank %}
+        <picture>
+          {% if mobile_image != blank %}
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ mobile_image | image_url: width: 480 }} 480w, {{ mobile_image | image_url: width: 750 }} 750w, {{ mobile_image | image_url: width: 1000 }} 1000w"
+              sizes="100vw"
+            >
+          {% endif %}
+          {{ desktop_image
+            | image_url: width: 1800
+            | image_tag:
+              class: 'fom-home-hero__image',
+              widths: '750, 1000, 1200, 1500, 1800',
+              sizes: '(min-width: 990px) 58vw, 100vw',
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: section.settings.image_alt
+          }}
+        </picture>
+      {% else %}
+        <div class="fom-home-hero__placeholder">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'fom-home-hero__placeholder-svg' }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.badge_text != blank %}
+        <div class="fom-home-hero__badge" aria-label="{{ section.settings.badge_text | escape }}">
+          <span>{{ section.settings.badge_text | escape | newline_to_br }}</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-home-hero {
+    position: relative;
+    overflow: hidden;
+    background: #fbfcf7;
+    color: #17251b;
+  }
+
+  .fom-home-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(340px, .84fr) minmax(0, 1.16fr);
+    min-height: var(--fom-hero-min-height, 560px);
+    padding-inline-end: 0;
+  }
+
+  .fom-home-hero__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 590px;
+    padding: 64px 54px 64px 0;
+  }
+
+  .fom-home-hero__eyebrow {
+    margin: 0 0 12px;
+    color: #216b3a;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .fom-home-hero__title {
+    margin: 0;
+    color: #216b3a;
+    font-size: clamp(46px, 5.1vw, 76px);
+    font-weight: 700;
+    line-height: .98;
+    letter-spacing: -.045em;
+  }
+
+  .fom-home-hero__title span,
+  .fom-home-hero__title strong {
+    display: block;
+  }
+
+  .fom-home-hero__title strong {
+    margin-block-start: 7px;
+    color: #111;
+    font: inherit;
+  }
+
+  .fom-home-hero__description {
+    max-width: 510px;
+    margin-block-start: 24px;
+    color: #526057;
+    font-size: clamp(17px, 1.45vw, 21px);
+    line-height: 1.48;
+  }
+
+  .fom-home-hero__description p {
+    margin: 0;
+  }
+
+  .fom-home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-block-start: 30px;
+  }
+
+  .fom-home-hero__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 50px;
+    padding-inline: 25px;
+    border: 1px solid #216b3a;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+  }
+
+  .fom-home-hero__button svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+
+  .fom-home-hero__button--primary {
+    background: #216b3a;
+    color: #fff;
+  }
+
+  .fom-home-hero__button--secondary {
+    background: #fff;
+    color: #18572e;
+  }
+
+  .fom-home-hero__button:hover {
+    transform: translateY(-1px);
+  }
+
+  .fom-home-hero__button--primary:hover {
+    border-color: #12351f;
+    background: #12351f;
+  }
+
+  .fom-home-hero__button--secondary:hover {
+    background: #f2f7ed;
+  }
+
+  .fom-home-hero__button:focus-visible {
+    outline: 3px solid #ee9d1c;
+    outline-offset: 3px;
+  }
+
+  .fom-home-hero__visual {
+    position: relative;
+    min-width: 0;
+    min-height: inherit;
+    overflow: hidden;
+  }
+
+  .fom-home-hero__visual::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #fbfcf7 0%, rgb(251 252 247 / .82) 7%, transparent 28%), rgb(18 53 31 / var(--fom-hero-overlay, 0));
+    content: '';
+    pointer-events: none;
+  }
+
+  .fom-home-hero__visual picture,
+  .fom-home-hero__image,
+  .fom-home-hero__placeholder,
+  .fom-home-hero__placeholder-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .fom-home-hero__image {
+    position: absolute;
+    inset: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .fom-home-hero__placeholder {
+    min-height: inherit;
+    background: #f2f7ed;
+  }
+
+  .fom-home-hero__placeholder-svg {
+    object-fit: cover;
+    color: #dce8d5;
+  }
+
+  .fom-home-hero__badge {
+    position: absolute;
+    z-index: 2;
+    top: 34px;
+    right: 34px;
+    display: grid;
+    place-items: center;
+    width: 142px;
+    aspect-ratio: 1;
+    padding: 19px;
+    border: 3px solid rgb(255 255 255 / .9);
+    border-radius: 50%;
+    background: rgb(255 255 255 / .9);
+    box-shadow: 0 8px 28px rgb(18 53 31 / .12);
+    color: #18572e;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    transform: rotate(-5deg);
+  }
+
+  @media screen and (max-width: 1199px) {
+    .fom-home-hero__inner {
+      grid-template-columns: minmax(330px, .9fr) minmax(0, 1.1fr);
+    }
+
+    .fom-home-hero__content {
+      padding-block: 54px;
+      padding-inline-end: 36px;
+    }
+
+    .fom-home-hero__badge {
+      width: 118px;
+      top: 24px;
+      right: 24px;
+      font-size: 15px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .fom-home-hero__inner {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-inline: 0;
+    }
+
+    .fom-home-hero__content {
+      max-width: none;
+      padding: 42px 20px 34px;
+      text-align: start;
+    }
+
+    .fom-home-hero__title {
+      font-size: clamp(40px, 12vw, 56px);
+    }
+
+    .fom-home-hero__description {
+      margin-block-start: 18px;
+      font-size: 17px;
+    }
+
+    .fom-home-hero__actions {
+      width: 100%;
+      margin-block-start: 24px;
+    }
+
+    .fom-home-hero__button {
+      flex: 1 1 150px;
+      padding-inline: 18px;
+    }
+
+    .fom-home-hero__visual {
+      min-height: clamp(330px, 88vw, 520px);
+    }
+
+    .fom-home-hero__visual::after {
+      background: linear-gradient(180deg, #fbfcf7 0%, transparent 18%), rgb(18 53 31 / var(--fom-hero-overlay, 0));
+    }
+
+    .fom-home-hero__badge {
+      width: 104px;
+      top: 20px;
+      right: 18px;
+      padding: 14px;
+      font-size: 13px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fom-home-hero__button {
+      transition: none;
+    }
+
+    .fom-home-hero__button:hover {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alternative text",
+      "default": "Fresh O Mill grains, flour and cooking oil"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading_primary",
+      "label": "First heading line",
+      "default": "Freshly milled."
+    },
+    {
+      "type": "text",
+      "id": "heading_secondary",
+      "label": "Second heading line",
+      "default": "Packed for you."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Freshly milled staples and everyday essentials, prepared and packed for your kitchen.</p>"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop fresh"
+    },
+    {
+      "type": "url",
+      "id": "primary_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Why Fresh O Mill"
+    },
+    {
+      "type": "url",
+      "id": "secondary_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "textarea",
+      "id": "badge_text",
+      "label": "Badge text"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 460,
+      "max": 760,
+      "step": 10,
+      "unit": "px",
+      "default": 570
+    },
+    {
+      "type": "range",
+      "id": "image_overlay",
+      "label": "Image overlay",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fresh O Mill hero"
+    }
+  ]
+}
+{% endschema %}

@@ -115,8 +115,8 @@
     z-index: 1;
     display: grid;
     grid-template-columns: minmax(230px, 1.35fr) minmax(110px, .62fr) minmax(130px, .75fr) minmax(245px, 1.2fr) minmax(160px, .75fr);
-    gap: 34px;
-    padding-block: 46px 38px;
+    gap: 40px;
+    padding-block: 56px 46px;
   }
 
   .fom-footer__brand,
@@ -127,6 +127,7 @@
   .fom-footer__logo {
     display: inline-flex;
     max-width: 176px;
+    margin-block-end: 4px;
   }
 
   .fom-footer__logo img {
@@ -146,7 +147,7 @@
 
   .fom-footer__description {
     max-width: 280px;
-    margin: 14px 0 18px;
+    margin: 14px 0 22px;
     color: rgb(255 255 255 / .8);
     font-size: 14px;
     line-height: 1.65;
@@ -155,7 +156,7 @@
   .fom-footer__social {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
   }
 
   .fom-footer__social a {
@@ -182,13 +183,13 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 11px;
-    padding-inline-start: 24px;
+    gap: 12px;
+    padding-inline-start: 28px;
     border-inline-start: 1px solid rgb(255 255 255 / .14);
   }
 
   .fom-footer__column h3 {
-    margin: 0 0 9px;
+    margin: 0 0 12px;
     color: #fff;
     font-size: 15px;
     font-weight: 700;
@@ -227,6 +228,10 @@
     gap: 10px;
   }
 
+  .fom-footer__contact {
+    gap: 14px;
+  }
+
   .fom-footer__contact svg {
     flex: 0 0 18px;
     width: 18px;
@@ -239,6 +244,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    margin-block-start: 2px;
   }
 
   .fom-footer__payment-icons span {
@@ -260,7 +266,7 @@
   }
 
   .fom-footer__bottom .page-width {
-    padding-block: 18px;
+    padding-block: 20px;
   }
 
   .fom-footer__bottom p {
@@ -273,8 +279,8 @@
   @media screen and (max-width: 1199px) {
     .fom-footer__main {
       grid-template-columns: 1.25fr 1fr 1fr;
-      gap: 36px 48px;
-      padding-block: 44px 34px;
+      gap: 42px 46px;
+      padding-block: 48px 40px;
     }
 
     .fom-footer__contact {
@@ -289,8 +295,8 @@
 
     .fom-footer__main {
       grid-template-columns: 1fr;
-      gap: 30px;
-      padding-block: 38px 30px;
+      gap: 0;
+      padding-block: 40px 34px;
     }
 
     .fom-footer__brand {
@@ -308,12 +314,14 @@
 
     .fom-footer__description {
       margin-inline: auto;
+      margin-block-end: 24px;
     }
 
     .fom-footer__column {
       align-items: center;
       padding-inline-start: 0;
-      padding-block-start: 26px;
+      margin-block-start: 30px;
+      padding-block-start: 30px;
       border-inline-start: 0;
       border-top: 1px solid rgb(255 255 255 / .14);
       text-align: center;
@@ -331,6 +339,10 @@
 
     .fom-footer__bottom p {
       text-align: center;
+    }
+
+    .fom-footer__bottom .page-width {
+      padding-block: 18px;
     }
   }
 {% endstylesheet %}
