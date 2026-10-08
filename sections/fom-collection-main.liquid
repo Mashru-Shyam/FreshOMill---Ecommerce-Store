@@ -4,11 +4,17 @@
 <section class="fom-catalog" data-fom-catalog-root>
   <header class="fom-catalog-hero">
     <div class="fom-catalog-hero__inner page-width">
-      <div>
+      <div class="fom-catalog-hero__content">
         <nav class="fom-catalog-hero__crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">›</span><span aria-current="page">{{ collection.title | default: 'Our Store' | escape }}</span></nav>
         <p class="fom-catalog-hero__eyebrow">FreshOMill pantry</p>
         <h1>{{ collection.title | default: section.settings.heading | escape }}</h1>
         <div class="fom-catalog-hero__copy">{% if collection.description != blank %}{{ collection.description | strip_html | truncatewords: 34 }}{% else %}{{ section.settings.subheading | escape }}{% endif %}</div>
+        <div class="fom-catalog-benefits" aria-label="Store benefits">
+          <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M27 5C15 5 7 11 6 24c8 0 15-5 18-13-2 8-7 13-14 16"/></svg><div><strong>Farm fresh</strong><span>Sourced with care</span></div></div>
+          <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l3 3 4-1 2 4 4 2-1 4 2 4-3 3v5h-5l-3 3-3-3-4 1-2-4-4-2 1-4-2-4 3-3V7h5l3-4Zm-5 13 3 3 7-8"/></svg><div><strong>Pure & natural</strong><span>No additives</span></div></div>
+          <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 9h17v14H3zM20 14h5l4 5v4h-9zM8 26a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg><div><strong>Fast delivery</strong><span>Across India</span></div></div>
+          <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12"/><path d="M22 10c-7 1-11 5-11 12 5-1 9-4 11-12Zm-10 12c2-4 5-7 9-9"/></svg><div><strong>Better living</strong><span>Wholesome choices</span></div></div>
+        </div>
       </div>
       <div class="fom-catalog-hero__visual" aria-hidden="true">
         {% if collection.image != blank %}
@@ -21,15 +27,6 @@
       </div>
     </div>
   </header>
-
-  <div class="fom-catalog-benefits">
-    <div class="fom-catalog-benefits__inner page-width">
-      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M27 5C15 5 7 11 6 24c8 0 15-5 18-13-2 8-7 13-14 16"/></svg><div><strong>Carefully selected</strong><span>Quality pantry essentials</span></div></div>
-      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 10h22v15H5zM10 10V6h12v4M9 16h14"/></svg><div><strong>Packed for you</strong><span>Prepared with attention</span></div></div>
-      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 27 9v8c0 7-4 11-11 14C9 28 5 24 5 17V9l11-5Zm-5 13 4 4 7-8"/></svg><div><strong>Secure checkout</strong><span>Powered by Shopify</span></div></div>
-      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 19v-4a9 9 0 0 1 18 0v4M7 18H4v8h7v-8H7Zm18 0h3v8h-7v-8h4Z"/></svg><div><strong>Helpful support</strong><span>WhatsApp and email</span></div></div>
-    </div>
-  </div>
 
   <div class="fom-catalog__main page-width">
     <div class="fom-catalog-layout">
