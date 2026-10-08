@@ -166,6 +166,8 @@
       {% section 'fom-benefits' %}
       {% section 'fom-customer-stories' %}
       {% section 'fom-service-strip' %}
+    {% elsif request.page_type == 'product' %}
+      {% section 'fom-product-main' %}
     {% else %}
       {{ content_for_layout }}
     {% endif %}

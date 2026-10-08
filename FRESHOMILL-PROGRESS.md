@@ -13,7 +13,38 @@
 - Task 23 — Customer Stories Homepage Section: Code complete with clearly marked development previews; approved stories pending.
 - Task 24 — Trust/Service Sections: Code complete; final delivery, returns, payment, and support wording pending.
 - Task 25 — Homepage Responsive Design: Code complete; final browser/reference screenshot review pending.
-- Next task after Phase 1 approval: Task 26 — Create Product Data Template.
+- Phase 2, Tasks 26–33: Coding and local artifact work complete. Shopify Admin data entry/import and the explicitly deferred authorized verification pass remain outside the coding phase.
+
+## Phase 2 product experience
+
+- Replaced the default product output with a dedicated Fresh O Mill product section matching the supplied product-and-cart reference.
+- Added breadcrumbs, a thumbnail gallery, responsive main media, and an accessible image lightbox.
+- Added product type, inventory state, optional verified rating data, description, price, compare-at price, and editable badge content.
+- Added native Shopify variant selection, quantity controls, and a Shopify product form that integrates with the theme cart behavior.
+- Added responsive trust messaging with editable wording so unverified business claims are not presented as facts.
+- Added keyboard-accessible product information tabs backed by product description and optional sourcing/nutrition metafields.
+- Added a related-products grid sourced from the product collection or the all-products collection.
+- Added product-page-specific cart drawer styling to bring the existing native drawer closer to Reference 03.
+- Added desktop, tablet, and mobile layouts with consistent page gutters and accessible focus states.
+
+## Phase 2 files
+
+- `sections/fom-product-main.liquid`
+- `assets/fom-product-page.js`
+- `layout/theme.liquid`
+
+## Phase 2 completion audit against the authoritative 13-phase plan
+
+- Task 26 — Product Data Template: Complete locally. Added an import-ready draft template, validation rules, and written import instructions.
+- Task 27 — First Complete Sample Product: Complete locally. Added a development-only specification and a clearly labelled disabled no-product preview state.
+- Task 28 — Product Page Template: Complete in code. Added the remaining weight/unit presentation, conditional content, native product-form error output, and mobile sticky purchase treatment.
+- Task 29 — Product Variant Interface: Complete in code. Added per-variant quantity, weight, price, media and availability updates plus radiogroup keyboard navigation.
+- Task 30 — Inventory Presentation: Complete in code. Added tracked-inventory low-stock logic, quantity min/max/increment enforcement, sold-out handling, and cart error presentation.
+- Task 31 — Product Metafield Rendering: Complete in code. Added conditional ingredients, storage, shelf life, origin, highlights, sourcing, and nutrition rendering through Shopify metafield filters.
+- Task 32 — Product Image Standards: Complete locally. Added source, crop, responsive sizing, zoom, alt-text, format, and compression guidance.
+- Task 33 — Full Catalog Import: Coding readiness complete and documented. The actual catalog import and runtime verification remain deferred Admin/verification work as defined by the task.
+
+Phase completion reports must end with the phase name.
 
 ## Task 16 changes
 
@@ -56,6 +87,12 @@ The client will commit and verify the implementation directly on the Shopify dev
 
 - `sections/fom-footer.liquid`
 - `layout/theme.liquid`
+- `locales/en.default.json`
+- `data/freshomill-product-import-template.csv`
+- `documentation/PRODUCT-IMPORT-GUIDE.md`
+- `documentation/DEVELOPMENT-SAMPLE-PRODUCT.md`
+- `documentation/PRODUCT-IMAGE-STANDARDS.md`
+- `documentation/CATALOG-READINESS.md`
 - `locales/en.default.json`
 
 ## Task 18 changes
