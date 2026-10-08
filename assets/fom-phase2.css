@@ -1,0 +1,223 @@
+.fom-product-page {
+  --fom-forest: #164f2a;
+  --fom-green: #236b3b;
+  --fom-cream: #fbfaf4;
+  --fom-line: #dfe6dc;
+  background: #fff;
+  color: #172019;
+}
+
+.fom-product-page .page-width,
+.fom-product-recommendations .page-width {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 4vw, 72px);
+}
+
+.fom-product-page__inner {
+  padding-block: clamp(28px, 4vw, 58px) clamp(58px, 7vw, 96px);
+}
+
+.fom-product-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(26px, 3vw, 42px);
+  color: #6b746d;
+  font-size: 13px;
+}
+
+.fom-product-breadcrumbs a {
+  color: #4b5a50;
+  text-decoration: none;
+}
+
+.fom-product-layout {
+  grid-template-columns: minmax(0, 1.06fr) minmax(390px, .94fr);
+  gap: clamp(42px, 5vw, 82px);
+  align-items: start;
+}
+
+.fom-product-gallery__stage {
+  overflow: hidden;
+  border: 1px solid #e4e6df;
+  border-radius: 18px;
+  background: #f7f5ed;
+  box-shadow: 0 16px 40px rgb(35 69 43 / 7%);
+}
+
+.fom-product-gallery__thumb {
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f7f5ed;
+}
+
+.fom-product-gallery__thumb.is-active {
+  border-color: var(--fom-green);
+  box-shadow: 0 0 0 2px rgb(35 107 59 / 15%);
+}
+
+.fom-product-info {
+  padding-top: 4px;
+}
+
+.fom-product-info h1 {
+  max-width: 660px;
+  margin-block: 8px 12px;
+  color: #14251a;
+  font-size: clamp(34px, 3.2vw, 50px);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+
+.fom-product-info__intro {
+  max-width: 620px;
+  margin-top: 18px;
+  color: #59635b;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.fom-product-options,
+.fom-product-price-block {
+  padding-top: 4px;
+}
+
+.fom-product-option {
+  min-height: 72px;
+  border-radius: 12px;
+}
+
+.fom-product-price-block strong {
+  font-size: clamp(32px, 3vw, 42px);
+}
+
+.fom-product-purchase {
+  gap: 18px;
+}
+
+.fom-product-quantity,
+.fom-product-add {
+  min-height: 56px;
+  border-radius: 10px;
+}
+
+.fom-product-add {
+  background: var(--fom-forest);
+  box-shadow: 0 10px 24px rgb(22 79 42 / 18%);
+}
+
+.fom-product-trust {
+  margin-top: clamp(48px, 6vw, 78px);
+  padding: 24px clamp(20px, 3vw, 42px);
+  border: 1px solid #e2eadf;
+  border-radius: 16px;
+  background: #f4f8ef;
+}
+
+.fom-product-details {
+  margin-top: 36px;
+}
+
+.fom-product-tabs {
+  gap: clamp(28px, 4vw, 52px);
+}
+
+.fom-product-tab-panel {
+  max-width: 900px;
+  padding-block: 26px 12px;
+  line-height: 1.75;
+}
+
+.fom-product-recommendations {
+  padding-block: clamp(58px, 7vw, 96px);
+  background: var(--fom-cream);
+}
+
+.fom-product-recommendations__head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.fom-product-recommendations__eyebrow {
+  margin: 0 0 8px;
+  color: var(--fom-green);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.fom-product-recommendations h2 {
+  margin: 0;
+  color: #163321;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+}
+
+.fom-product-recommendations__link {
+  color: var(--fom-forest);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.fom-product-recommendations__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+}
+
+@media (max-width: 1099px) {
+  .fom-product-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, .9fr);
+    gap: 34px;
+  }
+
+  .fom-product-recommendations__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 799px) {
+  .fom-product-page .page-width,
+  .fom-product-recommendations .page-width {
+    padding-inline: 22px;
+  }
+
+  .fom-product-layout {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .fom-product-info h1 {
+    font-size: clamp(30px, 9vw, 40px);
+  }
+
+  .fom-product-trust {
+    margin-top: 44px;
+  }
+
+  .fom-product-recommendations__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 479px) {
+  .fom-product-page .page-width,
+  .fom-product-recommendations .page-width {
+    padding-inline: 18px;
+  }
+
+  .fom-product-purchase {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+
+  .fom-product-recommendations__head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

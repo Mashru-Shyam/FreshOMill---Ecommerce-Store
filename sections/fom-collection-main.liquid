@@ -1,0 +1,80 @@
+{{ 'fom-catalog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fom-catalog.js' | asset_url }}" defer></script>
+
+<section class="fom-catalog" data-fom-catalog-root>
+  <header class="fom-catalog-hero">
+    <div class="fom-catalog-hero__inner page-width">
+      <div>
+        <nav class="fom-catalog-hero__crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">›</span><span aria-current="page">{{ collection.title | default: 'Our Store' | escape }}</span></nav>
+        <p class="fom-catalog-hero__eyebrow">FreshOMill pantry</p>
+        <h1>{{ collection.title | default: section.settings.heading | escape }}</h1>
+        <div class="fom-catalog-hero__copy">{% if collection.description != blank %}{{ collection.description | strip_html | truncatewords: 34 }}{% else %}{{ section.settings.subheading | escape }}{% endif %}</div>
+      </div>
+      <div class="fom-catalog-hero__visual" aria-hidden="true">
+        {% if collection.image != blank %}
+          {{ collection.image | image_url: width: 900 | image_tag: loading: 'eager', widths: '420, 640, 900', sizes: '(min-width: 900px) 34vw, 50vw', alt: '' }}
+        {% elsif section.settings.hero_image != blank %}
+          {{ section.settings.hero_image | image_url: width: 900 | image_tag: loading: 'eager', widths: '420, 640, 900', sizes: '(min-width: 900px) 34vw, 50vw', alt: '' }}
+        {% else %}
+          {{ 'collection-1' | placeholder_svg_tag }}
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <div class="fom-catalog-benefits">
+    <div class="fom-catalog-benefits__inner page-width">
+      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M27 5C15 5 7 11 6 24c8 0 15-5 18-13-2 8-7 13-14 16"/></svg><div><strong>Carefully selected</strong><span>Quality pantry essentials</span></div></div>
+      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 10h22v15H5zM10 10V6h12v4M9 16h14"/></svg><div><strong>Packed for you</strong><span>Prepared with attention</span></div></div>
+      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 27 9v8c0 7-4 11-11 14C9 28 5 24 5 17V9l11-5Zm-5 13 4 4 7-8"/></svg><div><strong>Secure checkout</strong><span>Powered by Shopify</span></div></div>
+      <div class="fom-catalog-benefit"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 19v-4a9 9 0 0 1 18 0v4M7 18H4v8h7v-8H7Zm18 0h3v8h-7v-8h4Z"/></svg><div><strong>Helpful support</strong><span>WhatsApp and email</span></div></div>
+    </div>
+  </div>
+
+  <div class="fom-catalog__main page-width">
+    <div class="fom-catalog-layout">
+      <aside class="fom-catalog-sidebar" data-fom-sidebar>
+        <form class="fom-catalog-search" action="{{ routes.search_url }}" method="get" role="search">
+          <input type="search" name="q" placeholder="Search products" aria-label="Search products"><input type="hidden" name="type" value="product">
+          <button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+        </form>
+        {% render 'fom-catalog-filters', results: collection %}
+      </aside>
+
+      <div class="fom-catalog-content">
+        <div class="fom-catalog-toolbar">
+          <p class="fom-catalog-toolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}</p>
+          <div class="fom-catalog-toolbar__actions">
+            <button class="fom-catalog-filter-toggle" type="button" data-fom-filter-toggle aria-expanded="false">Filters</button>
+            <div class="fom-catalog-sort"><label for="FomSort-{{ section.id }}">Sort by</label><select id="FomSort-{{ section.id }}" data-fom-sort>{% assign selected_sort = collection.sort_by | default: collection.default_sort_by %}{% for option in collection.sort_options %}<option value="{{ option.value }}"{% if option.value == selected_sort %} selected{% endif %}>{{ option.name }}</option>{% endfor %}</select></div>
+          </div>
+        </div>
+        {% render 'fom-active-filters', results: collection %}
+
+        {% paginate collection.products by 24 %}
+          {% if collection.products.size > 0 %}
+            <div class="fom-catalog-grid">{% for product in collection.products %}{% render 'fom-product-card', product: product %}{% endfor %}</div>
+          {% elsif collection.all_products_count == 0 %}
+            <p class="fom-catalog-preview-note">Store preview: these sample cards show the intended layout until products are added to this collection in Shopify.</p>
+            <div class="fom-catalog-grid">{% for sample_index in (1..12) %}{% render 'fom-sample-product-card', sample_index: sample_index %}{% endfor %}</div>
+          {% else %}
+            <div class="fom-catalog-empty"><h2>No matching products</h2><p>Clear the selected filters or browse the complete store.</p><a href="{{ collection.url }}">Clear filters</a></div>
+          {% endif %}
+          {% if paginate.pages > 1 %}<nav class="fom-pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill store",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Fallback heading", "default": "Our Store" },
+    { "type": "textarea", "id": "subheading", "label": "Fallback description", "default": "Explore freshly prepared staples and carefully selected pantry essentials for everyday meals." },
+    { "type": "image_picker", "id": "hero_image", "label": "Fallback hero image" }
+  ],
+  "presets": [{ "name": "Fresh O Mill store" }]
+}
+{% endschema %}

@@ -1,0 +1,54 @@
+{% liquid
+  assign card_product = product
+  assign card_variant = card_product.selected_or_first_available_variant
+  assign card_type = card_product.type
+  if card_type == blank and card_product.collections.first != blank
+    assign card_type = card_product.collections.first.title
+  endif
+%}
+
+<article class="fom-catalog-card">
+  <div class="fom-catalog-card__media">
+    <a href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
+      {% if card_product.featured_image != blank %}
+        {{ card_product.featured_image | image_url: width: 720 | image_tag: loading: 'lazy', widths: '240, 360, 480, 600, 720', sizes: '(min-width: 1200px) 22vw, (min-width: 760px) 30vw, 48vw', alt: card_product.featured_image.alt | default: card_product.title }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'fom-catalog-card__placeholder' }}
+      {% endif %}
+    </a>
+    {% if card_product.compare_at_price_max > card_product.price %}
+      <span class="fom-catalog-card__badge">Sale</span>
+    {% elsif card_product.available %}
+      <span class="fom-catalog-card__badge fom-catalog-card__badge--soft">Fresh pick</span>
+    {% endif %}
+  </div>
+
+  <div class="fom-catalog-card__body">
+    {% if card_type != blank %}<p class="fom-catalog-card__type">{{ card_type | escape }}</p>{% endif %}
+    <h3><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
+    {% unless card_product.has_only_default_variant %}<p class="fom-catalog-card__variant">{{ card_variant.title | escape }}</p>{% endunless %}
+    <div class="fom-catalog-card__stock{% unless card_product.available %} is-sold-out{% endunless %}">
+      <span aria-hidden="true"></span>
+      {% if card_product.available %}In stock{% else %}Sold out{% endif %}
+    </div>
+    <div class="fom-catalog-card__footer">
+      <div class="fom-catalog-card__price">
+        <strong>{{ card_product.price | money }}</strong>
+        {% if card_product.compare_at_price_max > card_product.price %}<s>{{ card_product.compare_at_price_max | money }}</s>{% endif %}
+      </div>
+      {% if card_product.available and card_product.has_only_default_variant %}
+        {% form 'product', card_product, class: 'fom-catalog-card__form' %}
+          <input type="hidden" name="id" value="{{ card_variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" name="add" aria-label="Add {{ card_product.title | escape }} to cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 8H7M10 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>
+          </button>
+        {% endform %}
+      {% else %}
+        <a class="fom-catalog-card__choose" href="{{ card_product.url }}" aria-label="View {{ card_product.title | escape }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</article>

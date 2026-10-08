@@ -1,0 +1,10 @@
+{% assign active_filter_count = 0 %}
+{% for filter in results.filters %}{% assign active_filter_count = active_filter_count | plus: filter.active_values.size %}{% if filter.min_value.value != blank or filter.max_value.value != blank %}{% assign active_filter_count = active_filter_count | plus: 1 %}{% endif %}{% endfor %}
+{% if active_filter_count > 0 %}
+  <div class="fom-active-filters" aria-label="Active filters">
+    {% for filter in results.filters %}
+      {% for value in filter.active_values %}<a href="{{ value.url_to_remove }}">{{ value.label | escape }} <span aria-hidden="true">×</span></a>{% endfor %}
+      {% if filter.min_value.value != blank or filter.max_value.value != blank %}<a href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }} – {{ filter.max_value.value | default: filter.range_max | money }} <span aria-hidden="true">×</span></a>{% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

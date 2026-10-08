@@ -1,0 +1,49 @@
+{{ 'fom-catalog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fom-catalog.js' | asset_url }}" defer></script>
+
+<section class="fom-search-page" data-fom-catalog-root>
+  <header class="fom-search-page__header page-width">
+    <nav class="fom-search-page__crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">›</span><span aria-current="page">Search</span></nav>
+    <h1>{% if search.performed %}Search results{% else %}Find your pantry essentials{% endif %}</h1>
+    {% if search.performed %}<p>{{ search.results_count }} results for “{{ search.terms | escape }}”</p>{% else %}<p>Search FreshOMill products by name, category or ingredient.</p>{% endif %}
+    <form class="fom-search-page__form" action="{{ routes.search_url }}" method="get" role="search">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products" aria-label="Search products" required><input type="hidden" name="type" value="product">
+      <button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+    </form>
+  </header>
+
+  {% if search.performed %}
+    <div class="fom-search-page__main page-width">
+      <div class="fom-catalog-layout">
+        <aside class="fom-catalog-sidebar" data-fom-sidebar>{% render 'fom-catalog-filters', results: search, search_term: search.terms %}</aside>
+        <div class="fom-catalog-content">
+          <div class="fom-catalog-toolbar">
+            <p class="fom-catalog-toolbar__count">{{ search.results_count }} {% if search.results_count == 1 %}product{% else %}products{% endif %}</p>
+            <div class="fom-catalog-toolbar__actions">
+              <button class="fom-catalog-filter-toggle" type="button" data-fom-filter-toggle aria-expanded="false">Filters</button>
+              <div class="fom-catalog-sort"><label for="FomSearchSort-{{ section.id }}">Sort by</label><select id="FomSearchSort-{{ section.id }}" data-fom-sort>{% assign selected_sort = search.sort_by | default: search.default_sort_by %}{% for option in search.sort_options %}<option value="{{ option.value }}"{% if option.value == selected_sort %} selected{% endif %}>{{ option.name }}</option>{% endfor %}</select></div>
+            </div>
+          </div>
+          {% render 'fom-active-filters', results: search %}
+
+          {% paginate search.results by 24 %}
+            {% if search.results_count > 0 %}
+              <div class="fom-catalog-grid">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'fom-product-card', product: item %}{% endif %}{% endfor %}</div>
+            {% else %}
+              <div class="fom-catalog-empty"><h2>No products found</h2><p>Try a shorter product name, browse all products, or clear the selected filters.</p><a href="{{ routes.all_products_collection_url }}">Browse all products</a></div>
+            {% endif %}
+            {% if paginate.pages > 1 %}<nav class="fom-pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+          {% endpaginate %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill search",
+  "settings": [],
+  "presets": [{ "name": "Fresh O Mill search" }]
+}
+{% endschema %}

@@ -1,3 +1,4 @@
+{{ 'fom-phase2.css' | asset_url | stylesheet_tag }}
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
   assign current_media = current_variant.featured_media | default: product.featured_media
@@ -5,7 +6,6 @@
   assign rating_value = product.metafields.reviews.rating.value.rating | default: product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count.value | default: 0
   assign product_form_id = 'FomProductForm-' | append: section.id
-  assign related_products = product_collection.products | default: collections.all.products
   assign quantity_min = current_variant.quantity_rule.min | default: 1
   assign quantity_increment = current_variant.quantity_rule.increment | default: 1
   assign quantity_max = current_variant.quantity_rule.max
@@ -308,35 +308,6 @@
       {% endif %}
     </div>
 
-    <section class="fom-related" aria-labelledby="fom-related-title-{{ section.id }}">
-      <div class="fom-related__header">
-        <h2 id="fom-related-title-{{ section.id }}">{{ section.settings.related_heading | escape }}</h2>
-        {% if product_collection != blank %}<a href="{{ product_collection.url }}">{{ 'fom_product.view_all' | t }} <span aria-hidden="true">→</span></a>{% endif %}
-      </div>
-      <div class="fom-related__grid">
-        {% assign related_count = 0 %}
-        {% for related_product in related_products %}
-          {% if related_product.id != product.id and related_count < 4 %}
-            {% assign related_variant = related_product.selected_or_first_available_variant %}
-            <article class="fom-related-card">
-              <a class="fom-related-card__image" href="{{ related_product.url }}">
-                {% if related_product.featured_image != blank %}
-                  {{ related_product.featured_image | image_url: width: 620 | image_tag: loading: 'lazy', widths: '220, 360, 480, 620', sizes: '(min-width: 990px) 23vw, 47vw', alt: related_product.featured_image.alt | default: related_product.title }}
-                {% else %}
-                  {{ 'product-1' | placeholder_svg_tag }}
-                {% endif %}
-              </a>
-              <div class="fom-related-card__body">
-                {% if related_product.type != blank %}<span>{{ related_product.type | escape }}</span>{% endif %}
-                <h3><a href="{{ related_product.url }}">{{ related_product.title | escape }}</a></h3>
-                <strong>{{ related_variant.price | money }}</strong>
-              </div>
-            </article>
-            {% assign related_count = related_count | plus: 1 %}
-          {% endif %}
-        {% endfor %}
-      </div>
-    </section>
   </div>
 
   <dialog class="fom-product-lightbox" data-fom-lightbox aria-label="{{ 'fom_product.image_viewer' | t }}">
@@ -434,20 +405,6 @@
   .fom-product-facts[hidden] { display: none; }
   .fom-product-facts > div { padding: 16px; border: 1px solid #e0e5dd; border-radius: 9px; background: #fbfcf8; }
   .fom-product-facts h3 { margin: 0 0 8px; color: #153b22; font-size: 14px; }
-  .fom-related { margin-top: 2px; }
-  .fom-related__header { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 16px; }
-  .fom-related__header h2 { margin: 0; color: #101813; font-size: 22px; }
-  .fom-related__header a { color: #165c2a; font-size: 13px; font-weight: 700; text-decoration: none; }
-  .fom-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-  .fom-related-card { overflow: hidden; border: 1px solid #e0e4de; border-radius: 10px; background: #fff; }
-  .fom-related-card__image { display: block; aspect-ratio: 1.23; overflow: hidden; background: #f4f2e9; }
-  .fom-related-card__image img, .fom-related-card__image svg { width: 100%; height: 100%; object-fit: cover; transition: transform .25s ease; }
-  .fom-related-card:hover .fom-related-card__image img { transform: scale(1.03); }
-  .fom-related-card__body { padding: 13px 14px 16px; }
-  .fom-related-card__body span { color: #27723b; font-size: 11px; }
-  .fom-related-card__body h3 { min-height: 40px; margin: 5px 0 8px; font-size: 14px; line-height: 1.35; }
-  .fom-related-card__body h3 a { text-decoration: none; }
-  .fom-related-card__body strong { font-size: 17px; }
   .fom-product-lightbox { width: min(92vw, 1050px); max-width: none; height: min(90vh, 900px); max-height: none; padding: 0; border: 0; border-radius: 14px; background: #f5f3eb; box-shadow: 0 25px 90px rgb(0 0 0 / .32); }
   .fom-product-lightbox::backdrop { background: rgb(5 20 10 / .72); }
   .fom-product-lightbox img { width: 100%; height: 100%; object-fit: contain; }
@@ -481,7 +438,6 @@
     .fom-product-trust { grid-template-columns: 1fr; padding: 4px 20px; }
     .fom-product-trust > div { justify-content: flex-start; padding: 16px 0; }
     .fom-product-trust > div + div { border-inline-start: 0; border-top: 1px solid #d7dfd2; }
-    .fom-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .fom-product-facts { grid-template-columns: 1fr; }
   }
   @media screen and (max-width: 479px) {
@@ -492,9 +448,7 @@
     .fom-product-quantity { grid-template-columns: 52px 1fr 52px; width: 100%; }
     .fom-product-add { min-width: 0; padding-inline: 12px; font-size: 15px; }
     .fom-product-tabs { gap: 28px; }
-    .fom-related-card__body { padding-inline: 10px; }
   }
-  @media (prefers-reduced-motion: reduce) { .fom-related-card__image img { transition: none; } }
 {% endstylesheet %}
 
 {% schema %}
@@ -508,8 +462,7 @@
     { "type": "text", "id": "trust_2_text", "label": "Trust item 2 text", "default": "Protected Shopify checkout" },
     { "type": "text", "id": "trust_3_heading", "label": "Trust item 3 heading", "default": "Helpful support" },
     { "type": "text", "id": "trust_3_text", "label": "Trust item 3 text", "default": "WhatsApp and email assistance" },
-    { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 1, "max": 20, "step": 1, "default": 5 },
-    { "type": "text", "id": "related_heading", "label": "Related products heading", "default": "You may also like" }
+    { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 1, "max": 20, "step": 1, "default": 5 }
   ],
   "presets": [{ "name": "Fresh O Mill product" }]
 }

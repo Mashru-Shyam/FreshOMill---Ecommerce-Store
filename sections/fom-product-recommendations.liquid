@@ -1,0 +1,36 @@
+{{ 'fom-phase2.css' | asset_url | stylesheet_tag }}
+{{ 'fom-catalog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fom-recommendations.js' | asset_url }}" defer></script>
+
+<section
+  class="fom-product-recommendations"
+  data-fom-recommendations
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=related"
+>
+  <div class="page-width">
+    <div class="fom-product-recommendations__head">
+      <div><p class="fom-product-recommendations__eyebrow">More to explore</p><h2>{{ section.settings.heading | escape }}</h2></div>
+      <a class="fom-product-recommendations__link" href="{{ routes.all_products_collection_url }}">View all products</a>
+    </div>
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      <div class="fom-product-recommendations__grid" data-fom-live-recommendations>
+        {% for product in recommendations.products %}{% render 'fom-product-card', product: product %}{% endfor %}
+      </div>
+    {% else %}
+      <div class="fom-product-recommendations__grid">
+        {% for sample_index in (1..4) %}{% render 'fom-sample-product-card', sample_index: sample_index %}{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
+    { "type": "range", "id": "products_to_show", "label": "Products", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Product recommendations" }]
+}
+{% endschema %}

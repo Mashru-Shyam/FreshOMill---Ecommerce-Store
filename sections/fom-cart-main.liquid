@@ -1,0 +1,83 @@
+{{ 'fom-catalog.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign shipping_threshold = section.settings.free_shipping_threshold | times: 100
+  assign shipping_progress = 0
+  if shipping_threshold > 0
+    assign shipping_progress = cart.total_price | times: 100 | divided_by: shipping_threshold
+    if shipping_progress > 100
+      assign shipping_progress = 100
+    endif
+  endif
+%}
+
+<section class="fom-cart-page">
+  <header class="fom-cart-page__header page-width">
+    <nav class="fom-cart-page__crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">›</span><span aria-current="page">Cart</span></nav>
+    <h1>Your cart</h1>
+    <p>{% if cart.item_count > 0 %}Review your items before continuing to secure checkout.{% else %}Your FreshOMill basket is ready when you are.{% endif %}</p>
+  </header>
+
+  <div class="fom-cart-page__main page-width">
+    {% if cart.item_count == 0 %}
+      <div class="fom-cart-empty"><h2>Your cart is empty</h2><p>Explore our pantry staples and add something wholesome.</p><a href="{{ routes.all_products_collection_url }}">Continue shopping</a></div>
+    {% else %}
+      {% form 'cart', cart, id: 'FomCartForm' %}
+        <div class="fom-cart-layout">
+          <div class="fom-cart-items">
+            {% for item in cart.items %}
+              <article class="fom-cart-item">
+                <a class="fom-cart-item__image" href="{{ item.url }}">
+                  {% if item.image != blank %}{{ item.image | image_url: width: 280 | image_tag: loading: 'lazy', widths: '112, 168, 224, 280', sizes: '112px', alt: item.image.alt | default: item.product.title }}{% else %}{{ 'product-1' | placeholder_svg_tag }}{% endif %}
+                </a>
+                <div>
+                  <h2><a href="{{ item.url }}">{{ item.product.title | escape }}</a></h2>
+                  {% unless item.product.has_only_default_variant %}<p class="fom-cart-item__variant">{{ item.variant.title | escape }}</p>{% endunless %}
+                  {% for property in item.properties %}{% assign first_character = property.first | slice: 0 %}{% unless property.last == blank or first_character == '_' %}<p class="fom-cart-item__property">{{ property.first | escape }}: {{ property.last | escape }}</p>{% endunless %}{% endfor %}
+                  <div class="fom-cart-item__controls">
+                    <label class="visually-hidden" for="FomCartQuantity-{{ forloop.index }}">Quantity for {{ item.product.title | escape }}</label>
+                    <input id="FomCartQuantity-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" step="1">
+                    <a class="fom-cart-item__remove" href="{{ item.url_to_remove }}">Remove</a>
+                  </div>
+                  {% if item.line_level_discount_allocations.size > 0 %}{% for discount in item.line_level_discount_allocations %}<p class="fom-cart-item__property">{{ discount.discount_application.title | escape }} (−{{ discount.amount | money }})</p>{% endfor %}{% endif %}
+                </div>
+                <div class="fom-cart-item__price">
+                  {% if item.original_line_price > item.final_line_price %}<s>{{ item.original_line_price | money }}</s>{% endif %}
+                  <strong>{{ item.final_line_price | money }}</strong>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+
+          <aside class="fom-cart-summary">
+            <h2>Order summary</h2>
+            {% if section.settings.show_shipping_progress and shipping_threshold > 0 %}
+              <div class="fom-shipping-progress">
+                {% if cart.total_price >= shipping_threshold %}<p>You have reached the free-shipping threshold.</p>{% else %}<p>Add {{ shipping_threshold | minus: cart.total_price | money }} more to reach free shipping.</p>{% endif %}
+                <div aria-hidden="true"><span style="width: {{ shipping_progress }}%"></span></div>
+              </div>
+            {% endif %}
+            <div class="fom-cart-summary__row"><span>Subtotal</span><strong>{{ cart.items_subtotal_price | money }}</strong></div>
+            {% if cart.total_discount > 0 %}<div class="fom-cart-summary__row"><span>Discounts</span><strong>−{{ cart.total_discount | money }}</strong></div>{% endif %}
+            <div class="fom-cart-summary__row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="fom-cart-summary__row fom-cart-summary__row--total"><span>Total</span><strong>{{ cart.total_price | money }}</strong></div>
+            <label for="FomCartNote-{{ section.id }}">Order note</label><textarea id="FomCartNote-{{ section.id }}" name="note" placeholder="Add a note for your order">{{ cart.note }}</textarea>
+            <button class="fom-cart-summary__update" type="submit" name="update">Update cart</button>
+            <button class="fom-cart-summary__checkout" type="submit" name="checkout">Proceed to checkout</button>
+            <a class="fom-cart-summary__continue" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+          </aside>
+        </div>
+      {% endform %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill cart",
+  "settings": [
+    { "type": "checkbox", "id": "show_shipping_progress", "label": "Show free-shipping progress", "default": false },
+    { "type": "number", "id": "free_shipping_threshold", "label": "Free-shipping threshold", "default": 1000 }
+  ],
+  "presets": [{ "name": "Fresh O Mill cart" }]
+}
+{% endschema %}

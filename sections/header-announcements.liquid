@@ -231,17 +231,25 @@
     align-items: center;
     justify-content: center;
     flex: 1 0 auto;
-    padding-inline: 24px;
+    padding-inline: 14px;
   }
 
   .fom-marquee .announcement-bar__slide,
   .fom-marquee .announcement-bar__text {
-    font-size: 11px !important;
+    font-size: 13px !important;
+    font-weight: 600;
+    line-height: 1.35 !important;
+    letter-spacing: 0.01em;
   }
 
   @media (max-width: 749px) {
     .fom-marquee__group > .announcement-bar__slide {
-      padding-inline: 18px;
+      padding-inline: 12px;
+    }
+
+    .fom-marquee .announcement-bar__slide,
+    .fom-marquee .announcement-bar__text {
+      font-size: 12px !important;
     }
   }
 

@@ -1,0 +1,51 @@
+<form class="fom-filters" action="{{ results.url | default: routes.search_url }}" method="get" data-fom-filter-form>
+  {% if search_term != blank %}<input type="hidden" name="q" value="{{ search_term | escape }}"><input type="hidden" name="type" value="product">{% endif %}
+  <div class="fom-filters__head">
+    <h2>Filters</h2>
+    {% if results.filters != empty %}<a href="{{ results.url | default: routes.search_url }}{% if search_term != blank %}?q={{ search_term | url_encode }}&type=product{% endif %}">Clear all</a>{% endif %}
+  </div>
+
+  {% if results.filters != empty %}
+    {% for filter in results.filters %}
+      <details class="fom-filter" open>
+        <summary><span>{{ filter.label | escape }}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></summary>
+        <div class="fom-filter__body">
+          {% case filter.type %}
+            {% when 'boolean', 'list' %}
+              {% for value in filter.values %}
+                <label class="fom-filter__option">
+                  <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                  <span>{{ value.label | escape }}</span>
+                  <small>{{ value.count }}</small>
+                </label>
+              {% endfor %}
+            {% when 'price_range' %}
+              <div class="fom-filter__price">
+                <label><span>Min</span><input type="number" name="{{ filter.min_value.param_name }}" value="{% if filter.min_value.value %}{{ filter.min_value.value | money_without_currency | replace: ',', '' }}{% endif %}" min="0" placeholder="0"></label>
+                <span aria-hidden="true">–</span>
+                <label><span>Max</span><input type="number" name="{{ filter.max_value.param_name }}" value="{% if filter.max_value.value %}{{ filter.max_value.value | money_without_currency | replace: ',', '' }}{% endif %}" min="0" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"></label>
+              </div>
+          {% endcase %}
+        </div>
+      </details>
+    {% endfor %}
+  {% else %}
+    <details class="fom-filter" open>
+      <summary><span>Category</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></summary>
+      <div class="fom-filter__body">
+        {% assign preview_categories = 'Flours & Atta,Oils & Ghee,Spices & Masala,Pulses & Lentils,Rice & Grains' | split: ',' %}
+        {% for label in preview_categories %}<label class="fom-filter__option"><input type="checkbox" disabled><span>{{ label }}</span></label>{% endfor %}
+      </div>
+    </details>
+    <details class="fom-filter" open>
+      <summary><span>Availability</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></summary>
+      <div class="fom-filter__body"><label class="fom-filter__option"><input type="checkbox" disabled><span>In stock</span></label><label class="fom-filter__option"><input type="checkbox" disabled><span>Out of stock</span></label></div>
+    </details>
+    <details class="fom-filter" open>
+      <summary><span>Price</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></summary>
+      <div class="fom-filter__body"><div class="fom-filter__price"><label><span>Min</span><input type="number" disabled placeholder="₹0"></label><span>–</span><label><span>Max</span><input type="number" disabled placeholder="₹1000"></label></div></div>
+    </details>
+  {% endif %}
+
+  <button class="fom-filters__apply" type="submit">Apply filters</button>
+</form>
