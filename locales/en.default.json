@@ -436,6 +436,7 @@
     "preview_title": "Development sample product",
     "preview_description": "This clearly marked preview demonstrates the product page layout until a real Shopify product is available.",
     "preview_variants": "Sample variant presentation",
+    "quantity_unavailable": "The selected quantity is unavailable.",
     "preview_disabled": "Preview only"
   },
   "products": {

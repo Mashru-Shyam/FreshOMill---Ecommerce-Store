@@ -24,13 +24,13 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+    <link rel="preload" href="{{ 'fom-layout-consistency.css' | asset_url }}" as="style">
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
     {% endif %}
 
     {{ content_for_header }}
-    {{ 'fom-layout-consistency.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
@@ -196,6 +196,8 @@
       {% render 'quick-add-modal' %}
     {% endif %}
     {% render 'fom-mobile-navigation' %}
+
+    {{ 'fom-layout-consistency.css' | asset_url | stylesheet_tag }}
 
   </body>
 </html>

@@ -36,9 +36,7 @@ class FomCartSummary extends HTMLElement {
       const money = new Intl.NumberFormat(currency === 'INR' ? 'en-IN' : this.dataset.locale, { style: 'currency', currency }).format(cart.total_price / 100);
       this.querySelector('[data-fom-total]').textContent = money;
       this.querySelector('[data-fom-count]').textContent = String(cart.item_count);
-    } catch (error) {
-      if (error.name !== 'AbortError') console.warn('Cart summary could not refresh.');
-    }
+    } catch {}
   }
 }
 
