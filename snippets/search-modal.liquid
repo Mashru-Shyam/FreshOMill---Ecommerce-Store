@@ -186,6 +186,16 @@
     }
   }
 
+  .search-modal__content .predictive-search-results__inner {
+    padding-inline: clamp(18px, 3vw, 34px);
+  }
+
+  .search-modal__content .predictive-search-results__products,
+  .search-modal__content .predictive-search-results__resource-header,
+  .search-modal__content .predictive-search-results__wrapper.predictive-search-results__wrapper-queries {
+    padding-inline: 0;
+  }
+
   /* Hide the default dialog backdrop on small screens */
   @media screen and (max-width: 749px) {
     .search-modal__content::backdrop {

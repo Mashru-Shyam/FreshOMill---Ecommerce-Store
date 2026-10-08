@@ -83,7 +83,7 @@
 
 {% stylesheet %}
   #header-component .header__columns:has(.fom-header-layout) { display: block !important; }
-  #header-component .fom-header-layout { display: flex !important; align-items: center; gap: 12px; width: 100%; }
+  #header-component .fom-header-layout { display: flex !important; align-items: center; gap: 12px; width: 100%; padding-inline: clamp(18px, 3vw, 42px); }
   .fom-header-brand { flex: 1; min-width: 0; }
   .fom-header-brand .header-logo { display: flex; justify-content: flex-start; }
   .fom-header-search, .fom-header-nav, .fom-header-store { display: none; }
@@ -91,7 +91,7 @@
   .fom-header-search-modal { position: absolute; width: 0; height: 0; }
   @media (min-width: 990px) {
     #header-component .header__columns:has(.fom-header-layout) { grid-column: 2 !important; padding-inline: 0 !important; }
-    #header-component .fom-header-layout { display: grid !important; grid-template-columns: 100px minmax(160px, 1fr) auto auto auto; gap: 24px; min-height: 88px; color: #17251b; }
+    #header-component .fom-header-layout { display: grid !important; grid-template-columns: 100px minmax(160px, 1fr) auto auto auto; gap: 24px; min-height: 88px; padding-inline: clamp(24px, 3vw, 52px); color: #17251b; }
     #header-component .header__row--top:has(.fom-header-layout) { background: #fff; }
     .fom-header-mobile-menu, .fom-header-mobile-search { display: none; }
     .fom-header-search { display: flex; min-width: 0; height: 46px; }
@@ -112,7 +112,7 @@
     .fom-header-nav a:focus-visible, .fom-header-store:focus-visible, .fom-header-search-trigger:focus-visible { outline: 2px solid #216b3a; outline-offset: 3px; }
   }
   @media (min-width: 990px) and (max-width: 1199px) {
-    #header-component .fom-header-layout { gap: 16px; grid-template-columns: 90px minmax(140px, 1fr) auto auto auto; }
+    #header-component .fom-header-layout { gap: 16px; grid-template-columns: 90px minmax(140px, 1fr) auto auto auto; padding-inline: 22px; }
     .fom-header-nav { gap: 16px; }
     .fom-header-nav a { font-size: 13px; }
     .fom-header-store { padding-inline: 12px; font-size: 12px; }

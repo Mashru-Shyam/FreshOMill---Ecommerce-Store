@@ -88,7 +88,7 @@
     display: grid;
     grid-template-columns: minmax(340px, .84fr) minmax(0, 1.16fr);
     min-height: var(--fom-hero-min-height, 560px);
-    padding-inline-end: 0;
+    padding-inline: clamp(24px, 4vw, 64px);
   }
 
   .fom-home-hero__content {
@@ -99,7 +99,7 @@
     justify-content: center;
     align-items: flex-start;
     max-width: 590px;
-    padding: 64px 54px 64px 0;
+    padding: 68px clamp(42px, 5vw, 76px) 68px 0;
   }
 
   .fom-home-hero__eyebrow {
@@ -272,7 +272,7 @@
 
     .fom-home-hero__content {
       padding-block: 54px;
-      padding-inline-end: 36px;
+      padding-inline-end: 42px;
     }
 
     .fom-home-hero__badge {
@@ -292,7 +292,7 @@
 
     .fom-home-hero__content {
       max-width: none;
-      padding: 42px 20px 34px;
+      padding: 44px 24px 36px;
       text-align: start;
     }
 
