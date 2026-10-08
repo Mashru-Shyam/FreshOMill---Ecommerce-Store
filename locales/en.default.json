@@ -47,6 +47,12 @@
     "shop_category": "Shop {{ category }}"
   },
 
+  "fom_products": {
+    "add_to_cart": "Add to cart",
+    "choose_options": "Choose options",
+    "select_collection": "Select an approved product collection to display this section."
+  },
+
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",
