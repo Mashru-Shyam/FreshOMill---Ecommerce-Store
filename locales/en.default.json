@@ -59,6 +59,20 @@
     "price_pending": "Price pending"
   },
 
+  "fom_promotion": {
+    "preview": "Development preview"
+  },
+
+  "fom_stories": {
+    "preview": "Preview",
+    "five_stars": "5 out of 5 stars"
+  },
+
+  "fom_trust": {
+    "hero_label": "Fresh O Mill customer assurances",
+    "service_label": "Fresh O Mill service information"
+  },
+
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",

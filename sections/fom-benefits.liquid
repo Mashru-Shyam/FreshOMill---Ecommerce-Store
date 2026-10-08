@@ -1,0 +1,97 @@
+{% liquid
+  assign cta_url = section.settings.cta_url | default: routes.all_products_collection_url
+%}
+
+<section id="fom-benefits" class="fom-benefits" aria-labelledby="fom-benefits-title-{{ section.id }}">
+  <div class="fom-benefits__inner page-width">
+    <div class="fom-benefits__intro">
+      <p class="fom-benefits__eyebrow"><span aria-hidden="true">◆</span>{{ section.settings.eyebrow | escape }}</p>
+      <h2 id="fom-benefits-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      <div class="fom-benefits__description">{{ section.settings.description }}</div>
+      {% if section.settings.cta_label != blank %}
+        <a class="fom-benefits__cta" href="{{ cta_url }}">{{ section.settings.cta_label | escape }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+      {% endif %}
+    </div>
+
+    <div class="fom-benefits__panel">
+      <article class="fom-benefit">
+        <span class="fom-benefit__icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M18 50V27m28 23V27M12 50h40M20 24c0-7 5-12 12-12s12 5 12 12M25 24v-6m14 6v-6M32 12V5m-5 5-5-4m15 4 5-4"/></svg></span>
+        <h3>{{ section.settings.benefit_1_heading | escape }}</h3>
+        <p>{{ section.settings.benefit_1_text | escape }}</p>
+      </article>
+      <article class="fom-benefit">
+        <span class="fom-benefit__icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 7C23 21 16 29 16 40a16 16 0 0 0 32 0C48 29 41 21 32 7Zm-7 35c2 5 7 7 12 5"/></svg></span>
+        <h3>{{ section.settings.benefit_2_heading | escape }}</h3>
+        <p>{{ section.settings.benefit_2_text | escape }}</p>
+      </article>
+      <article class="fom-benefit">
+        <span class="fom-benefit__icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 31h40c0 12-9 21-20 21S12 43 12 31Zm7-7c4-7 10-11 18-11m-5 11 8-14m-2 21 10-14M24 52v5m16-5v5"/></svg></span>
+        <h3>{{ section.settings.benefit_3_heading | escape }}</h3>
+        <p>{{ section.settings.benefit_3_text | escape }}</p>
+      </article>
+    </div>
+  </div>
+  <div class="fom-benefits__landscape" aria-hidden="true">
+    <svg viewBox="0 0 1440 130" preserveAspectRatio="none"><path d="M0 104c118-42 219-54 334-30 105 22 160-25 265-23 107 2 146 46 255 33 118-14 188-57 300-46 104 10 180 45 286 26v66H0Z"/><path d="M0 115c151-20 245-4 365-16 116-12 176-43 293-31 126 13 197 48 322 24 160-31 261-28 460-3" fill="none"/><path d="M145 94v-25m0 5-14-12m14 8 14-14m-14 4V44m520 40V55m0 8-17-14m17 10 17-16m-17 6V32m487 55V61m0 8-14-12m14 8 14-14" fill="none"/></svg>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-benefits { position: relative; overflow: hidden; background: linear-gradient(90deg, #fbfcf7, #f5f8ef); color: #17251b; padding-block: 62px 94px; }
+  .fom-benefits__inner { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(290px, .78fr) minmax(0, 1.42fr); gap: 52px; padding-inline: clamp(28px, 4vw, 68px); }
+  .fom-benefits__intro { align-self: center; }
+  .fom-benefits__eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 8px; color: #18572e; font-size: 14px; font-weight: 700; }
+  .fom-benefits__eyebrow span { color: #65a644; font-size: 11px; transform: rotate(45deg); }
+  .fom-benefits__intro h2 { margin: 0; color: #12351f; font-size: clamp(38px, 4.2vw, 62px); line-height: 1; letter-spacing: -.045em; }
+  .fom-benefits__description { max-width: 500px; margin-block-start: 20px; color: #526057; font-size: 17px; line-height: 1.55; }
+  .fom-benefits__description p { margin: 0; }
+  .fom-benefits__cta { display: inline-flex; align-items: center; gap: 11px; min-height: 48px; margin-block-start: 25px; padding-inline: 22px; border-radius: 8px; background: #216b3a; color: #fff; font-size: 14px; font-weight: 700; text-decoration: none; }
+  .fom-benefits__cta svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .fom-benefits__cta:hover { background: #12351f; }
+  .fom-benefits__cta:focus-visible { outline: 3px solid #ee9d1c; outline-offset: 3px; }
+  .fom-benefits__panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: center; overflow: hidden; border: 1px solid #e5eadf; border-radius: 14px; background: rgb(255 255 255 / .9); box-shadow: 0 8px 28px rgb(18 53 31 / .05); }
+  .fom-benefit { min-width: 0; padding: 34px 26px; text-align: center; }
+  .fom-benefit + .fom-benefit { border-inline-start: 1px solid #e5eadf; }
+  .fom-benefit__icon { display: grid; place-items: center; width: 68px; height: 68px; margin: 0 auto 17px; border-radius: 50%; background: #f2f7ed; color: #18572e; }
+  .fom-benefit__icon svg { width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .fom-benefit h3 { margin: 0; color: #12351f; font-size: 18px; line-height: 1.2; }
+  .fom-benefit p { margin: 10px 0 0; color: #526057; font-size: 14px; line-height: 1.45; }
+  .fom-benefits__landscape { position: absolute; z-index: 1; inset-inline: 0; bottom: -4px; height: 125px; color: #b8ccb0; opacity: .52; }
+  .fom-benefits__landscape svg { width: 100%; height: 100%; }
+  .fom-benefits__landscape path { fill: rgb(184 204 176 / .16); stroke: currentColor; stroke-width: 1.2; }
+  @media screen and (max-width: 989px) {
+    .fom-benefits__inner { grid-template-columns: 1fr; gap: 34px; }
+    .fom-benefits__intro { max-width: 680px; }
+  }
+  @media screen and (max-width: 749px) {
+    .fom-benefits { padding-block: 48px 76px; }
+    .fom-benefits__inner { gap: 30px; padding-inline: 24px; }
+    .fom-benefits__intro h2 { font-size: clamp(36px, 11vw, 50px); }
+    .fom-benefits__panel { grid-template-columns: 1fr; }
+    .fom-benefit { display: grid; grid-template-columns: 58px 1fr; column-gap: 16px; padding: 22px; text-align: start; }
+    .fom-benefit + .fom-benefit { border-inline-start: 0; border-top: 1px solid #e5eadf; }
+    .fom-benefit__icon { grid-row: span 2; width: 58px; height: 58px; margin: 0; }
+    .fom-benefit__icon svg { width: 39px; height: 39px; }
+    .fom-benefit p { margin-block-start: 6px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill benefits",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Fresh O Mill" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "More than a store" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Freshly milled staples and everyday essentials, selected and prepared for wholesome meals at home.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Explore our products" },
+    { "type": "url", "id": "cta_url", "label": "Button link" },
+    { "type": "text", "id": "benefit_1_heading", "label": "Benefit 1 heading", "default": "Locally Sourced" },
+    { "type": "textarea", "id": "benefit_1_text", "label": "Benefit 1 text", "default": "Add approved sourcing information during the content phase." },
+    { "type": "text", "id": "benefit_2_heading", "label": "Benefit 2 heading", "default": "Washed & Cleaned" },
+    { "type": "textarea", "id": "benefit_2_text", "label": "Benefit 2 text", "default": "Add the approved preparation details during the content phase." },
+    { "type": "text", "id": "benefit_3_heading", "label": "Benefit 3 heading", "default": "Freshly Prepared" },
+    { "type": "textarea", "id": "benefit_3_text", "label": "Benefit 3 text", "default": "Add the approved production details during the content phase." }
+  ],
+  "presets": [{ "name": "Fresh O Mill benefits" }]
+}
+{% endschema %}

@@ -1,0 +1,89 @@
+{% if section.settings.enabled or request.design_mode %}
+  {% liquid
+    assign primary_link = section.settings.primary_link | default: routes.all_products_collection_url
+    assign secondary_link = section.settings.secondary_link | default: routes.all_products_collection_url
+  %}
+  <section class="fom-promotion{% unless section.settings.enabled %} fom-promotion--preview{% endunless %}" aria-labelledby="fom-promotion-title-{{ section.id }}">
+    <div class="fom-promotion__inner page-width">
+      {% unless section.settings.enabled %}
+        <span class="fom-promotion__preview">{{ 'fom_promotion.preview' | t }}</span>
+      {% endunless %}
+      <div class="fom-promotion__grid">
+        <article class="fom-promotion__card fom-promotion__card--primary">
+          {% if section.settings.primary_image != blank %}
+            {{ section.settings.primary_image | image_url: width: 1400 | image_tag: class: 'fom-promotion__image', widths: '600, 900, 1200, 1400', sizes: '(min-width: 750px) 60vw, 100vw', loading: 'lazy', alt: section.settings.primary_heading }}
+          {% endif %}
+          <div class="fom-promotion__shade"></div>
+          <div class="fom-promotion__content">
+            {% if section.settings.primary_eyebrow != blank %}<p>{{ section.settings.primary_eyebrow | escape }}</p>{% endif %}
+            <h2 id="fom-promotion-title-{{ section.id }}">{{ section.settings.primary_heading | escape }}</h2>
+            {% if section.settings.primary_text != blank %}<div>{{ section.settings.primary_text }}</div>{% endif %}
+            {% if section.settings.primary_label != blank %}<a href="{{ primary_link }}">{{ section.settings.primary_label | escape }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>{% endif %}
+          </div>
+        </article>
+        <article class="fom-promotion__card fom-promotion__card--secondary">
+          {% if section.settings.secondary_image != blank %}
+            {{ section.settings.secondary_image | image_url: width: 1000 | image_tag: class: 'fom-promotion__image', widths: '400, 600, 800, 1000', sizes: '(min-width: 750px) 38vw, 100vw', loading: 'lazy', alt: section.settings.secondary_heading }}
+          {% endif %}
+          <div class="fom-promotion__shade"></div>
+          <div class="fom-promotion__content">
+            {% if section.settings.secondary_eyebrow != blank %}<p>{{ section.settings.secondary_eyebrow | escape }}</p>{% endif %}
+            <h3>{{ section.settings.secondary_heading | escape }}</h3>
+            {% if section.settings.secondary_text != blank %}<div>{{ section.settings.secondary_text }}</div>{% endif %}
+            {% if section.settings.secondary_label != blank %}<a href="{{ secondary_link }}">{{ section.settings.secondary_label | escape }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>{% endif %}
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .fom-promotion { background: #fbfcf7; padding-block: 12px 62px; }
+  .fom-promotion__inner { position: relative; padding-inline: clamp(28px, 4vw, 68px); }
+  .fom-promotion__preview { position: absolute; z-index: 4; top: 12px; left: clamp(40px, 5vw, 84px); padding: 6px 10px; border-radius: 999px; background: #fff; color: #526057; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .fom-promotion__grid { display: grid; grid-template-columns: 1.45fr .8fr; gap: 18px; }
+  .fom-promotion__card { position: relative; display: flex; min-height: 330px; overflow: hidden; border-radius: 16px; background: linear-gradient(135deg, #18572e, #12351f); color: #fff; }
+  .fom-promotion__card--secondary { background: linear-gradient(135deg, #d88718, #9f5a08); }
+  .fom-promotion__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .fom-promotion__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(18 53 31 / .9), rgb(18 53 31 / .4) 65%, transparent); }
+  .fom-promotion__card--secondary .fom-promotion__shade { background: linear-gradient(90deg, rgb(85 45 6 / .88), rgb(85 45 6 / .34)); }
+  .fom-promotion__content { position: relative; z-index: 2; align-self: flex-end; max-width: 560px; padding: 36px; }
+  .fom-promotion__content p { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .fom-promotion__content h2, .fom-promotion__content h3 { margin: 0; color: #fff; font-size: clamp(28px, 3vw, 44px); line-height: 1.08; }
+  .fom-promotion__content h3 { font-size: clamp(25px, 2.4vw, 35px); }
+  .fom-promotion__content div { margin-block-start: 12px; color: rgb(255 255 255 / .85); }
+  .fom-promotion__content div p { margin: 0; font-size: 15px; font-weight: 400; letter-spacing: normal; line-height: 1.5; text-transform: none; }
+  .fom-promotion__content a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-block-start: 20px; padding-inline: 18px; border-radius: 8px; background: #fff; color: #18572e; font-size: 13px; font-weight: 700; text-decoration: none; }
+  .fom-promotion__content a svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .fom-promotion__content a:focus-visible { outline: 3px solid #ee9d1c; outline-offset: 3px; }
+  @media screen and (max-width: 749px) {
+    .fom-promotion { padding-block: 4px 46px; }
+    .fom-promotion__inner { padding-inline: 24px; }
+    .fom-promotion__grid { grid-template-columns: 1fr; gap: 14px; }
+    .fom-promotion__card { min-height: 300px; }
+    .fom-promotion__content { padding: 28px 24px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill promotions",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show promotions", "default": false },
+    { "type": "image_picker", "id": "primary_image", "label": "Primary image" },
+    { "type": "text", "id": "primary_eyebrow", "label": "Primary eyebrow", "default": "Featured" },
+    { "type": "text", "id": "primary_heading", "label": "Primary heading", "default": "Approved promotion" },
+    { "type": "richtext", "id": "primary_text", "label": "Primary text", "default": "<p>Add approved promotional details before enabling this section.</p>" },
+    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Shop now" },
+    { "type": "url", "id": "primary_link", "label": "Primary button link" },
+    { "type": "image_picker", "id": "secondary_image", "label": "Secondary image" },
+    { "type": "text", "id": "secondary_eyebrow", "label": "Secondary eyebrow", "default": "Fresh picks" },
+    { "type": "text", "id": "secondary_heading", "label": "Secondary heading", "default": "Seasonal selection" },
+    { "type": "richtext", "id": "secondary_text", "label": "Secondary text", "default": "<p>Add approved campaign content before enabling this section.</p>" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Explore" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary button link" }
+  ],
+  "presets": [{ "name": "Fresh O Mill promotions" }]
+}
+{% endschema %}

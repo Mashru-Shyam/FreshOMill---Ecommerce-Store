@@ -1,0 +1,46 @@
+<section class="fom-service-strip" aria-label="{{ 'fom_trust.service_label' | t }}">
+  <div class="fom-service-strip__inner page-width">
+    <div class="fom-service-strip__item"><svg viewBox="0 0 54 54" aria-hidden="true"><path d="M4 17h28v24H4V17Zm28 8h9l8 9v7H32V25ZM13 45a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm27 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 24h15M1 30h14"/></svg><div><strong>{{ section.settings.item_1_heading | escape }}</strong><span>{{ section.settings.item_1_text | escape }}</span></div></div>
+    <div class="fom-service-strip__item"><svg viewBox="0 0 54 54" aria-hidden="true"><path d="M27 4 44 11v13c0 12-7 21-17 26C17 45 10 36 10 24V11l17-7Zm-8 22 6 6 11-13"/></svg><div><strong>{{ section.settings.item_2_heading | escape }}</strong><span>{{ section.settings.item_2_text | escape }}</span></div></div>
+    <div class="fom-service-strip__item"><svg viewBox="0 0 54 54" aria-hidden="true"><path d="M8 16 27 6l19 10v24L27 50 8 40V16Zm0 0 19 10 19-10M27 26v24M14 12l19 10"/></svg><div><strong>{{ section.settings.item_3_heading | escape }}</strong><span>{{ section.settings.item_3_text | escape }}</span></div></div>
+    <div class="fom-service-strip__item"><svg viewBox="0 0 54 54" aria-hidden="true"><path d="M11 31v-7a16 16 0 0 1 32 0v7m-32-1H6v12h10V30h-5Zm32 0h5v12H38V30h5Zm0 12c0 5-5 8-11 8"/></svg><div><strong>{{ section.settings.item_4_heading | escape }}</strong><span>{{ section.settings.item_4_text | escape }}</span></div></div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-service-strip { border-top: 1px solid #e1e8dc; border-bottom: 1px solid #e1e8dc; background: linear-gradient(90deg, #f5f9ef, #fbfcf7, #f5f9ef); color: #17251b; }
+  .fom-service-strip__inner { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-inline: clamp(28px, 4vw, 68px); }
+  .fom-service-strip__item { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 104px; padding: 18px 24px; }
+  .fom-service-strip__item + .fom-service-strip__item { border-inline-start: 1px solid #dbe4d6; }
+  .fom-service-strip__item svg { flex: 0 0 44px; width: 44px; height: 44px; fill: none; stroke: #18572e; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+  .fom-service-strip__item div { display: flex; flex-direction: column; gap: 3px; }
+  .fom-service-strip__item strong { color: #12351f; font-size: 14px; }
+  .fom-service-strip__item span { color: #526057; font-size: 12px; line-height: 1.35; }
+  @media screen and (max-width: 989px) {
+    .fom-service-strip__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fom-service-strip__item:nth-child(3) { border-inline-start: 0; }
+    .fom-service-strip__item:nth-child(n + 3) { border-top: 1px solid #dbe4d6; }
+  }
+  @media screen and (max-width: 749px) {
+    .fom-service-strip__inner { grid-template-columns: 1fr; padding-inline: 24px; }
+    .fom-service-strip__item { justify-content: flex-start; min-height: 88px; padding: 16px 8px; }
+    .fom-service-strip__item + .fom-service-strip__item { border-inline-start: 0; border-top: 1px solid #dbe4d6; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill services",
+  "settings": [
+    { "type": "text", "id": "item_1_heading", "label": "Item 1 heading", "default": "Delivery information" },
+    { "type": "text", "id": "item_1_text", "label": "Item 1 text", "default": "Approved delivery terms pending" },
+    { "type": "text", "id": "item_2_heading", "label": "Item 2 heading", "default": "Secure payments" },
+    { "type": "text", "id": "item_2_text", "label": "Item 2 text", "default": "Supported Shopify checkout" },
+    { "type": "text", "id": "item_3_heading", "label": "Item 3 heading", "default": "Returns information" },
+    { "type": "text", "id": "item_3_text", "label": "Item 3 text", "default": "Approved return terms pending" },
+    { "type": "text", "id": "item_4_heading", "label": "Item 4 heading", "default": "Dedicated support" },
+    { "type": "text", "id": "item_4_text", "label": "Item 4 text", "default": "WhatsApp and email assistance" }
+  ],
+  "presets": [{ "name": "Fresh O Mill services" }]
+}
+{% endschema %}

@@ -8,7 +8,12 @@
 - Task 18 — Build Homepage Hero/Slider: Complete per client confirmation; final image remains merchant-editable in Shopify.
 - Task 19 — Build Shop-by-Category Section: Implemented locally; Shopify category images, product data, and Search & Discovery filter setup pending.
 - Task 20 — Build Featured/Best-Selling Products: Implemented locally with visible development preview cards; approved Shopify collection and real product data pending for the later Admin phase.
-- Next task after approval: Task 21 — Build Promotional Sections.
+- Task 21 — Build Promotional Sections: Code complete; disabled by default until an approved promotion is supplied.
+- Task 22 — Fresh O Mill Brand/Benefits Section: Code complete; final approved benefit copy pending for the later Admin/content phase.
+- Task 23 — Customer Stories Homepage Section: Code complete with clearly marked development previews; approved stories pending.
+- Task 24 — Trust/Service Sections: Code complete; final delivery, returns, payment, and support wording pending.
+- Task 25 — Homepage Responsive Design: Code complete; final browser/reference screenshot review pending.
+- Next task after Phase 1 approval: Task 26 — Create Product Data Template.
 
 ## Task 16 changes
 
@@ -93,5 +98,24 @@ The client will commit and verify the implementation directly on the Shopify dev
 ## Task 20 files
 
 - `sections/fom-featured-products.liquid`
+- `layout/theme.liquid`
+- `locales/en.default.json`
+
+## Phase 1 homepage completion
+
+- Added an optional two-card promotional section with approved-content safeguards.
+- Added the reference-style More than a store brand and benefits section.
+- Added a three-card customer stories section with development preview labels.
+- Added the hero assurance strip and the pre-footer service strip.
+- Established the final homepage section order and prevented inherited default homepage sections from rendering underneath the custom design.
+- Applied responsive gutters, section spacing, card spacing, mobile stacking, focus states, and reduced-motion handling across the homepage.
+
+## Phase 1 files
+
+- `sections/fom-promotion.liquid`
+- `sections/fom-benefits.liquid`
+- `sections/fom-customer-stories.liquid`
+- `sections/fom-hero-trust.liquid`
+- `sections/fom-service-strip.liquid`
 - `layout/theme.liquid`
 - `locales/en.default.json`

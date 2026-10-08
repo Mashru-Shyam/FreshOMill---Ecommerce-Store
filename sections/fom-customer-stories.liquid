@@ -1,0 +1,113 @@
+{% liquid
+  assign stories_url = section.settings.stories_url | default: routes.root_url
+%}
+
+<section class="fom-customer-stories" aria-labelledby="fom-stories-title-{{ section.id }}">
+  <div class="fom-customer-stories__inner page-width">
+    <div class="fom-customer-stories__header">
+      <div>
+        {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow | escape }}</p>{% endif %}
+        <h2 id="fom-stories-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      </div>
+      {% if section.settings.link_label != blank %}<a href="{{ stories_url }}">{{ section.settings.link_label | escape }}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>{% endif %}
+    </div>
+
+    <div class="fom-customer-stories__track">
+      {% for item in (1..3) %}
+        {% liquid
+          assign image_key = 'story_image_' | append: item
+          assign quote_key = 'story_quote_' | append: item
+          assign name_key = 'story_name_' | append: item
+          assign location_key = 'story_location_' | append: item
+          assign story_image = section.settings[image_key]
+          assign story_quote = section.settings[quote_key]
+          assign story_name = section.settings[name_key]
+          assign story_location = section.settings[location_key]
+        %}
+        <article class="fom-story-card">
+          {% if section.settings.preview_labels %}<span class="fom-story-card__preview">{{ 'fom_stories.preview' | t }}</span>{% endif %}
+          <div class="fom-story-card__avatar">
+            {% if story_image != blank %}
+              {{ story_image | image_url: width: 180 | image_tag: widths: '90, 120, 180', sizes: '76px', loading: 'lazy', alt: story_name }}
+            {% else %}
+              {{ 'image' | placeholder_svg_tag: 'fom-story-card__placeholder' }}
+            {% endif %}
+          </div>
+          <div class="fom-story-card__body">
+            <blockquote>“{{ story_quote | escape }}”</blockquote>
+            {% unless section.settings.preview_labels %}<div class="fom-story-card__stars" aria-label="{{ 'fom_stories.five_stars' | t }}">★★★★★</div>{% endunless %}
+            <p class="fom-story-card__name">{{ story_name | escape }}</p>
+            <p class="fom-story-card__location">{{ story_location | escape }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="fom-customer-stories__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-customer-stories { position: relative; overflow: hidden; background: linear-gradient(90deg, #eff7e9, #f7faef 48%, #edf6e6); color: #17251b; padding-block: 44px 48px; }
+  .fom-customer-stories::before, .fom-customer-stories::after { position: absolute; width: 190px; height: 190px; border-radius: 55% 45% 55% 45%; background: radial-gradient(ellipse at 35% 35%, rgb(76 139 55 / .15) 0 12%, transparent 13%), radial-gradient(ellipse at 62% 56%, rgb(76 139 55 / .12) 0 15%, transparent 16%); content: ''; pointer-events: none; }
+  .fom-customer-stories::before { left: -70px; top: -70px; transform: rotate(-22deg); }
+  .fom-customer-stories::after { right: -70px; bottom: -80px; transform: scaleX(-1) rotate(-12deg); }
+  .fom-customer-stories__inner { position: relative; z-index: 1; padding-inline: clamp(28px, 4vw, 68px); }
+  .fom-customer-stories__header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-block-end: 22px; }
+  .fom-customer-stories__header p { margin: 0 0 6px; color: #216b3a; font-size: 13px; font-weight: 700; }
+  .fom-customer-stories__header h2 { margin: 0; color: #12351f; font-size: clamp(29px, 3vw, 42px); line-height: 1.1; letter-spacing: -.035em; }
+  .fom-customer-stories__header a { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; color: #18572e; font-size: 14px; font-weight: 700; text-decoration: none; }
+  .fom-customer-stories__header a svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .fom-customer-stories__header a:focus-visible, .fom-story-card:focus-within { outline: 3px solid #ee9d1c; outline-offset: 3px; }
+  .fom-customer-stories__track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .fom-story-card { position: relative; display: grid; grid-template-columns: 82px 1fr; gap: 18px; min-width: 0; padding: 24px; border: 1px solid #e1eadd; border-radius: 12px; background: rgb(255 255 255 / .94); box-shadow: 0 5px 18px rgb(18 53 31 / .05); }
+  .fom-story-card__preview { position: absolute; top: 10px; right: 10px; padding: 4px 7px; border-radius: 999px; background: #f2f7ed; color: #526057; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .fom-story-card__avatar { width: 76px; height: 76px; overflow: hidden; border: 4px solid #e4f0dc; border-radius: 50%; background: #f2f7ed; }
+  .fom-story-card__avatar img, .fom-story-card__placeholder { display: block; width: 100%; height: 100%; object-fit: cover; color: #c9ddbf; }
+  .fom-story-card blockquote { margin: 0; color: #526057; font-size: 14px; font-style: italic; line-height: 1.5; }
+  .fom-story-card__stars { margin-block-start: 9px; color: #ee9d1c; font-size: 14px; letter-spacing: 2px; }
+  .fom-story-card__name { margin: 8px 0 0; color: #17251b; font-size: 14px; font-weight: 700; }
+  .fom-story-card__location { margin: 2px 0 0; color: #748078; font-size: 12px; }
+  .fom-customer-stories__dots { display: flex; justify-content: center; gap: 8px; margin-block-start: 24px; }
+  .fom-customer-stories__dots span { width: 8px; height: 8px; border-radius: 50%; background: #c4d7b9; }
+  .fom-customer-stories__dots span:first-child { background: #4f8c33; }
+  @media screen and (max-width: 989px) {
+    .fom-customer-stories__track { grid-template-columns: 1fr; }
+  }
+  @media screen and (max-width: 749px) {
+    .fom-customer-stories { padding-block: 38px 42px; }
+    .fom-customer-stories__inner { padding-inline: 24px; }
+    .fom-customer-stories__header { align-items: flex-start; }
+    .fom-customer-stories__header a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+    .fom-customer-stories__track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .fom-customer-stories__track::-webkit-scrollbar { display: none; }
+    .fom-story-card { flex: 0 0 min(88vw, 390px); grid-template-columns: 68px 1fr; scroll-snap-align: start; padding: 20px; }
+    .fom-story-card__avatar { width: 64px; height: 64px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill stories",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customer stories" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Our customers, healthier homes" },
+    { "type": "text", "id": "link_label", "label": "Link label" },
+    { "type": "url", "id": "stories_url", "label": "Stories link" },
+    { "type": "checkbox", "id": "preview_labels", "label": "Show development preview labels", "default": true },
+    { "type": "image_picker", "id": "story_image_1", "label": "Story 1 image" },
+    { "type": "textarea", "id": "story_quote_1", "label": "Story 1 quote", "default": "Approved customer feedback will appear here." },
+    { "type": "text", "id": "story_name_1", "label": "Story 1 name", "default": "Customer preview" },
+    { "type": "text", "id": "story_location_1", "label": "Story 1 location", "default": "Location pending" },
+    { "type": "image_picker", "id": "story_image_2", "label": "Story 2 image" },
+    { "type": "textarea", "id": "story_quote_2", "label": "Story 2 quote", "default": "Approved customer feedback will appear here." },
+    { "type": "text", "id": "story_name_2", "label": "Story 2 name", "default": "Customer preview" },
+    { "type": "text", "id": "story_location_2", "label": "Story 2 location", "default": "Location pending" },
+    { "type": "image_picker", "id": "story_image_3", "label": "Story 3 image" },
+    { "type": "textarea", "id": "story_quote_3", "label": "Story 3 quote", "default": "Approved customer feedback will appear here." },
+    { "type": "text", "id": "story_name_3", "label": "Story 3 name", "default": "Customer preview" },
+    { "type": "text", "id": "story_location_3", "label": "Story 3 location", "default": "Location pending" }
+  ],
+  "presets": [{ "name": "Fresh O Mill stories" }]
+}
+{% endschema %}

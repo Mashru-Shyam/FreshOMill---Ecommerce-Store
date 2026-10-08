@@ -1,0 +1,36 @@
+<section class="fom-hero-trust" aria-label="{{ 'fom_trust.hero_label' | t }}">
+  <div class="fom-hero-trust__inner page-width">
+    <div class="fom-hero-trust__item"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M39 8C20 8 10 18 10 32c0 5 3 8 7 8 14 0 22-14 22-32ZM13 38c6-8 12-14 22-23"/></svg><span>{{ section.settings.item_1 | escape }}</span></div>
+    <div class="fom-hero-trust__item"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 15 24 7l14 8v18l-14 8-14-8V15Zm0 0 14 8 14-8M24 23v18"/></svg><span>{{ section.settings.item_2 | escape }}</span></div>
+    <div class="fom-hero-trust__item"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5 39 11v11c0 10-6 17-15 21C15 39 9 32 9 22V11l15-6Zm-7 18 5 5 10-11"/></svg><span>{{ section.settings.item_3 | escape }}</span></div>
+    <div class="fom-hero-trust__item"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 27v-6a14 14 0 0 1 28 0v6M10 26H6v10h8V26h-4Zm28 0h4v10h-8V26h4Zm0 10c0 5-4 7-9 7"/></svg><span>{{ section.settings.item_4 | escape }}</span></div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-hero-trust { background: #fbfcf7; border-bottom: 1px solid #e9ede5; }
+  .fom-hero-trust__inner { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-inline: clamp(28px, 4vw, 68px); }
+  .fom-hero-trust__item { display: flex; align-items: center; justify-content: center; gap: 13px; min-height: 82px; padding: 14px 22px; color: #17251b; font-size: 13px; font-weight: 600; text-align: center; }
+  .fom-hero-trust__item + .fom-hero-trust__item { border-inline-start: 1px solid #e1e7dd; }
+  .fom-hero-trust__item svg { flex: 0 0 35px; width: 35px; height: 35px; fill: none; stroke: #216b3a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  @media screen and (max-width: 749px) {
+    .fom-hero-trust__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 12px; }
+    .fom-hero-trust__item { min-height: 74px; padding: 11px 8px; font-size: 11px; }
+    .fom-hero-trust__item:nth-child(3) { border-inline-start: 0; }
+    .fom-hero-trust__item:nth-child(n + 3) { border-top: 1px solid #e1e7dd; }
+    .fom-hero-trust__item svg { flex-basis: 29px; width: 29px; height: 29px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill hero trust",
+  "settings": [
+    { "type": "text", "id": "item_1", "label": "Item 1", "default": "Quality assured" },
+    { "type": "text", "id": "item_2", "label": "Item 2", "default": "Freshly packed" },
+    { "type": "text", "id": "item_3", "label": "Item 3", "default": "Secure payments" },
+    { "type": "text", "id": "item_4", "label": "Item 4", "default": "Helpful support" }
+  ],
+  "presets": [{ "name": "Fresh O Mill hero trust" }]
+}
+{% endschema %}

@@ -159,10 +159,16 @@
       >
     {% if request.page_type == 'index' %}
       {% section 'fom-home-hero' %}
+      {% section 'fom-hero-trust' %}
       {% section 'fom-category-grid' %}
       {% section 'fom-featured-products' %}
+      {% section 'fom-promotion' %}
+      {% section 'fom-benefits' %}
+      {% section 'fom-customer-stories' %}
+      {% section 'fom-service-strip' %}
+    {% else %}
+      {{ content_for_layout }}
     {% endif %}
-    {{ content_for_layout }}
       </main>
 
       <footer>
