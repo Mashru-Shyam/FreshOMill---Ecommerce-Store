@@ -1,0 +1,153 @@
+<section class="fom-search-page" aria-labelledby="fom-search-title-{{ section.id }}">
+  <div class="fom-search-page__hero">
+    <div class="fom-search-page__hero-inner">
+      <p class="fom-search-page__eyebrow">Find your pantry essentials</p>
+      <h1 id="fom-search-title-{{ section.id }}">Search Fresh O Mill</h1>
+      <p class="fom-search-page__intro">Search freshly prepared staples, flours, grains, oils, spices and everyday pantry essentials.</p>
+      <form class="fom-search-page__form" action="{{ routes.search_url }}" method="get" role="search">
+        <input type="hidden" name="type" value="product">
+        <input type="hidden" name="options[prefix]" value="last">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products..." aria-label="Search products" required>
+        <button type="submit" aria-label="Submit search">⌕</button>
+      </form>
+      <div class="fom-search-page__categories" aria-label="Browse categories">
+        <a class="fom-search-page__category" href="{{ routes.all_products_collection_url }}">All products</a>
+        {% for category_collection in collections limit: 7 %}
+          {% unless category_collection.handle == 'all' or category_collection.products_count == 0 %}
+            <a class="fom-search-page__category" href="{{ category_collection.url }}">{{ category_collection.title }}</a>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="fom-search-page__body">
+    {% if search.performed %}
+      {% paginate search.results by section.settings.results_per_page %}
+        <div class="fom-search-page__layout{% if search.filters.size == 0 %} is-wide{% endif %}">
+          {% if search.filters.size > 0 %}
+            <aside class="fom-search-page__sidebar" aria-label="Search filters">
+              <h2 class="fom-search-page__filter-heading">Filters</h2>
+              {% render 'fom-search-filters', search: search %}
+            </aside>
+          {% endif %}
+
+          <div class="fom-search-page__results">
+            {% if search.filters.size > 0 %}
+              <details class="fom-search-page__mobile-filter">
+                <summary>Filter results</summary>
+                <div class="fom-search-page__mobile-filter-body">
+                  {% render 'fom-search-filters', search: search %}
+                </div>
+              </details>
+            {% endif %}
+
+            <div class="fom-search-page__toolbar">
+              <p class="fom-search-page__count">{{ search.results_count }} results for “{{ search.terms }}”</p>
+              {% if search.sort_options.size > 0 %}
+                <form class="fom-search-page__sort" action="{{ routes.search_url }}" method="get">
+                  <input type="hidden" name="q" value="{{ search.terms | escape }}">
+                  <input type="hidden" name="type" value="product">
+                  <input type="hidden" name="options[prefix]" value="last">
+                  {% for filter in search.filters %}
+                    {% for value in filter.active_values %}
+                      <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+                    {% endfor %}
+                    {% if filter.type == 'price_range' %}
+                      {% if filter.min_value.value != blank %}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">{% endif %}
+                      {% if filter.max_value.value != blank %}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">{% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  <label for="fom-search-sort-{{ section.id }}">Sort by</label>
+                  <select id="fom-search-sort-{{ section.id }}" name="sort_by" onchange="this.form.submit()">
+                    {% assign current_sort = search.sort_by | default: search.default_sort_by %}
+                    {% for option in search.sort_options %}
+                      <option value="{{ option.value }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name }}</option>
+                    {% endfor %}
+                  </select>
+                </form>
+              {% endif %}
+            </div>
+
+            <div class="fom-search-page__active-filters">
+              {% for filter in search.filters %}
+                {% for value in filter.active_values %}
+                  <a class="fom-search-page__active-filter" href="{{ value.url_to_remove }}">{{ value.label }} <span aria-hidden="true">×</span></a>
+                {% endfor %}
+                {% if filter.type == 'price_range' %}
+                  {% if filter.min_value.value != blank or filter.max_value.value != blank %}
+                    <a class="fom-search-page__active-filter" href="{{ filter.url_to_remove }}">Price <span aria-hidden="true">×</span></a>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% if search.results_count > 0 %}
+              <div class="fom-search-page__grid">
+                {% for item in search.results %}
+                  {% if item.object_type == 'product' %}
+                    {% render 'fom-unified-product-card', product: item %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              {% if paginate.pages > 1 %}
+                <nav class="fom-search-page__pagination" aria-label="Search pagination">
+                  {% if paginate.previous %}<a href="{{ paginate.previous.url }}" aria-label="Previous page">‹</a>{% endif %}
+                  {% for part in paginate.parts %}
+                    {% if part.is_link %}
+                      <a href="{{ part.url }}">{{ part.title }}</a>
+                    {% else %}
+                      <span{% if part.title == paginate.current_page %} class="current" aria-current="page"{% endif %}>{{ part.title }}</span>
+                    {% endif %}
+                  {% endfor %}
+                  {% if paginate.next %}<a href="{{ paginate.next.url }}" aria-label="Next page">›</a>{% endif %}
+                </nav>
+              {% endif %}
+            {% else %}
+              <div class="fom-search-page__empty">
+                <h2>No products found</h2>
+                <p>Check the spelling, try a broader search, or browse all pantry essentials.</p>
+                <a class="fom-search-page__apply" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endpaginate %}
+    {% else %}
+      <div class="fom-search-page__initial">
+        <h2>What are you looking for?</h2>
+        <p>Start with a product name, ingredient, category, or browse our most popular products below.</p>
+      </div>
+      {% if collections.all.products_count > 0 %}
+        <div class="fom-search-page__grid" style="margin-top: 24px;">
+          {% for product in collections.all.products limit: 8 %}
+            {% render 'fom-unified-product-card', product: product %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "label": "Results per page",
+      "min": 8,
+      "max": 32,
+      "step": 4,
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fresh O Mill search"
+    }
+  ]
+}
+{% endschema %}

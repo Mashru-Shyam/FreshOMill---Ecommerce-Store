@@ -1,0 +1,46 @@
+<form action="{{ routes.search_url }}" method="get">
+  <input type="hidden" name="q" value="{{ search.terms | escape }}">
+  <input type="hidden" name="type" value="product">
+  <input type="hidden" name="options[prefix]" value="last">
+  {% if search.sort_by != blank %}<input type="hidden" name="sort_by" value="{{ search.sort_by }}">{% endif %}
+
+  {% for filter in search.filters %}
+    <div class="fom-search-page__filter-group">
+      <h3>{{ filter.label }}</h3>
+      {% case filter.type %}
+        {% when 'boolean', 'list' %}
+          <div class="fom-search-page__filter-values">
+            {% for value in filter.values %}
+              <label class="fom-search-page__filter-value">
+                <input
+                  type="checkbox"
+                  name="{{ value.param_name }}"
+                  value="{{ value.value }}"
+                  {% if value.active %}checked{% endif %}
+                  {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                >
+                <span>{{ value.label }}</span>
+                <span class="fom-search-page__filter-count">{{ value.count }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        {% when 'price_range' %}
+          <div class="fom-search-page__price-inputs">
+            <label>
+              Min
+              <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}" min="0" placeholder="0">
+            </label>
+            <label>
+              Max
+              <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}" min="0" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+            </label>
+          </div>
+      {% endcase %}
+    </div>
+  {% endfor %}
+
+  <div class="fom-search-page__filter-actions">
+    <button class="fom-search-page__apply" type="submit">Apply filters</button>
+    <a class="fom-search-page__clear" href="{{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product&options%5Bprefix%5D=last">Clear filters</a>
+  </div>
+</form>

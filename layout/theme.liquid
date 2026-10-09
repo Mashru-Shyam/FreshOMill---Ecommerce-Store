@@ -175,7 +175,7 @@
         {% section 'fom-collection-main-v2' %}
       {% section 'fom-service-strip' %}
     {% elsif request.page_type == 'search' %}
-      {% section 'fom-search-main' %}
+        {% section 'fom-search-main-v2' %}
     {% elsif request.page_type == 'cart' %}
         {% section 'fom-cart-main-v2' %}
     {% else %}
@@ -202,6 +202,8 @@
     {{ 'fom-layout-consistency.css' | asset_url | stylesheet_tag }}
     {{ 'fom-interface-lock.css' | asset_url | stylesheet_tag }}
     {{ 'fom-cart-experience.css' | asset_url | stylesheet_tag }}
+    {{ 'fom-search-v2.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'fom-search-discovery.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
   </body>
 </html>
