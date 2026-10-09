@@ -177,7 +177,7 @@
     {% elsif request.page_type == 'search' %}
       {% section 'fom-search-main' %}
     {% elsif request.page_type == 'cart' %}
-      {% section 'fom-cart-main' %}
+        {% section 'fom-cart-main-v2' %}
     {% else %}
       {{ content_for_layout }}
     {% endif %}
@@ -201,6 +201,7 @@
     {{ 'fom-product-card.css' | asset_url | stylesheet_tag }}
     {{ 'fom-layout-consistency.css' | asset_url | stylesheet_tag }}
     {{ 'fom-interface-lock.css' | asset_url | stylesheet_tag }}
+    {{ 'fom-cart-experience.css' | asset_url | stylesheet_tag }}
 
   </body>
 </html>

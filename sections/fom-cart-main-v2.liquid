@@ -1,0 +1,139 @@
+<script src="{{ 'fom-cart-page-v2.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign free_delivery_threshold = section.settings.free_delivery_threshold | times: 100
+  assign delivery_remaining = free_delivery_threshold | minus: cart.total_price
+  assign delivery_progress = 0
+  if free_delivery_threshold > 0
+    assign delivery_progress = cart.total_price | times: 100 | divided_by: free_delivery_threshold
+  endif
+  if delivery_progress > 100
+    assign delivery_progress = 100
+  endif
+%}
+
+<fom-cart-page class="fom-cart-page">
+  <div class="fom-cart-page__inner">
+    <div class="fom-cart-page__header">
+      <div>
+        <p class="fom-cart-page__eyebrow">Fresh O Mill</p>
+        <h1>Your cart</h1>
+      </div>
+      {% if cart.item_count > 0 %}<button class="fom-cart-page__clear" type="button" data-clear-cart>Clear cart</button>{% endif %}
+    </div>
+
+    {% if cart.item_count > 0 %}
+      <div class="fom-cart-page__delivery">
+        <div class="fom-cart-page__delivery-row">
+          {% if delivery_remaining > 0 %}
+            <span>Add {{ delivery_remaining | money }} more for free delivery</span>
+            <span>{{ cart.total_price | money }} / {{ free_delivery_threshold | money }}</span>
+          {% else %}
+            <span>You qualify for free delivery</span>
+            <span>Unlocked</span>
+          {% endif %}
+        </div>
+        <div class="fom-cart-page__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ delivery_progress }}">
+          <span style="--fom-cart-progress: {{ delivery_progress }}%"></span>
+        </div>
+      </div>
+
+      <form action="{{ routes.cart_url }}" method="post" id="cart" data-cart-form>
+        <div class="fom-cart-page__layout">
+          <div class="fom-cart-page__items">
+            {% for item in cart.items %}
+              {% assign compare_line_price = item.variant.compare_at_price | times: item.quantity %}
+              <article class="fom-cart-page__item" data-cart-line="{{ forloop.index }}">
+                <a class="fom-cart-page__image" href="{{ item.url }}" aria-label="{{ item.product.title | escape }}">
+                  {% if item.image != blank %}
+                    {{ item.image | image_url: width: 280 | image_tag: loading: 'lazy', widths: '140, 220, 280', sizes: '112px', alt: item.image.alt }}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  {% endif %}
+                </a>
+
+                <div class="fom-cart-page__item-details">
+                  <a class="fom-cart-page__item-title" href="{{ item.url }}">{{ item.product.title }}</a>
+                  {% unless item.variant.title == 'Default Title' %}<p class="fom-cart-page__variant">{{ item.variant.title }}</p>{% endunless %}
+                  {% for property in item.properties %}
+                    {% assign property_first_character = property.first | slice: 0 %}
+                    {% unless property.last == blank or property_first_character == '_' %}
+                      <p class="fom-cart-page__property">{{ property.first }}: {{ property.last }}</p>
+                    {% endunless %}
+                  {% endfor %}
+                  <div class="fom-cart-page__line-price">
+                    {{ item.final_line_price | money }}
+                    {% if compare_line_price > item.final_line_price %}<s class="fom-cart-page__compare">{{ compare_line_price | money }}</s>{% endif %}
+                  </div>
+                </div>
+
+                <div class="fom-cart-page__item-actions">
+                  <div class="fom-cart-page__quantity" aria-label="Quantity for {{ item.product.title | escape }}">
+                    <button type="button" data-cart-quantity-change="-1" data-line="{{ forloop.index }}" aria-label="Decrease quantity">−</button>
+                    <input
+                      type="number"
+                      name="updates[]"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      inputmode="numeric"
+                      data-cart-quantity-input
+                      data-line="{{ forloop.index }}"
+                      aria-label="Quantity for {{ item.product.title | escape }}"
+                    >
+                    <button type="button" data-cart-quantity-change="1" data-line="{{ forloop.index }}" aria-label="Increase quantity">+</button>
+                  </div>
+                  <a class="fom-cart-page__remove" href="{{ item.url_to_remove }}" aria-label="Remove {{ item.product.title | escape }}">Remove</a>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+
+          <aside class="fom-cart-page__summary" aria-labelledby="fom-cart-summary-title-{{ section.id }}">
+            <h2 id="fom-cart-summary-title-{{ section.id }}">Order summary</h2>
+            <div class="fom-cart-page__summary-row"><span>Subtotal ({{ cart.item_count }} items)</span><strong>{{ cart.items_subtotal_price | money }}</strong></div>
+            {% if cart.cart_level_discount_applications.size > 0 %}
+              {% for discount in cart.cart_level_discount_applications %}
+                <div class="fom-cart-page__summary-row"><span>{{ discount.title }}</span><strong>−{{ discount.total_allocated_amount | money }}</strong></div>
+              {% endfor %}
+            {% endif %}
+            <div class="fom-cart-page__summary-row"><span>Delivery</span><strong>{% if delivery_remaining <= 0 %}Free{% else %}Calculated at checkout{% endif %}</strong></div>
+            <div class="fom-cart-page__summary-row"><span>Taxes</span><strong>Calculated at checkout</strong></div>
+            <div class="fom-cart-page__summary-divider"></div>
+            <div class="fom-cart-page__total"><span>Total</span><strong>{{ cart.total_price | money }}</strong></div>
+            <button class="fom-cart-page__checkout" type="submit" name="checkout">Secure checkout</button>
+            <a class="fom-cart-page__continue" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+            <p class="fom-cart-page__note">Shipping and final taxes are confirmed during checkout.</p>
+          </aside>
+        </div>
+      </form>
+    {% else %}
+      <div class="fom-cart-page__empty">
+        <div>
+          <span class="fom-cart-page__empty-icon" aria-hidden="true">⌑</span>
+          <h2>Your cart is empty</h2>
+          <p>Explore freshly prepared staples and pantry essentials packed for your kitchen.</p>
+          <a class="fom-cart-page__checkout" href="{{ routes.all_products_collection_url }}">Shop all products</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</fom-cart-page>
+
+{% schema %}
+{
+  "name": "Fresh O Mill cart",
+  "settings": [
+    {
+      "type": "number",
+      "id": "free_delivery_threshold",
+      "label": "Free delivery threshold",
+      "default": 499
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fresh O Mill cart"
+    }
+  ]
+}
+{% endschema %}
