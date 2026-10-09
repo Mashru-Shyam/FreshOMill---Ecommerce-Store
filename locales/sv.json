@@ -1,4 +1,6 @@
 {
+  "fom_mobile": { "navigation": "Mobile navigation", "home": "Home", "shop": "Shop", "search": "Search", "account": "Account", "cart": "Cart", "resize_sheet": "Expand or collapse this panel" },
+    "fom_header": { "announcements": "Store announcements", "search_placeholder": "Search products...", "search_button": "Search", "navigation": "Main navigation", "home": "Home", "all_products": "All Products", "contact": "Contact", "my_account": "My Account", "visit_store": "Visit Our Store" },
   "blocks": {
     "load_video": "Ladda video: {{ description }}",
     "sold_out": "Slutsåld",

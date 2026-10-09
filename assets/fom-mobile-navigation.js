@@ -20,6 +20,7 @@ class FomMobileNavigation extends HTMLElement {
     this.mobile = window.matchMedia('(max-width: 989px)');
     const options = { signal: this.controller.signal };
     this.addEventListener('click', (event) => this.onNavigation(event), options);
+    window.addEventListener('popstate', (event) => this.onPopState(event), options);
     this.mobile.addEventListener('change', () => this.resizeSheets(), options);
     window.addEventListener('resize', () => this.resizeSheets(), options);
     window.visualViewport?.addEventListener('resize', () => this.resizeSheets(), options);
@@ -64,7 +65,7 @@ class FomMobileNavigation extends HTMLElement {
       if (!panel.id) panel.id = `fom-${id}-panel`;
       handle.setAttribute('aria-controls', panel.id);
       panel.prepend(handle);
-      const state = { host, panel, handle, id, expanded: false, wasOpen: false, controller: new AbortController() };
+      const state = { host, panel, handle, id, expanded: false, wasOpen: false, historyPushed: false, closingFromHistory: false, controller: new AbortController() };
       this.sheets.set(panel, state);
       const options = { signal: state.controller.signal };
       handle.addEventListener('pointerdown', (event) => this.startDrag(state, event), options);
@@ -103,16 +104,67 @@ class FomMobileNavigation extends HTMLElement {
     this.querySelector(`[data-fom-action="${action}"]`)?.setAttribute('aria-expanded', String(open));
     if (open && !state.wasOpen && this.mobile.matches) {
       this.setSheetSize(state, false);
-      for (const other of this.sheets.values()) {
-        if (other !== state && other.panel.open) this.closeSheet(other).catch(() => {});
-      }
+      this.activateSheet(state).catch(() => {
+        this.switchingSheets = false;
+      });
     }
     if (!open) {
       state.drag = null;
       state.panel.removeAttribute('data-fom-dragging');
       this.clearSheetStyle(state);
+      if (state.historyPushed && !this.switchingSheets) {
+        state.historyPushed = false;
+        if (!state.closingFromHistory) window.history.back();
+      } else if (this.switchingSheets) {
+        state.historyPushed = false;
+      }
+      state.closingFromHistory = false;
     }
     state.wasOpen = open;
+  }
+
+  async activateSheet(state) {
+    const others = [...this.sheets.values()].filter((other) => other !== state && other.panel.open);
+    if (others.length) {
+      this.switchingSheets = true;
+      this.reuseSheetHistory = this.reuseSheetHistory || others.some((other) => other.historyPushed);
+      for (const other of others) other.historyPushed = false;
+      await Promise.all(others.map((other) => this.closeSheet(other)));
+      this.switchingSheets = false;
+    }
+    if (!state.panel.open || !this.mobile.matches) return;
+    this.pushSheetHistory(state);
+    if (state.id === 'search-modal') {
+      requestAnimationFrame(() => {
+        if (state.panel.open && this.mobile.matches) {
+          state.panel.querySelector('.search-input')?.focus({ preventScroll: true });
+        }
+      });
+    }
+  }
+
+  pushSheetHistory(state) {
+    if (state.historyPushed) return;
+    const current = window.history.state;
+    const next = current && typeof current === 'object' ? { ...current } : {};
+    next.fomMobileSheet = state.id;
+    if (this.reuseSheetHistory) {
+      window.history.replaceState(next, '', window.location.href);
+      this.reuseSheetHistory = false;
+    } else {
+      window.history.pushState(next, '', window.location.href);
+    }
+    state.historyPushed = true;
+  }
+
+  onPopState(event) {
+    const state = [...this.sheets.values()].find((sheet) => sheet.panel.open && sheet.historyPushed);
+    if (!state) return;
+    state.historyPushed = false;
+    state.closingFromHistory = true;
+    this.closeSheet(state).catch(() => {
+      state.closingFromHistory = false;
+    });
   }
 
   viewport() {
@@ -212,11 +264,25 @@ class FomMobileNavigation extends HTMLElement {
     try {
       await customElements.whenDefined(search ? 'dialog-component' : 'theme-drawer');
       this.scanSheets();
-      for (const state of this.sheets.values()) if (state.host !== host && state.panel.open) await this.closeSheet(state);
-      trigger.focus({ preventScroll: true });
+      this.switchingSheets = true;
+      this.reuseSheetHistory = false;
+      for (const state of this.sheets.values()) {
+        if (state.host !== host && state.panel.open) {
+          this.reuseSheetHistory = this.reuseSheetHistory || state.historyPushed;
+          state.historyPushed = false;
+          await this.closeSheet(state);
+        }
+      }
+      this.switchingSheets = false;
+      if (host.querySelector(':scope > dialog')?.open) {
+        if (search) host.closeDialog();
+        else await host.close();
+        return;
+      }
       if (search) host.showDialog();
       else host.open();
     } catch {
+      this.switchingSheets = false;
       window.location.assign(search ? this.dataset.searchUrl : trigger.href);
     }
   }

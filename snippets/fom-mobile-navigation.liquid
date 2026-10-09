@@ -29,7 +29,7 @@
       <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2z"/></svg></span>
       <span>{{ 'fom_mobile.account' | t }}</span>
     </a>
-    <a class="fom-bottom-nav__item" href="{{ routes.cart_url }}" data-fom-action="cart" {% if settings.cart_type == 'drawer' and template.name != 'cart' %}aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded="false"{% endif %} {% if request.page_type == 'cart' %}aria-current="page"{% endif %}>
+    <a class="fom-bottom-nav__item" href="{{ routes.cart_url }}" {% if settings.cart_type == 'drawer' and template.name != 'cart' %}data-fom-action="cart" aria-haspopup="dialog" aria-controls="cart-drawer" aria-expanded="false"{% endif %} {% if request.page_type == 'cart' %}aria-current="page"{% endif %}>
       <span class="fom-bottom-nav__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18l-1.5 15h-15zM8 6V5a4 4 0 0 1 8 0v1"/></svg><span class="fom-bottom-nav__badge" data-fom-cart-count{% if cart.item_count == 0 %} data-empty{% endif %} aria-hidden="true">{{ cart.item_count }}</span></span>
       <span>{{ 'fom_mobile.cart' | t }}</span>
     </a>

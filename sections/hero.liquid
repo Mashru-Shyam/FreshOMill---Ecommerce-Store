@@ -327,7 +327,11 @@
   {{ media_slot_2 }}
 
   {% if media_count == 0 %}
-    {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+    {% if template.name == 'index' %}
+      <div class="hero__media fom-home-hero__fallback" aria-hidden="true"></div>
+    {% else %}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+    {% endif %}
   {%- endif -%}
 {% endcapture %}
 
@@ -359,7 +363,11 @@
     }}
   {% endif %}
   {% if media_count == 0 %}
-    {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+    {% if template.name == 'index' %}
+      <div class="hero__media fom-home-hero__fallback" aria-hidden="true"></div>
+    {% else %}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+    {% endif %}
   {% endif %}
 {% endcapture %}
 
@@ -461,13 +469,15 @@
 
 <div
   id="Hero-{{ section.id }}"
-  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
+  class="hero{% if template.name == 'index' %} hero--fom-home{% endif %}{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
   style="
     --hero-border-style: {{ section.settings.border }};
     --hero-border-width: {{ section.settings.border_width }}px;
     --hero-border-opacity: {{ section.settings.border_opacity }}%;
     --blur-opacity: {{ section.settings.reflection_opacity | divided_by: 100.0 }};
-    {% if section.settings.section_height == 'custom' %}
+    {% if template.name == 'index' %}
+      --hero-min-height: var(--fom-home-hero-height, clamp(360px, 48vw, 620px));
+    {% elsif section.settings.section_height == 'custom' %}
       --hero-min-height: {{ section.settings.section_height_custom }}svh;
     {% elsif section.settings.section_height == "full-screen" %}
        --hero-min-height: 100svh;
@@ -561,6 +571,87 @@
   .hero {
     position: relative;
     min-height: calc(var(--hero-min-height) - var(--hero-height-offset));
+  }
+
+  .hero--fom-home {
+    background: #12351f;
+    color: #fff;
+    --fom-home-hero-height: clamp(360px, 48vw, 620px);
+  }
+
+  .hero--fom-home .hero__container {
+    min-height: inherit;
+  }
+
+  .hero--fom-home .hero__content-wrapper {
+    width: min(100%, 1240px);
+    margin-inline: auto;
+    padding-inline: clamp(24px, 6vw, 88px);
+    padding-block: clamp(48px, 8vw, 112px);
+  }
+
+  .hero--fom-home .hero__media {
+    object-position: center;
+  }
+
+  .hero--fom-home .fom-home-hero__fallback {
+    background:
+      radial-gradient(ellipse at 78% 22%, rgb(238 157 28 / 34%) 0 7%, transparent 7.2%),
+      radial-gradient(ellipse at 86% 78%, rgb(242 247 237 / 12%) 0 18%, transparent 18.2%),
+      linear-gradient(118deg, #12351f 0%, #18572e 58%, #216b3a 100%);
+  }
+
+  .hero--fom-home .layout-panel-flex {
+    gap: clamp(16px, 2vw, 28px);
+  }
+
+  .hero--fom-home :is(h1, h2, h3, p) {
+    color: #fff;
+  }
+
+  .hero--fom-home a.button-custom,
+  .hero--fom-home .button-custom {
+    min-height: 48px;
+    padding-inline: 24px;
+    border: 1px solid #ee9d1c;
+    border-radius: 8px;
+    background: #ee9d1c;
+    color: #12351f;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .hero--fom-home a.button-custom:hover,
+  .hero--fom-home .button-custom:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #12351f;
+  }
+
+  .hero--fom-home :is(a, button):focus-visible {
+    outline: 3px solid #ee9d1c;
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .hero--fom-home {
+      --fom-home-hero-height: clamp(340px, 76svh, 620px);
+    }
+
+    .hero--fom-home .hero__content-wrapper {
+      padding: 44px 24px 52px;
+    }
+
+    .hero--fom-home .layout-panel-flex {
+      align-items: flex-start;
+      text-align: start;
+    }
+
+    .hero--fom-home a.button-custom,
+    .hero--fom-home .button-custom {
+      min-height: 48px;
+      width: auto;
+    }
   }
 
   .hero[data-shopify-visual-preview] {

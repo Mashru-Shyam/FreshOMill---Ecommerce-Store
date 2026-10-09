@@ -149,7 +149,7 @@ fom-mobile-navigation,
     width: 100% !important;
     box-sizing: border-box !important;
     max-width: 100% !important;
-    height: var(--fom-sheet-height, 68dvh) !important;
+    height: var(--fom-sheet-height, 64dvh) !important;
     min-height: 0 !important;
     max-height: calc(100dvh - 12px) !important;
     margin: 0 !important;
@@ -207,6 +207,10 @@ fom-mobile-navigation,
     touch-action: none;
     cursor: grab;
     user-select: none;
+  }
+
+  .fom-sheet-handle:active {
+    cursor: grabbing;
   }
 
   .fom-sheet-handle::before {

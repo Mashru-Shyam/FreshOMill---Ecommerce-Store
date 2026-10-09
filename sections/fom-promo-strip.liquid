@@ -1,0 +1,106 @@
+{% if section.blocks.size > 0 %}
+  <section class="fom-promo-strip" aria-label="{{ section.settings.accessibility_label | escape }}">
+    <ul class="fom-promo-strip__items" role="list">
+      {% for block in section.blocks %}
+        <li class="fom-promo-strip__item" {{ block.shopify_attributes }}>
+          <span class="fom-promo-strip__mark" aria-hidden="true"></span>
+          <span>{{ block.settings.text | escape }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .fom-promo-strip {
+    background: #fbfcf7;
+    border-block: 1px solid rgb(33 107 58 / 12%);
+  }
+
+  .fom-promo-strip__items {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 32px;
+    width: min(100% - 48px, 1280px);
+    margin: 0 auto;
+    padding: 20px 0;
+    list-style: none;
+  }
+
+  .fom-promo-strip__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 0;
+    color: #18572e;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .fom-promo-strip__mark {
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ee9d1c;
+  }
+
+  @media screen and (max-width: 749px) {
+    .fom-promo-strip__items {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: min(100% - 40px, 520px);
+      padding: 18px 0;
+    }
+
+    .fom-promo-strip__item {
+      justify-content: flex-start;
+      font-size: 13px;
+      text-align: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill highlights",
+  "tag": "section",
+  "class": "fom-promo-strip-section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessible label",
+      "default": "Store highlights"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Highlight",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Freshly Packed On Order"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fresh O Mill highlights",
+      "blocks": [
+        { "type": "point", "settings": { "text": "Freshly Packed On Order" } },
+        { "type": "point", "settings": { "text": "Premium Quality Ingredients" } },
+        { "type": "point", "settings": { "text": "Sourced From Local Farms" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
