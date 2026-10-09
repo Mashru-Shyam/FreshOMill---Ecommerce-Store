@@ -75,14 +75,34 @@
     "form": {
       "type": "section",
       "blocks": {
+        "fom_contact_details": {
+          "type": "fom-contact-details",
+          "settings": {
+            "width": "custom",
+            "custom_width": 46,
+            "width_mobile": "custom",
+            "custom_width_mobile": 100,
+            "heading": "Contact information",
+            "location_label": "Store location",
+            "directions_label": "Get directions",
+            "hours_label": "Opening hours",
+            "whatsapp_label": "Chat with us on WhatsApp",
+            "instagram_label": "Follow us on Instagram"
+          }
+        },
         "contact_form_UwiCkQ": {
           "type": "contact-form",
           "settings": {
             "width": "custom",
-            "custom_width": 50,
+            "custom_width": 46,
             "width_mobile": "custom",
             "custom_width_mobile": 100,
-            "input_style": "default",
+            "input_style": "custom",
+            "input_background_color": "#ffffff",
+            "input_text_color": "#18351f",
+            "input_border_color": "#285b32",
+            "border_width": 1,
+            "border_radius": 12,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -107,11 +127,12 @@
         }
       },
       "block_order": [
+        "fom_contact_details",
         "contact_form_UwiCkQ"
       ],
       "name": "t:names.contact_form",
       "settings": {
-        "content_direction": "column",
+        "content_direction": "row",
         "vertical_on_mobile": true,
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",

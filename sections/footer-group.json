@@ -14,6 +14,33 @@
     "footer_m9NzUG": {
       "type": "footer",
       "blocks": {
+        "brand_logo": {
+          "type": "logo",
+          "settings": {
+            "unit": "pixel",
+            "pixel_height": 64,
+            "custom_mobile_size": true,
+            "unit_mobile": "pixel",
+            "pixel_height_mobile": 48
+          },
+          "blocks": {}
+        },
+        "fom_footer_contact": {
+          "type": "fom-contact-details",
+          "settings": {
+            "width": "custom",
+            "custom_width": 100,
+            "width_mobile": "custom",
+            "custom_width_mobile": 100,
+            "heading": "Contact us",
+            "location_label": "Store location",
+            "directions_label": "Get directions",
+            "hours_label": "Opening hours",
+            "whatsapp_label": "Chat with us on WhatsApp",
+            "instagram_label": "Follow us on Instagram"
+          },
+          "blocks": {}
+        },
         "group_H6VpwJ": {
           "type": "group",
           "settings": {
@@ -131,8 +158,10 @@
         }
       },
       "block_order": [
+        "brand_logo",
         "group_H6VpwJ",
-        "email_signup_crihX7"
+        "email_signup_crihX7",
+        "fom_footer_contact"
       ],
       "name": "t:names.footer",
       "settings": {
@@ -154,31 +183,10 @@
             "case": "none"
           },
           "blocks": {}
-        },
-        "footer_policy_list_VCdnpa": {
-          "type": "footer-policy-list",
-          "settings": {
-            "font_size": "0.75rem",
-            "case": "none"
-          },
-          "blocks": {}
-        },
-        "social_links_Ew63Kq": {
-          "type": "social-links",
-          "settings": {
-            "facebook_url": "https://www.facebook.com/",
-            "instagram_url": "https://www.instagram.com/",
-            "youtube_url": "https://www.youtube.com/",
-            "tiktok_url": "https://www.tiktok.com/",
-            "twitter_url": "https://x.com/"
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "footer_copyright_jweRK8",
-        "footer_policy_list_VCdnpa",
-        "social_links_Ew63Kq"
+        "footer_copyright_jweRK8"
       ],
       "name": "t:names.utilities",
       "settings": {

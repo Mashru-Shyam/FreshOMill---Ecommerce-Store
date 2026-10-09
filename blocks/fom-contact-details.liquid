@@ -1,0 +1,182 @@
+{% liquid
+  assign contact_email = shop.email
+  assign contact_phone = shop.phone
+  assign phone_link = contact_phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+  assign store_address = shop.address | format_address
+  assign map_query = store_address | strip_html | strip | url_encode
+  assign whatsapp_number = block.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+%}
+
+<section
+  class="fom-contact-details size-style"
+  style="{% render 'size-style', settings: block.settings %}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.heading != blank %}
+    <h2 class="fom-contact-details__heading">{{ block.settings.heading | escape }}</h2>
+  {% endif %}
+
+  <ul class="fom-contact-details__list" role="list">
+    {% if contact_email != blank %}
+      <li>
+        <span class="fom-contact-details__label">{{ 'blocks.contact_form.email' | t }}</span>
+        <a href="mailto:{{ contact_email | escape }}">{{ contact_email | escape }}</a>
+      </li>
+    {% endif %}
+
+    {% if contact_phone != blank %}
+      <li>
+        <span class="fom-contact-details__label">{{ 'blocks.contact_form.phone' | t }}</span>
+        <a href="tel:{{ phone_link | escape }}">{{ contact_phone | escape }}</a>
+      </li>
+    {% endif %}
+
+    {% if store_address != blank %}
+      <li>
+        <span class="fom-contact-details__label">{{ block.settings.location_label | escape }}</span>
+        <address>{{ store_address }}</address>
+        {% if map_query != blank %}
+          <a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_query }}" target="_blank" rel="noopener noreferrer">
+            {{ block.settings.directions_label | escape }}
+          </a>
+        {% endif %}
+      </li>
+    {% endif %}
+
+    {% if block.settings.hours != blank %}
+      <li>
+        <span class="fom-contact-details__label">{{ block.settings.hours_label | escape }}</span>
+        <span>{{ block.settings.hours | escape | newline_to_br }}</span>
+      </li>
+    {% endif %}
+
+    {% if whatsapp_number != blank %}
+      <li>
+        <a href="https://wa.me/{{ whatsapp_number | escape }}" target="_blank" rel="noopener noreferrer">{{ block.settings.whatsapp_label | escape }}</a>
+      </li>
+    {% endif %}
+
+    {% if block.settings.instagram_url != blank %}
+      <li>
+        <a href="{{ block.settings.instagram_url | escape }}" target="_blank" rel="noopener noreferrer">{{ block.settings.instagram_label | escape }}</a>
+      </li>
+    {% endif %}
+  </ul>
+</section>
+
+{% stylesheet %}
+  .fom-contact-details {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.5rem;
+    border: 1px solid rgb(34 94 48 / 14%);
+    border-radius: 1rem;
+    background: #f4f7ee;
+    color: #18351f;
+  }
+
+  .fom-contact-details__heading {
+    margin: 0 0 1.25rem;
+    color: inherit;
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+
+  .fom-contact-details__list {
+    display: grid;
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fom-contact-details__list li {
+    display: grid;
+    justify-items: start;
+    gap: 0.3rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .fom-contact-details__label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+  }
+
+  .fom-contact-details__list a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  .fom-contact-details__list a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .fom-contact-details address {
+    font-style: normal;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact details",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width on desktop",
+      "options": [
+        { "value": "fit-content", "label": "Fit content" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "fit-content"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "Desktop width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.width == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "width_mobile",
+      "label": "Width on mobile",
+      "options": [
+        { "value": "fit-content", "label": "Fit content" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "range",
+      "id": "custom_width_mobile",
+      "label": "Mobile width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.width_mobile == 'custom' }}"
+    },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Contact information" },
+    { "type": "text", "id": "location_label", "label": "Location label", "default": "Store location" },
+    { "type": "text", "id": "directions_label", "label": "Directions link label", "default": "Get directions" },
+    { "type": "text", "id": "hours_label", "label": "Hours label", "default": "Opening hours" },
+    { "type": "textarea", "id": "hours", "label": "Opening hours", "info": "Leave blank until approved hours are available." },
+    { "type": "text", "id": "whatsapp_label", "label": "WhatsApp link label", "default": "Chat with us on WhatsApp" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "info": "Enter the confirmed international number using digits only, including country code. Leave blank until confirmed." },
+    { "type": "text", "id": "instagram_label", "label": "Instagram link label", "default": "Follow us on Instagram" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram URL", "info": "Leave blank until the official account URL is confirmed." }
+  ],
+  "presets": [
+    { "name": "Contact details" }
+  ]
+}
+{% endschema %}
