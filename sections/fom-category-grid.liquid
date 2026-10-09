@@ -15,11 +15,18 @@
       {% for block in section.blocks %}
         {% assign category_title = block.settings.title %}
         {% assign category_param = category_title | url_encode %}
-        {% assign category_url = routes.all_products_collection_url | append: '?filter.p.product_type=' | append: category_param %}
+        {% assign category_collection = block.settings.collection %}
+        {% if category_collection != blank %}
+          {% assign category_url = category_collection.url %}
+          {% assign category_image = block.settings.image | default: category_collection.featured_image | default: category_collection.products.first.featured_image %}
+        {% else %}
+          {% assign category_url = routes.all_products_collection_url | append: '?filter.p.product_type=' | append: category_param %}
+          {% assign category_image = block.settings.image %}
+        {% endif %}
         <li class="fom-category-grid__item" {{ block.shopify_attributes }}>
           <a class="fom-category-grid__card" href="{{ category_url | escape }}" aria-label="Shop {{ category_title | escape }}">
-            {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 900 | image_tag: class: 'fom-category-grid__image', widths: '240, 360, 540, 720, 900', sizes: '(min-width: 1200px) 220px, (min-width: 750px) 20vw, 46vw', loading: 'lazy', alt: '' }}
+            {% if category_image != blank %}
+              {{ category_image | image_url: width: 900 | image_tag: class: 'fom-category-grid__image', widths: '240, 360, 540, 720, 900', sizes: '(min-width: 1200px) 220px, (min-width: 750px) 20vw, 46vw', loading: 'lazy', alt: '' }}
             {% else %}
               <span class="fom-category-grid__placeholder" aria-hidden="true"></span>
             {% endif %}
@@ -183,6 +190,11 @@
           "type": "image_picker",
           "id": "image",
           "label": "Category image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection link"
         }
       ]
     }
