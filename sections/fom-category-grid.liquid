@@ -1,0 +1,219 @@
+{% liquid
+  assign section_heading = section.settings.heading | default: 'Shop by Category'
+%}
+
+<section class="fom-category-grid" aria-labelledby="fom-category-grid-heading-{{ section.id }}">
+  <div class="fom-category-grid__inner page-width">
+    {% if section_heading != blank %}
+      <h2 class="fom-category-grid__heading" id="fom-category-grid-heading-{{ section.id }}">{{ section_heading | escape }}</h2>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p class="fom-category-grid__subheading">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+
+    <ul class="fom-category-grid__items" role="list">
+      {% for block in section.blocks %}
+        {% assign category_title = block.settings.title %}
+        {% assign category_param = category_title | url_encode %}
+        {% assign category_url = routes.all_products_collection_url | append: '?filter.p.product_type=' | append: category_param %}
+        <li class="fom-category-grid__item" {{ block.shopify_attributes }}>
+          <a class="fom-category-grid__card" href="{{ category_url | escape }}" aria-label="Shop {{ category_title | escape }}">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 900 | image_tag: class: 'fom-category-grid__image', widths: '240, 360, 540, 720, 900', sizes: '(min-width: 1200px) 220px, (min-width: 750px) 20vw, 46vw', loading: 'lazy', alt: '' }}
+            {% else %}
+              <span class="fom-category-grid__placeholder" aria-hidden="true"></span>
+            {% endif %}
+            <span class="fom-category-grid__shade" aria-hidden="true"></span>
+            <span class="fom-category-grid__label">{{ category_title | escape }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-category-grid {
+    padding-block: 48px;
+    background: #fffdf6;
+  }
+
+  .fom-category-grid__inner {
+    margin-inline: auto;
+  }
+
+  .fom-category-grid__heading {
+    margin: 0;
+    color: #12351f;
+    text-align: center;
+  }
+
+  .fom-category-grid__subheading {
+    margin: 10px auto 0;
+    max-width: 50rem;
+    color: #526455;
+    text-align: center;
+  }
+
+  .fom-category-grid__items {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 18px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fom-category-grid__card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #e8bd4f, #367d43 76%);
+    color: #fff;
+    isolation: isolate;
+    text-decoration: none;
+  }
+
+  .fom-category-grid__image,
+  .fom-category-grid__placeholder,
+  .fom-category-grid__shade {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .fom-category-grid__image {
+    object-fit: cover;
+    transition: transform 220ms ease;
+  }
+
+  .fom-category-grid__placeholder {
+    background: radial-gradient(ellipse at 30% 25%, #f1c54e 0 12%, transparent 13%), linear-gradient(140deg, #e8bd4f, #367d43 78%);
+  }
+
+  .fom-category-grid__shade {
+    background: linear-gradient(180deg, transparent 38%, rgb(12 34 20 / 78%) 100%);
+  }
+
+  .fom-category-grid__label {
+    position: absolute;
+    z-index: 1;
+    inset-inline: 12px;
+    bottom: 14px;
+    color: #fff;
+    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-wrap: balance;
+    text-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+  }
+
+  .fom-category-grid__card:hover .fom-category-grid__image,
+  .fom-category-grid__card:focus-visible .fom-category-grid__image {
+    transform: scale(1.045);
+  }
+
+  .fom-category-grid__card:focus-visible {
+    outline: 3px solid #ee9d1c;
+    outline-offset: 3px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .fom-category-grid {
+      padding-block: 32px;
+    }
+
+    .fom-category-grid__items {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .fom-category-grid__card {
+      border-radius: 11px;
+    }
+
+    .fom-category-grid__label {
+      inset-inline: 8px;
+      bottom: 10px;
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fom-category-grid__image {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Fresh O Mill categories",
+  "class": "fom-category-grid-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category name",
+          "default": "Category"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Fresh O Mill categories",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Wood Pressed Oils" } },
+        { "type": "category", "settings": { "title": "Flour & Multigrain" } },
+        { "type": "category", "settings": { "title": "Dry Fruits & Dates" } },
+        { "type": "category", "settings": { "title": "Nuts & Seeds" } },
+        { "type": "category", "settings": { "title": "Millets" } },
+        { "type": "category", "settings": { "title": "Spices" } },
+        { "type": "category", "settings": { "title": "Masalas" } },
+        { "type": "category", "settings": { "title": "Health Foods" } },
+        { "type": "category", "settings": { "title": "Coffee & Tea" } },
+        { "type": "category", "settings": { "title": "Pickles" } },
+        { "type": "category", "settings": { "title": "Natural Sweetners" } },
+        { "type": "category", "settings": { "title": "Pulses & Lentils" } },
+        { "type": "category", "settings": { "title": "Fresh Nuts Butters" } },
+        { "type": "category", "settings": { "title": "Pasta & Noodles" } },
+        { "type": "category", "settings": { "title": "Poha" } },
+        { "type": "category", "settings": { "title": "Quick Bites" } },
+        { "type": "category", "settings": { "title": "Rava" } },
+        { "type": "category", "settings": { "title": "Rice" } },
+        { "type": "category", "settings": { "title": "Skin & Hair Care" } },
+        { "type": "category", "settings": { "title": "Eco-Friendly" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

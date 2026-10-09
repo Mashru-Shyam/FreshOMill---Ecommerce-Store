@@ -346,11 +346,164 @@
       "settings": {
         "accessibility_label": "Store highlights"
       }
+    },
+    "fom_category_grid": {
+      "type": "fom-category-grid",
+      "blocks": {
+        "fom_category_01": {
+          "type": "category",
+          "settings": {
+            "title": "Wood Pressed Oils"
+          }
+        },
+        "fom_category_02": {
+          "type": "category",
+          "settings": {
+            "title": "Flour & Multigrain"
+          }
+        },
+        "fom_category_03": {
+          "type": "category",
+          "settings": {
+            "title": "Dry Fruits & Dates"
+          }
+        },
+        "fom_category_04": {
+          "type": "category",
+          "settings": {
+            "title": "Nuts & Seeds"
+          }
+        },
+        "fom_category_05": {
+          "type": "category",
+          "settings": {
+            "title": "Millets"
+          }
+        },
+        "fom_category_06": {
+          "type": "category",
+          "settings": {
+            "title": "Spices"
+          }
+        },
+        "fom_category_07": {
+          "type": "category",
+          "settings": {
+            "title": "Masalas"
+          }
+        },
+        "fom_category_08": {
+          "type": "category",
+          "settings": {
+            "title": "Health Foods"
+          }
+        },
+        "fom_category_09": {
+          "type": "category",
+          "settings": {
+            "title": "Coffee & Tea"
+          }
+        },
+        "fom_category_10": {
+          "type": "category",
+          "settings": {
+            "title": "Pickles"
+          }
+        },
+        "fom_category_11": {
+          "type": "category",
+          "settings": {
+            "title": "Natural Sweetners"
+          }
+        },
+        "fom_category_12": {
+          "type": "category",
+          "settings": {
+            "title": "Pulses & Lentils"
+          }
+        },
+        "fom_category_13": {
+          "type": "category",
+          "settings": {
+            "title": "Fresh Nuts Butters"
+          }
+        },
+        "fom_category_14": {
+          "type": "category",
+          "settings": {
+            "title": "Pasta & Noodles"
+          }
+        },
+        "fom_category_15": {
+          "type": "category",
+          "settings": {
+            "title": "Poha"
+          }
+        },
+        "fom_category_16": {
+          "type": "category",
+          "settings": {
+            "title": "Quick Bites"
+          }
+        },
+        "fom_category_17": {
+          "type": "category",
+          "settings": {
+            "title": "Rava"
+          }
+        },
+        "fom_category_18": {
+          "type": "category",
+          "settings": {
+            "title": "Rice"
+          }
+        },
+        "fom_category_19": {
+          "type": "category",
+          "settings": {
+            "title": "Skin & Hair Care"
+          }
+        },
+        "fom_category_20": {
+          "type": "category",
+          "settings": {
+            "title": "Eco-Friendly"
+          }
+        }
+      },
+      "block_order": [
+        "fom_category_01",
+        "fom_category_02",
+        "fom_category_03",
+        "fom_category_04",
+        "fom_category_05",
+        "fom_category_06",
+        "fom_category_07",
+        "fom_category_08",
+        "fom_category_09",
+        "fom_category_10",
+        "fom_category_11",
+        "fom_category_12",
+        "fom_category_13",
+        "fom_category_14",
+        "fom_category_15",
+        "fom_category_16",
+        "fom_category_17",
+        "fom_category_18",
+        "fom_category_19",
+        "fom_category_20"
+      ],
+      "name": "Fresh O Mill categories",
+      "settings": {
+        "heading": "Shop by Category",
+        "subheading": ""
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
     "fom_home_highlights",
+    "fom_category_grid",
     "product_list_fa6P9H",
     "179139869653a4d258"
   ]
