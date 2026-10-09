@@ -18,7 +18,7 @@
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "text_color": "#FFFFFF",
+            "text_color": "#12351F",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
@@ -37,9 +37,9 @@
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
             "style_class": "button-custom",
-            "custom_button_background": "#EE9D1C",
-            "custom_button_text": "#12351F",
-            "custom_button_border": "#EE9D1C",
+            "custom_button_background": "#18572E",
+            "custom_button_text": "#FFFFFF",
+            "custom_button_border": "#18572E",
             "link_text_color": "",
             "width": "fit-content",
             "custom_width": 100,
@@ -75,7 +75,7 @@
         "section_height": "medium",
         "section_height_custom": 50,
         "background_color": "rgba(0,0,0,0)",
-        "toggle_overlay": true,
+        "toggle_overlay": false,
         "overlay_color": "#12351F66",
         "overlay_style": "solid",
         "gradient_direction": "to bottom",
@@ -179,11 +179,12 @@
           "settings": {
             "product_card_gap": 10,
             "background_color": "",
-            "border": "none",
+            "background_color": "#FFFFFF",
+            "border": "solid",
             "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 16,
+            "border_opacity": 72,
+            "border_color": "#E7EBE5",
+            "border_radius": 12,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -268,20 +269,46 @@
         "collection": "all",
         "layout_type": "grid",
         "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
+        "max_products": 6,
+        "columns": 6,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
-        "columns_gap": 16,
-        "rows_gap": 28,
+        "columns_gap": 12,
+        "rows_gap": 20,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 48,
+        "padding-block-start": 40,
         "padding-block-end": 48
+      }
+    },
+    "fom_brand_story": {
+      "type": "fom-brand-story",
+      "blocks": {
+        "brand_value_1": {
+          "type": "point",
+          "settings": { "title": "Freshly Packed On Order" }
+        },
+        "brand_value_2": {
+          "type": "point",
+          "settings": { "title": "Premium Quality Ingredients" }
+        },
+        "brand_value_3": {
+          "type": "point",
+          "settings": { "title": "Sourced From Local Farms" }
+        }
+      },
+      "block_order": [
+        "brand_value_1",
+        "brand_value_2",
+        "brand_value_3"
+      ],
+      "settings": {
+        "eyebrow": "Why Fresh O Mill",
+        "heading": "Buy your health"
       }
     },
     "179139869653a4d258": {
@@ -505,6 +532,7 @@
     "fom_home_highlights",
     "fom_category_grid",
     "product_list_fa6P9H",
+    "fom_brand_story",
     "179139869653a4d258"
   ]
 }

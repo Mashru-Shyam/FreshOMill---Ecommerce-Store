@@ -328,7 +328,12 @@
 
   {% if media_count == 0 %}
     {% if template.name == 'index' %}
-      <div class="hero__media fom-home-hero__fallback" aria-hidden="true"></div>
+      {% assign home_fallback_image = collections['all'].products.first.featured_image %}
+      {% if home_fallback_image != blank %}
+        {{ home_fallback_image | image_url: width: 2400 | image_tag: class: 'hero__media fom-home-hero__fallback', widths: '832, 1200, 1600, 1920, 2400', sizes: '100vw', loading: 'eager', alt: '' }}
+      {% else %}
+        <div class="hero__media fom-home-hero__fallback" aria-hidden="true"></div>
+      {% endif %}
     {% else %}
       {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
     {% endif %}
@@ -364,7 +369,12 @@
   {% endif %}
   {% if media_count == 0 %}
     {% if template.name == 'index' %}
-      <div class="hero__media fom-home-hero__fallback" aria-hidden="true"></div>
+      {% assign home_fallback_image = collections['all'].products.first.featured_image %}
+      {% if home_fallback_image != blank %}
+        {{ home_fallback_image | image_url: width: 2400 | image_tag: class: 'hero__media fom-home-hero__fallback', widths: '832, 1200, 1600, 1920, 2400', sizes: '100vw', loading: 'eager', alt: '' }}
+      {% else %}
+        <div class="hero__media fom-home-hero__fallback" aria-hidden="true"></div>
+      {% endif %}
     {% else %}
       {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
     {% endif %}
@@ -574,9 +584,9 @@
   }
 
   .hero--fom-home {
-    background: #12351f;
-    color: #fff;
-    --fom-home-hero-height: clamp(360px, 48vw, 620px);
+    background: #fbfcf7;
+    color: #12351f;
+    --fom-home-hero-height: clamp(340px, 40vw, 560px);
   }
 
   .hero--fom-home .hero__container {
@@ -587,18 +597,32 @@
     width: min(100%, 1240px);
     margin-inline: auto;
     padding-inline: clamp(24px, 6vw, 88px);
-    padding-block: clamp(48px, 8vw, 112px);
+    padding-block: clamp(42px, 6vw, 88px);
+    position: relative;
+    z-index: 2;
   }
 
   .hero--fom-home .hero__media {
-    object-position: center;
+    object-position: right center;
   }
 
   .hero--fom-home .fom-home-hero__fallback {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 30%, #000 67%);
+    mask-image: linear-gradient(90deg, transparent 0%, transparent 30%, #000 67%);
+  }
+
+  .hero--fom-home .fom-home-hero__fallback:is(div) {
     background:
-      radial-gradient(ellipse at 78% 22%, rgb(238 157 28 / 34%) 0 7%, transparent 7.2%),
-      radial-gradient(ellipse at 86% 78%, rgb(242 247 237 / 12%) 0 18%, transparent 18.2%),
-      linear-gradient(118deg, #12351f 0%, #18572e 58%, #216b3a 100%);
+      radial-gradient(ellipse at 78% 24%, rgb(238 157 28 / 14%) 0 10%, transparent 10.2%),
+      radial-gradient(ellipse at 88% 78%, rgb(33 107 58 / 10%) 0 20%, transparent 20.2%),
+      linear-gradient(118deg, #fbfcf7 0%, #f2f7ed 58%, #e7efdf 100%);
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .hero--fom-home .layout-panel-flex {
@@ -606,26 +630,26 @@
   }
 
   .hero--fom-home :is(h1, h2, h3, p) {
-    color: #fff;
+    color: #12351f;
   }
 
   .hero--fom-home a.button-custom,
   .hero--fom-home .button-custom {
     min-height: 48px;
     padding-inline: 24px;
-    border: 1px solid #ee9d1c;
+    border: 1px solid #18572e;
     border-radius: 8px;
-    background: #ee9d1c;
-    color: #12351f;
+    background: #18572e;
+    color: #fff;
     font-weight: 700;
     text-decoration: none;
   }
 
   .hero--fom-home a.button-custom:hover,
   .hero--fom-home .button-custom:hover {
-    background: #fff;
-    border-color: #fff;
-    color: #12351f;
+    background: #12351f;
+    border-color: #12351f;
+    color: #fff;
   }
 
   .hero--fom-home :is(a, button):focus-visible {
@@ -635,11 +659,17 @@
 
   @media screen and (max-width: 749px) {
     .hero--fom-home {
-      --fom-home-hero-height: clamp(340px, 76svh, 620px);
+      --fom-home-hero-height: clamp(320px, 56svh, 460px);
     }
 
     .hero--fom-home .hero__content-wrapper {
       padding: 44px 24px 52px;
+    }
+
+    .hero--fom-home .fom-home-hero__fallback:not(div) {
+      opacity: 0.3;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 76%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 76%);
     }
 
     .hero--fom-home .layout-panel-flex {

@@ -16,6 +16,10 @@
         {% assign category_title = block.settings.title %}
         {% assign category_param = category_title | url_encode %}
         {% assign category_collection = block.settings.collection %}
+        {% if category_collection == blank %}
+          {% assign category_handle = category_title | handleize %}
+          {% assign category_collection = collections[category_handle] %}
+        {% endif %}
         {% if category_collection != blank %}
           {% assign category_url = category_collection.url %}
           {% assign category_image = block.settings.image | default: category_collection.featured_image | default: category_collection.products.first.featured_image %}
@@ -25,12 +29,13 @@
         {% endif %}
         <li class="fom-category-grid__item" {{ block.shopify_attributes }}>
           <a class="fom-category-grid__card" href="{{ category_url | escape }}" aria-label="Shop {{ category_title | escape }}">
-            {% if category_image != blank %}
-              {{ category_image | image_url: width: 900 | image_tag: class: 'fom-category-grid__image', widths: '240, 360, 540, 720, 900', sizes: '(min-width: 1200px) 220px, (min-width: 750px) 20vw, 46vw', loading: 'lazy', alt: '' }}
-            {% else %}
-              <span class="fom-category-grid__placeholder" aria-hidden="true"></span>
-            {% endif %}
-            <span class="fom-category-grid__shade" aria-hidden="true"></span>
+            <span class="fom-category-grid__media">
+              {% if category_image != blank %}
+                {{ category_image | image_url: width: 900 | image_tag: class: 'fom-category-grid__image', widths: '240, 360, 540, 720, 900', sizes: '(min-width: 1200px) 220px, (min-width: 750px) 20vw, 46vw', loading: 'lazy', alt: '' }}
+              {% else %}
+                <span class="fom-category-grid__placeholder" aria-hidden="true"></span>
+              {% endif %}
+            </span>
             <span class="fom-category-grid__label">{{ category_title | escape }}</span>
           </a>
         </li>
@@ -41,51 +46,68 @@
 
 {% stylesheet %}
   .fom-category-grid {
-    padding-block: 48px;
-    background: #fffdf6;
+    padding-block: 40px;
+    background: #fbfcf7;
   }
 
   .fom-category-grid__inner {
+    box-sizing: border-box;
+    width: min(100% - 48px, 1280px);
     margin-inline: auto;
+    padding: 24px;
+    border-radius: 20px;
+    background: #f2f7ed;
   }
 
   .fom-category-grid__heading {
     margin: 0;
     color: #12351f;
-    text-align: center;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    line-height: 1.15;
+    text-align: start;
   }
 
   .fom-category-grid__subheading {
-    margin: 10px auto 0;
+    margin: 8px 0 0;
     max-width: 50rem;
     color: #526455;
-    text-align: center;
+    text-align: start;
   }
 
   .fom-category-grid__items {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 18px;
-    margin: 28px 0 0;
+    gap: 14px;
+    margin: 22px 0 0;
     padding: 0;
     list-style: none;
   }
 
   .fom-category-grid__card {
-    position: relative;
-    display: block;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
     overflow: hidden;
-    aspect-ratio: 1 / 1;
-    border-radius: 14px;
-    background: linear-gradient(145deg, #e8bd4f, #367d43 76%);
-    color: #fff;
-    isolation: isolate;
+    height: 100%;
+    padding: 8px;
+    border: 1px solid rgb(23 37 27 / 7%);
+    border-radius: 16px;
+    background: #fff;
+    color: #17251b;
     text-decoration: none;
   }
 
+  .fom-category-grid__media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1.28 / 1;
+    border-radius: 11px;
+    background: #fbfcf7;
+  }
+
   .fom-category-grid__image,
-  .fom-category-grid__placeholder,
-  .fom-category-grid__shade {
+  .fom-category-grid__placeholder {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -98,25 +120,21 @@
   }
 
   .fom-category-grid__placeholder {
-    background: radial-gradient(ellipse at 30% 25%, #f1c54e 0 12%, transparent 13%), linear-gradient(140deg, #e8bd4f, #367d43 78%);
-  }
-
-  .fom-category-grid__shade {
-    background: linear-gradient(180deg, transparent 38%, rgb(12 34 20 / 78%) 100%);
+    background: linear-gradient(135deg, #f2f7ed 0%, #fbfcf7 52%, #e7ecdF 100%);
   }
 
   .fom-category-grid__label {
-    position: absolute;
-    z-index: 1;
-    inset-inline: 12px;
-    bottom: 14px;
-    color: #fff;
-    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 2.5em;
+    padding: 0 5px 3px;
+    color: #17251b;
+    font-size: clamp(0.85rem, 1.05vw, 1rem);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.25;
     text-align: center;
     text-wrap: balance;
-    text-shadow: 0 1px 4px rgb(0 0 0 / 35%);
   }
 
   .fom-category-grid__card:hover .fom-category-grid__image,
@@ -140,14 +158,26 @@
       margin-top: 22px;
     }
 
+    .fom-category-grid__inner {
+      width: min(100% - 28px, 640px);
+      padding: 16px;
+      border-radius: 16px;
+    }
+
     .fom-category-grid__card {
-      border-radius: 11px;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 12px;
+    }
+
+    .fom-category-grid__media {
+      aspect-ratio: 1.18 / 1;
+      border-radius: 8px;
     }
 
     .fom-category-grid__label {
-      inset-inline: 8px;
-      bottom: 10px;
-      font-size: 0.95rem;
+      min-height: 2.4em;
+      font-size: 0.82rem;
     }
   }
 

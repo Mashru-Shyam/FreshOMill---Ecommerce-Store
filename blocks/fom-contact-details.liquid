@@ -5,10 +5,14 @@
   assign store_address = shop.address | format_address
   assign map_query = store_address | strip_html | strip | url_encode
   assign whatsapp_number = block.settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+  assign contact_block_class = 'fom-contact-details size-style'
+  if block.settings.surface == 'plain'
+    assign contact_block_class = contact_block_class | append: ' fom-contact-details--plain'
+  endif
 %}
 
 <section
-  class="fom-contact-details size-style"
+  class="{{ contact_block_class }}"
   style="{% render 'size-style', settings: block.settings %}"
   {{ block.shopify_attributes }}
 >
@@ -75,6 +79,14 @@
     color: #18351f;
   }
 
+  .fom-contact-details--plain {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+  }
+
   .fom-contact-details__heading {
     margin: 0 0 1.25rem;
     color: inherit;
@@ -84,6 +96,7 @@
 
   .fom-contact-details__list {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.1rem;
     margin: 0;
     padding: 0;
@@ -95,7 +108,23 @@
     justify-items: start;
     gap: 0.3rem;
     min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid rgb(34 94 48 / 10%);
+    border-radius: 0.75rem;
+    background: #fff;
     overflow-wrap: anywhere;
+  }
+
+  .fom-contact-details--plain .fom-contact-details__list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  .fom-contact-details--plain .fom-contact-details__list li {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
   }
 
   .fom-contact-details__label {
@@ -117,12 +146,28 @@
   .fom-contact-details address {
     font-style: normal;
   }
+
+  @media screen and (max-width: 749px) {
+    .fom-contact-details__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Contact details",
   "settings": [
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "Contact panel surface",
+      "options": [
+        { "value": "card", "label": "Card" },
+        { "value": "plain", "label": "Plain" }
+      ],
+      "default": "card"
+    },
     {
       "type": "select",
       "id": "width",

@@ -1,0 +1,187 @@
+{% liquid
+  assign intro_title = collection.title
+  if collection.handle == 'all'
+    assign intro_title = 'fom_header.all_products' | t
+  endif
+
+  assign intro_image = section.settings.image | default: collection.image
+  if intro_image == blank and collection.products.first.featured_image != blank
+    assign intro_image = collection.products.first.featured_image
+  endif
+  assign intro_image_alt = intro_image.alt | default: intro_title | escape
+%}
+
+<section class="fom-collection-intro" aria-labelledby="fom-collection-title-{{ section.id }}">
+  <div class="fom-collection-intro__inner page-width">
+    <nav class="fom-collection-intro__breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">{{ 'fom_header.home' | t }}</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">{{ intro_title | escape }}</span>
+    </nav>
+
+    <div class="fom-collection-intro__layout{% if intro_image == blank %} fom-collection-intro__layout--no-image{% endif %}">
+      <div class="fom-collection-intro__copy">
+        <p class="fom-collection-intro__eyebrow">{{ shop.name | escape }}</p>
+        <h1 id="fom-collection-title-{{ section.id }}">{{ intro_title | escape }}</h1>
+        {% if collection.description != blank %}
+          <div class="fom-collection-intro__description rte">{{ collection.description }}</div>
+        {% endif %}
+      </div>
+
+      {% if intro_image != blank %}
+        <div class="fom-collection-intro__media">
+          {{ intro_image | image_url: width: 1600 | image_tag: class: 'fom-collection-intro__image', widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 990px) 44vw, 100vw', loading: 'eager', alt: intro_image_alt }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .fom-collection-intro {
+    padding-block: 20px 8px;
+    background: #fbfcf7;
+  }
+
+  .fom-collection-intro__inner {
+    box-sizing: border-box;
+    width: min(100% - 48px, 1280px);
+    margin-inline: auto;
+    padding: 14px 28px 28px;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(105deg, #fbfcf7 0%, #f2f7ed 62%, #e8f0e2 100%);
+  }
+
+  .fom-collection-intro__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-block-end: 16px;
+    color: #526057;
+    font-size: 0.82rem;
+  }
+
+  .fom-collection-intro__breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .fom-collection-intro__breadcrumb a:hover {
+    color: #216b3a;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .fom-collection-intro__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+    align-items: center;
+    gap: 32px;
+  }
+
+  .fom-collection-intro__layout--no-image {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 170px;
+  }
+
+  .fom-collection-intro__copy {
+    min-width: 0;
+  }
+
+  .fom-collection-intro__eyebrow {
+    margin: 0 0 8px;
+    color: #216b3a;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .fom-collection-intro h1 {
+    margin: 0;
+    color: #12351f;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.05;
+  }
+
+  .fom-collection-intro__description {
+    margin-block-start: 12px;
+    color: #526057;
+    font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  }
+
+  .fom-collection-intro__description > :first-child {
+    margin-block-start: 0;
+  }
+
+  .fom-collection-intro__description > :last-child {
+    margin-block-end: 0;
+  }
+
+  .fom-collection-intro__media {
+    min-width: 0;
+    overflow: hidden;
+    aspect-ratio: 1.8 / 1;
+    border-radius: 14px;
+    background: #f2f7ed;
+  }
+
+  .fom-collection-intro__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 749px) {
+    .fom-collection-intro {
+      padding-block: 12px 4px;
+    }
+
+    .fom-collection-intro__inner {
+      width: min(100% - 28px, 640px);
+      padding: 12px 16px 16px;
+      border-radius: 14px;
+    }
+
+    .fom-collection-intro__breadcrumb {
+      margin-block-end: 12px;
+      font-size: 0.76rem;
+    }
+
+    .fom-collection-intro__layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .fom-collection-intro__layout--no-image {
+      min-height: 120px;
+    }
+
+    .fom-collection-intro__media {
+      aspect-ratio: 1.7 / 1;
+    }
+
+    .fom-collection-intro h1 {
+      font-size: clamp(1.8rem, 8vw, 2.5rem);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FOM collection intro",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Collection banner image",
+      "info": "Optional. The collection image or a real product image is used when this is blank."
+    }
+  ],
+  "presets": [
+    { "name": "FOM collection intro" }
+  ]
+}
+{% endschema %}

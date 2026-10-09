@@ -3,7 +3,9 @@
     <ul class="fom-promo-strip__items" role="list">
       {% for block in section.blocks %}
         <li class="fom-promo-strip__item" {{ block.shopify_attributes }}>
-          <span class="fom-promo-strip__mark" aria-hidden="true"></span>
+          <span class="fom-promo-strip__mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" focusable="false"><path d="M25.5 5.5C15 5.9 8.3 9.3 7 16.1c-.8 4.2 1.8 7.5 5.7 7.5 7.3 0 11.8-8 12.8-18.1Z"/><path d="M6 27c4.7-6.5 9.2-10.7 15-14"/></svg>
+          </span>
           <span>{{ block.settings.text | escape }}</span>
         </li>
       {% endfor %}
@@ -41,11 +43,25 @@
   }
 
   .fom-promo-strip__mark {
-    flex: 0 0 8px;
-    width: 8px;
-    height: 8px;
+    display: grid;
+    flex: 0 0 34px;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgb(33 107 58 / 28%);
     border-radius: 50%;
-    background: #ee9d1c;
+    background: #f2f7ed;
+    color: #216b3a;
+  }
+
+  .fom-promo-strip__mark svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   @media screen and (max-width: 749px) {
