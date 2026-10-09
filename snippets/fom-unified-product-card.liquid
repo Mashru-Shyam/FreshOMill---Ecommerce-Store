@@ -56,16 +56,18 @@
       </div>
 
       {% if product.available and product.has_only_default_variant %}
-        {% form 'product', product, id: product_form_id, class: 'fom-product-card__form' %}
-          <input type="hidden" name="id" value="{{ card_variant.id }}">
-          <input type="hidden" name="quantity" value="1">
-          <button class="fom-product-card__button" type="submit" name="add">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-              <path d="M3 4h2l2 11h10l2-8H7M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM17 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Add to cart</span>
-          </button>
-        {% endform %}
+        <product-form-component data-section-id="{{ section.id }}">
+          {% form 'product', product, id: product_form_id, class: 'fom-product-card__form' %}
+            <input type="hidden" name="id" value="{{ card_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button class="fom-product-card__button" type="submit" name="add">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M3 4h2l2 11h10l2-8H7M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM17 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Add to cart</span>
+            </button>
+          {% endform %}
+        </product-form-component>
       {% elsif product.available %}
         <a class="fom-product-card__button" href="{{ product.url }}">Choose options</a>
       {% else %}

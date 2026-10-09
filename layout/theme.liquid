@@ -166,13 +166,13 @@
         {% section 'fom-featured-products-unified' %}
       {% section 'fom-promotion' %}
       {% section 'fom-benefits' %}
-      {% section 'fom-customer-stories' %}
+{% section 'fom-customer-stories-v2' %}
       {% section 'fom-service-strip' %}
     {% elsif request.page_type == 'product' %}
-      {% section 'fom-product-main' %}
+        {% section 'fom-product-main-v2' %}
       {% section 'fom-product-recommendations' %}
     {% elsif request.page_type == 'collection' %}
-      {% section 'fom-collection-main' %}
+        {% section 'fom-collection-main-v2' %}
       {% section 'fom-service-strip' %}
     {% elsif request.page_type == 'search' %}
       {% section 'fom-search-main' %}

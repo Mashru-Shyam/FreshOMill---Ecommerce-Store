@@ -1,0 +1,173 @@
+{{ 'fom-product-page-v2.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fom-product-page-v2.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign current_media = current_variant.featured_media | default: product.featured_media
+  assign form_id = 'fom-product-form-' | append: section.id
+%}
+
+<fom-product-page class="fom-pdp" data-section-id="{{ section.id }}">
+  <div class="fom-pdp__inner">
+    <nav class="fom-pdp__breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span aria-hidden="true">›</span>
+      <a href="{{ routes.all_products_collection_url }}">Products</a>
+      {% if product.collections.first != blank %}
+        <span aria-hidden="true">›</span>
+        <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+      {% endif %}
+      <span aria-hidden="true">›</span>
+      <span>{{ product.title }}</span>
+    </nav>
+
+    <div class="fom-pdp__main">
+      <div class="fom-pdp__gallery">
+        <div class="fom-pdp__thumbs" aria-label="Product images">
+          {% for media in product.media limit: 6 %}
+            {% if media.media_type == 'image' %}
+              <button
+                class="fom-pdp__thumb{% if media.id == current_media.id %} is-active{% endif %}"
+                type="button"
+                data-gallery-thumb
+                data-image-src="{{ media.preview_image | image_url: width: 1200 }}"
+                data-image-srcset="{{ media.preview_image | image_url: width: 600 }} 600w, {{ media.preview_image | image_url: width: 900 }} 900w, {{ media.preview_image | image_url: width: 1200 }} 1200w"
+                data-image-alt="{{ media.alt | default: product.title | escape }}"
+                aria-label="View image {{ forloop.index }}"
+              >
+                {{ media.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: media.alt }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="fom-pdp__media">
+          {% if current_media != blank %}
+            <img
+              src="{{ current_media.preview_image | image_url: width: 1400 }}"
+              srcset="{{ current_media.preview_image | image_url: width: 480 }} 480w, {{ current_media.preview_image | image_url: width: 720 }} 720w, {{ current_media.preview_image | image_url: width: 960 }} 960w, {{ current_media.preview_image | image_url: width: 1200 }} 1200w, {{ current_media.preview_image | image_url: width: 1400 }} 1400w"
+              sizes="(max-width: 989px) 100vw, 52vw"
+              alt="{{ current_media.alt | default: product.title | escape }}"
+              width="{{ current_media.preview_image.width }}"
+              height="{{ current_media.preview_image.height }}"
+              loading="eager"
+              data-main-image
+            >
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'fom-product-card__placeholder' }}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="fom-pdp__info">
+        <div class="fom-pdp__badges">
+          <span class="fom-pdp__badge">Freshly prepared</span>
+          <span class="fom-pdp__badge">{% if product.available %}In stock{% else %}Out of stock{% endif %}</span>
+        </div>
+
+        {% if product.type != blank %}<p class="fom-pdp__type">{{ product.type }}</p>{% endif %}
+        <h1 class="fom-pdp__title">{{ product.title }}</h1>
+
+        {% if product.description != blank %}
+          <div class="fom-pdp__description-short">{{ product.description | strip_html | truncatewords: 34 }}</div>
+        {% endif %}
+
+        <div class="fom-pdp__divider"></div>
+
+        {% if product.variants.size > 1 %}
+          <div class="fom-pdp__variant-picker">
+            <span class="fom-pdp__label">Choose option</span>
+            <div class="fom-pdp__variants">
+              {% for variant in product.variants %}
+                <button
+                  class="fom-pdp__variant{% if variant.id == current_variant.id %} is-active{% endif %}"
+                  type="button"
+                  data-variant-button
+                  data-variant-id="{{ variant.id }}"
+                  data-price="{{ variant.price | money | escape }}"
+                  data-compare-price="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | escape }}{% endif %}"
+                  data-available="{{ variant.available }}"
+                  {% unless variant.available %}disabled{% endunless %}
+                >
+                  {{ variant.title }}
+                  <span class="fom-pdp__variant-price">{{ variant.price | money }}</span>
+                </button>
+              {% endfor %}
+            </div>
+            <div class="fom-pdp__divider"></div>
+          </div>
+        {% endif %}
+
+        <p class="fom-pdp__price-label">Price</p>
+        <div class="fom-pdp__price-row">
+          <span class="fom-pdp__price" data-product-price>{{ current_variant.price | money }}</span>
+          <s class="fom-pdp__compare" data-compare-price{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>
+            {% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money }}{% endif %}
+          </s>
+        </div>
+
+        <product-form-component data-section-id="{{ section.id }}">
+          {% form 'product', product, id: form_id, class: 'fom-pdp__form' %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-input>
+            <div class="fom-pdp__purchase-row">
+              <div class="fom-pdp__quantity" aria-label="Quantity">
+                <button type="button" data-quantity-change="-1" aria-label="Decrease quantity">−</button>
+                <input type="number" name="quantity" value="1" min="1" inputmode="numeric" data-quantity-input aria-label="Quantity">
+                <button type="button" data-quantity-change="1" aria-label="Increase quantity">+</button>
+              </div>
+              <button class="fom-pdp__add" type="submit" name="add" data-add-button{% unless current_variant.available %} disabled{% endunless %}>
+                <span>{% if current_variant.available %}Add to cart{% else %}Out of stock{% endif %}</span>
+              </button>
+            </div>
+          {% endform %}
+        </product-form-component>
+
+        <div class="fom-pdp__trust">
+          <div class="fom-pdp__trust-item">
+            <span class="fom-pdp__trust-icon" aria-hidden="true">⌁</span>
+            <span><strong>Packed after your order</strong><small>Freshness you can trust</small></span>
+          </div>
+          <div class="fom-pdp__trust-item">
+            <span class="fom-pdp__trust-icon" aria-hidden="true">✓</span>
+            <span><strong>Secure payment</strong><small>Protected checkout</small></span>
+          </div>
+          <div class="fom-pdp__trust-item">
+            <span class="fom-pdp__trust-icon" aria-hidden="true">◉</span>
+            <span><strong>Helpful support</strong><small>Always here for you</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fom-pdp__details">
+      <div class="fom-pdp__tabs" role="tablist" aria-label="Product information">
+        <button class="fom-pdp__tab is-active" type="button" role="tab" aria-selected="true" data-product-tab="details">Product details</button>
+        <button class="fom-pdp__tab" type="button" role="tab" aria-selected="false" data-product-tab="quality">Quality & sourcing</button>
+        <button class="fom-pdp__tab" type="button" role="tab" aria-selected="false" data-product-tab="care">Storage</button>
+      </div>
+
+      <div class="fom-pdp__panel is-active" data-product-panel="details">{{ product.description | default: 'Freshly prepared and carefully packed for your everyday kitchen.' }}</div>
+      <div class="fom-pdp__panel" data-product-panel="quality">Carefully selected ingredients, prepared in small batches and packed with attention to freshness and quality.</div>
+      <div class="fom-pdp__panel" data-product-panel="care">Store in a cool, dry place. Keep the pack sealed after opening and use within the recommended period shown on the package.</div>
+
+      <div class="fom-pdp__features">
+        <div class="fom-pdp__feature"><span class="fom-pdp__feature-icon" aria-hidden="true">♨</span><strong>Premium ingredients</strong><small>Carefully selected</small></div>
+        <div class="fom-pdp__feature"><span class="fom-pdp__feature-icon" aria-hidden="true">◎</span><strong>Traditional preparation</strong><small>Made in small batches</small></div>
+        <div class="fom-pdp__feature"><span class="fom-pdp__feature-icon" aria-hidden="true">◇</span><strong>No added preservatives</strong><small>Simple and wholesome</small></div>
+        <div class="fom-pdp__feature"><span class="fom-pdp__feature-icon" aria-hidden="true">❧</span><strong>Freshly packed</strong><small>Prepared for your order</small></div>
+      </div>
+    </div>
+  </div>
+</fom-product-page>
+
+{% schema %}
+{
+  "name": "Fresh O Mill product",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Fresh O Mill product"
+    }
+  ]
+}
+{% endschema %}
