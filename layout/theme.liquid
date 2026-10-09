@@ -178,6 +178,12 @@
         {% section 'fom-search-main-v2' %}
     {% elsif request.page_type == 'cart' %}
         {% section 'fom-cart-main-v2' %}
+      {% elsif template.directory == 'customers' %}
+        {% section 'fom-customer-portal' %}
+      {% elsif template.name == '404' %}
+        {% section 'fom-utility-404' %}
+      {% elsif template.name == 'page' and page.handle == 'contact' %}
+        {% section 'fom-contact-page' %}
     {% else %}
       {{ content_for_layout }}
     {% endif %}
@@ -203,6 +209,8 @@
     {{ 'fom-interface-lock.css' | asset_url | stylesheet_tag }}
     {{ 'fom-cart-experience.css' | asset_url | stylesheet_tag }}
     {{ 'fom-search-v2.css' | asset_url | stylesheet_tag }}
+    {{ 'fom-customer-utility.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'fom-customer-utility.js' | asset_url }}" type="module" fetchpriority="low"></script>
     <script src="{{ 'fom-search-discovery.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
   </body>

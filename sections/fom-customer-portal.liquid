@@ -1,0 +1,206 @@
+<section class="fom-account" aria-labelledby="fom-account-title-{{ section.id }}">
+  <div class="fom-account__inner">
+    {% case template.name %}
+      {% when 'login' %}
+        <div class="fom-account__intro">
+          <p class="fom-account__eyebrow">Customer account</p>
+          <h1 id="fom-account-title-{{ section.id }}">Welcome back</h1>
+          <p class="fom-account__lede">Sign in to view orders, manage addresses and enjoy a faster checkout.</p>
+        </div>
+        <div class="fom-account__auth-shell">
+          <div class="fom-account__panel">
+            <h2>Sign in</h2>
+            <p>Enter the email and password associated with your account.</p>
+            {% form 'customer_login', class: 'fom-account__form' %}
+              {% if form.errors %}<div class="fom-form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+              <div class="fom-field"><label for="CustomerEmail">Email</label><input id="CustomerEmail" type="email" name="customer[email]" autocomplete="email" autocorrect="off" autocapitalize="off" required></div>
+              {% if form.password_needed %}<div class="fom-field"><label for="CustomerPassword">Password</label><input id="CustomerPassword" type="password" name="customer[password]" autocomplete="current-password" required></div>{% endif %}
+              <div class="fom-account__form-footer">
+                <button class="fom-button" type="submit">Sign in</button>
+                <a class="fom-account__link" href="#recover">Forgot your password?</a>
+              </div>
+              <a class="fom-button-secondary" href="{{ routes.account_register_url }}">Create an account</a>
+            {% endform %}
+
+            <details class="fom-account__details" id="recover">
+              <summary>Reset your password</summary>
+              {% form 'recover_customer_password', class: 'fom-account__form' %}
+                {% if form.posted_successfully? %}<p class="fom-form-message" role="status">We sent you an email with a password-reset link.</p>{% endif %}
+                {% if form.errors %}<div class="fom-form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+                <div class="fom-field"><label for="RecoverEmail">Email</label><input id="RecoverEmail" type="email" name="email" autocomplete="email" required></div>
+                <button class="fom-button" type="submit">Send reset link</button>
+              {% endform %}
+            </details>
+
+            {% if shop.checkout.guest_login %}
+              <details class="fom-account__details">
+                <summary>Continue as a guest</summary>
+                {% form 'guest_login', class: 'fom-account__form' %}<button class="fom-button-secondary" type="submit">Continue</button>{% endform %}
+              </details>
+            {% endif %}
+          </div>
+          <div class="fom-account__benefits">
+            <h2>Everything in one place</h2>
+            <div class="fom-account__benefit"><span class="fom-account__benefit-icon">⌑</span><span><strong>Track your orders</strong><small>Review purchases and fulfilment status.</small></span></div>
+            <div class="fom-account__benefit"><span class="fom-account__benefit-icon">⌂</span><span><strong>Save your addresses</strong><small>Move through checkout more quickly.</small></span></div>
+            <div class="fom-account__benefit"><span class="fom-account__benefit-icon">✓</span><span><strong>Secure account</strong><small>Your information remains protected.</small></span></div>
+          </div>
+        </div>
+
+      {% when 'register' %}
+        <div class="fom-account__intro">
+          <p class="fom-account__eyebrow">Join Fresh O Mill</p>
+          <h1 id="fom-account-title-{{ section.id }}">Create your account</h1>
+          <p class="fom-account__lede">Save your details, view order history and enjoy a simpler checkout.</p>
+        </div>
+        <div class="fom-account__auth-shell">
+          <div class="fom-account__panel">
+            <h2>Your details</h2>
+            {% form 'create_customer', class: 'fom-account__form' %}
+              {% if form.errors %}<div class="fom-form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+              <div class="fom-field"><label for="RegisterFirstName">First name</label><input id="RegisterFirstName" type="text" name="customer[first_name]" autocomplete="given-name" value="{{ form.first_name }}"></div>
+              <div class="fom-field"><label for="RegisterLastName">Last name</label><input id="RegisterLastName" type="text" name="customer[last_name]" autocomplete="family-name" value="{{ form.last_name }}"></div>
+              <div class="fom-field"><label for="RegisterEmail">Email</label><input id="RegisterEmail" type="email" name="customer[email]" autocomplete="email" autocorrect="off" autocapitalize="off" value="{{ form.email }}" required></div>
+              <div class="fom-field"><label for="RegisterPassword">Password</label><input id="RegisterPassword" type="password" name="customer[password]" autocomplete="new-password" required></div>
+              <button class="fom-button" type="submit">Create account</button>
+              <a class="fom-button-secondary" href="{{ routes.account_login_url }}">Already have an account? Sign in</a>
+            {% endform %}
+          </div>
+          <div class="fom-account__benefits">
+            <h2>A better shopping experience</h2>
+            <div class="fom-account__benefit"><span class="fom-account__benefit-icon">⌑</span><span><strong>Order history</strong><small>Find every purchase in one place.</small></span></div>
+            <div class="fom-account__benefit"><span class="fom-account__benefit-icon">⌂</span><span><strong>Faster checkout</strong><small>Keep delivery details ready.</small></span></div>
+            <div class="fom-account__benefit"><span class="fom-account__benefit-icon">◉</span><span><strong>Helpful support</strong><small>Get assistance with your orders.</small></span></div>
+          </div>
+        </div>
+
+      {% when 'activate_account' %}
+        <div class="fom-account__intro"><p class="fom-account__eyebrow">Account security</p><h1 id="fom-account-title-{{ section.id }}">Activate your account</h1><p class="fom-account__lede">Create a password to finish activating your Fresh O Mill account.</p></div>
+        <div class="fom-account__panel" style="max-width: 560px; margin-inline: auto;">
+          {% form 'activate_customer_password', class: 'fom-account__form' %}
+            {% if form.errors %}<div class="fom-form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+            <div class="fom-field"><label for="ActivatePassword">Password</label><input id="ActivatePassword" type="password" name="customer[password]" autocomplete="new-password" required></div>
+            <div class="fom-field"><label for="ActivatePasswordConfirmation">Confirm password</label><input id="ActivatePasswordConfirmation" type="password" name="customer[password_confirmation]" autocomplete="new-password" required></div>
+            <button class="fom-button" type="submit">Activate account</button>
+            <button class="fom-button-secondary" type="submit" name="decline">Decline invitation</button>
+          {% endform %}
+        </div>
+
+      {% when 'reset_password' %}
+        <div class="fom-account__intro"><p class="fom-account__eyebrow">Account security</p><h1 id="fom-account-title-{{ section.id }}">Reset your password</h1><p class="fom-account__lede">Choose a secure new password for your account.</p></div>
+        <div class="fom-account__panel" style="max-width: 560px; margin-inline: auto;">
+          {% form 'reset_customer_password', class: 'fom-account__form' %}
+            {% if form.errors %}<div class="fom-form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+            <div class="fom-field"><label for="ResetPassword">New password</label><input id="ResetPassword" type="password" name="customer[password]" autocomplete="new-password" required></div>
+            <div class="fom-field"><label for="ResetPasswordConfirmation">Confirm password</label><input id="ResetPasswordConfirmation" type="password" name="customer[password_confirmation]" autocomplete="new-password" required></div>
+            <button class="fom-button" type="submit">Reset password</button>
+          {% endform %}
+        </div>
+
+      {% when 'account' %}
+        <div class="fom-account__intro">
+          <p class="fom-account__eyebrow">Customer account</p>
+          <h1 id="fom-account-title-{{ section.id }}">Hello, {{ customer.first_name | default: customer.name }}</h1>
+          <p class="fom-account__lede">View your orders and manage your delivery information.</p>
+        </div>
+        <div class="fom-account__dashboard-grid">
+          <div class="fom-account__stat"><span>Orders</span><strong>{{ customer.orders_count }}</strong></div>
+          <div class="fom-account__stat"><span>Default address</span><strong>{% if customer.default_address %}Saved{% else %}Not added{% endif %}</strong></div>
+          <div class="fom-account__stat"><span>Account</span><strong><a class="fom-account__link" href="{{ routes.account_logout_url }}">Sign out</a></strong></div>
+        </div>
+        <div class="fom-account__columns">
+          <div class="fom-account__card">
+            <h2>Order history</h2>
+            {% paginate customer.orders by 10 %}
+              {% if customer.orders.size > 0 %}
+                <div class="fom-table-wrap"><table class="fom-table"><thead><tr><th>Order</th><th>Date</th><th>Payment</th><th>Fulfilment</th><th>Total</th></tr></thead><tbody>
+                  {% for order in customer.orders %}<tr><td><a href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d %b %Y' }}</td><td>{{ order.financial_status_label }}</td><td>{{ order.fulfillment_status_label }}</td><td>{{ order.total_price | money_with_currency }}</td></tr>{% endfor %}
+                </tbody></table></div>
+              {% else %}
+                <p>You have not placed an order yet.</p><a class="fom-button" href="{{ routes.all_products_collection_url }}">Start shopping</a>
+              {% endif %}
+              {% if paginate.pages > 1 %}<p>{{ paginate | default_pagination }}</p>{% endif %}
+            {% endpaginate %}
+          </div>
+          <aside class="fom-account__card">
+            <h2>Account details</h2>
+            <p>{{ customer.name }}<br>{{ customer.email }}</p>
+            {% if customer.default_address %}<address>{{ customer.default_address | format_address }}</address>{% endif %}
+            <a class="fom-button-secondary" href="{{ routes.account_addresses_url }}">Manage addresses</a>
+          </aside>
+        </div>
+
+      {% when 'addresses' %}
+        <div class="fom-account__intro">
+          <p class="fom-account__eyebrow">Customer account</p>
+          <h1 id="fom-account-title-{{ section.id }}">Your addresses</h1>
+          <p class="fom-account__lede">Manage the addresses used for delivery and checkout.</p>
+        </div>
+        <p><a class="fom-account__link" href="{{ routes.account_url }}">← Back to account</a></p>
+        <div class="fom-account__panel" style="margin-bottom: 20px;">
+          <details>
+            <summary class="fom-button" style="width: fit-content;">Add a new address</summary>
+            <div class="fom-account__details">
+              {% form 'customer_address', customer.new_address, class: 'fom-address-form' %}
+                {% render 'fom-address-fields', form: form, prefix: 'NewAddress' %}
+                <button class="fom-button" type="submit">Add address</button>
+              {% endform %}
+            </div>
+          </details>
+        </div>
+        {% paginate customer.addresses by 8 %}
+          <div class="fom-account__address-list">
+            {% for address in customer.addresses %}
+              <article class="fom-account__address-card">
+                <strong>{% if address == customer.default_address %}Default address{% else %}Address {{ forloop.index }}{% endif %}</strong>
+                <address>{{ address | format_address }}</address>
+                <div class="fom-account__address-actions">
+                  <details>
+                    <summary class="fom-button-secondary">Edit</summary>
+                    <div class="fom-account__details">
+                      {% form 'customer_address', address, class: 'fom-address-form' %}
+                        {% assign address_prefix = 'EditAddress-' | append: address.id %}
+                        {% render 'fom-address-fields', form: form, prefix: address_prefix %}
+                        <button class="fom-button" type="submit">Save address</button>
+                      {% endform %}
+                    </div>
+                  </details>
+                  <form method="post" action="{{ address.url }}"><input type="hidden" name="_method" value="delete"><button class="fom-button-secondary" type="submit">Delete</button></form>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+          {% if paginate.pages > 1 %}<p>{{ paginate | default_pagination }}</p>{% endif %}
+        {% endpaginate %}
+
+      {% when 'order' %}
+        <div class="fom-account__intro">
+          <p class="fom-account__eyebrow">Order details</p>
+          <h1 id="fom-account-title-{{ section.id }}">{{ order.name }}</h1>
+          <p class="fom-account__lede">Placed on {{ order.created_at | date: '%d %B %Y' }}</p>
+        </div>
+        <p><a class="fom-account__link" href="{{ routes.account_url }}">← Back to account</a></p>
+        <div class="fom-account__columns">
+          <div class="fom-account__card">
+            <h2>Items</h2>
+            <div class="fom-table-wrap"><table class="fom-table"><thead><tr><th>Product</th><th>Quantity</th><th>Price</th><th>Total</th></tr></thead><tbody>
+              {% for line_item in order.line_items %}<tr><td>{{ line_item.title }}</td><td>{{ line_item.quantity }}</td><td>{{ line_item.final_price | money }}</td><td>{{ line_item.final_line_price | money }}</td></tr>{% endfor %}
+            </tbody><tfoot><tr><th colspan="3">Subtotal</th><td>{{ order.line_items_subtotal_price | money }}</td></tr>{% for shipping_method in order.shipping_methods %}<tr><th colspan="3">Shipping ({{ shipping_method.title }})</th><td>{{ shipping_method.price | money }}</td></tr>{% endfor %}{% for tax_line in order.tax_lines %}<tr><th colspan="3">Tax ({{ tax_line.title }})</th><td>{{ tax_line.price | money }}</td></tr>{% endfor %}<tr><th colspan="3">Total</th><td><strong>{{ order.total_price | money_with_currency }}</strong></td></tr></tfoot></table></div>
+          </div>
+          <aside class="fom-account__card">
+            <h2>Delivery details</h2>
+            <p><strong>Fulfilment:</strong> {{ order.fulfillment_status_label }}<br><strong>Payment:</strong> {{ order.financial_status_label }}</p>
+            {% if order.shipping_address %}<address>{{ order.shipping_address | format_address }}</address>{% endif %}
+          </aside>
+        </div>
+    {% endcase %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill account",
+  "settings": [],
+  "presets": [{"name": "Fresh O Mill account"}]
+}
+{% endschema %}

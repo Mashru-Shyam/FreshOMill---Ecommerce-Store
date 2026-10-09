@@ -1,0 +1,45 @@
+<section class="fom-contact" aria-labelledby="fom-contact-title-{{ section.id }}">
+  <div class="fom-contact__inner">
+    <div class="fom-contact__intro">
+      <p class="fom-contact__eyebrow">We are here to help</p>
+      <h1 id="fom-contact-title-{{ section.id }}">Contact Fresh O Mill</h1>
+      <p class="fom-contact__lede">Questions about a product or order? Send us a message and our team will get back to you.</p>
+    </div>
+
+    <div class="fom-contact__layout">
+      <div class="fom-contact__form-card">
+        <h2>Send a message</h2>
+        <p>Complete the form below with as much detail as possible.</p>
+        {% form 'contact', class: 'fom-contact__form' %}
+          {% if form.posted_successfully? %}<p class="fom-form-message" role="status">Thank you. Your message has been sent successfully.</p>{% endif %}
+          {% if form.errors %}<div class="fom-form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+          <div class="fom-field"><label for="ContactName">Name</label><input id="ContactName" type="text" name="contact[name]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" autocomplete="name" required></div>
+          <div class="fom-field"><label for="ContactEmail">Email</label><input id="ContactEmail" type="email" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" autocomplete="email" autocorrect="off" autocapitalize="off" required></div>
+          <div class="fom-field"><label for="ContactPhone">Phone</label><input id="ContactPhone" type="tel" name="contact[phone]" value="{{ form.phone }}" autocomplete="tel"></div>
+          <div class="fom-field"><label for="ContactOrder">Order number (optional)</label><input id="ContactOrder" type="text" name="contact[order_number]" value="{{ form.order_number }}"></div>
+          <div class="fom-field"><label for="ContactMessage">Message</label><textarea id="ContactMessage" name="contact[body]" required>{{ form.body }}</textarea></div>
+          <button class="fom-button" type="submit">Send message</button>
+        {% endform %}
+      </div>
+
+      <aside class="fom-contact__details">
+        <h2>Contact details</h2>
+        <p>Reach us directly using the information below.</p>
+        <div class="fom-contact__details-list">
+          <div class="fom-contact__detail"><span class="fom-contact__detail-icon" aria-hidden="true">⌂</span><span><strong>Visit us</strong><span>GF 3/4, Nexus Complex, White House Lane, Bhayli TP 1, Vadodara - 391410</span></span></div>
+          <div class="fom-contact__detail"><span class="fom-contact__detail-icon" aria-hidden="true">✉</span><span><strong>Email</strong><a href="mailto:mashrushyam37@gmail.com">mashrushyam37@gmail.com</a></span></div>
+          <div class="fom-contact__detail"><span class="fom-contact__detail-icon" aria-hidden="true">◉</span><span><strong>WhatsApp</strong><a href="https://wa.me/917600062637">+91 76000 62637</a></span></div>
+          <div class="fom-contact__detail"><span class="fom-contact__detail-icon" aria-hidden="true">◎</span><span><strong>Instagram</strong><a href="https://www.instagram.com/freshomill/" target="_blank" rel="noopener">@freshomill</a></span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill contact",
+  "settings": [],
+  "presets": [{"name": "Fresh O Mill contact"}]
+}
+{% endschema %}

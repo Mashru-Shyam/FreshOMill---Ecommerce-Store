@@ -1,0 +1,22 @@
+<section class="fom-utility" aria-labelledby="fom-404-title-{{ section.id }}">
+  <div class="fom-utility__inner">
+    <div class="fom-utility__card">
+      <p class="fom-utility__code" aria-hidden="true">404</p>
+      <p class="fom-utility__eyebrow">Page not found</p>
+      <h1 id="fom-404-title-{{ section.id }}">This page has moved</h1>
+      <p class="fom-utility__lede" style="margin-inline: auto;">The page you requested may no longer exist. Continue shopping or return to the Fresh O Mill homepage.</p>
+      <div class="fom-utility__actions">
+        <a class="fom-button" href="{{ routes.all_products_collection_url }}">Browse products</a>
+        <a class="fom-button-secondary" href="{{ routes.root_url }}">Return home</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill 404",
+  "settings": [],
+  "presets": [{"name": "Fresh O Mill 404"}]
+}
+{% endschema %}
