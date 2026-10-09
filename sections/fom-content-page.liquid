@@ -1,0 +1,121 @@
+{% liquid
+  assign is_about = false
+  assign is_faq = false
+  assign is_policy_hub = false
+  if page.handle contains 'about' or page.handle contains 'story'
+    assign is_about = true
+  endif
+  if page.handle contains 'faq' or page.handle contains 'question'
+    assign is_faq = true
+  endif
+  if page.handle contains 'policy' or page.handle contains 'shipping' or page.handle contains 'return' or page.handle contains 'refund'
+    assign is_policy_hub = true
+  endif
+
+  assign page_summary = section.settings.default_summary
+  if is_about
+    assign page_summary = 'Honest, wholesome pantry essentials prepared with care and packed for healthier everyday meals.'
+  elsif is_faq
+    assign page_summary = 'Helpful answers about Fresh O Mill products, orders, delivery, storage and customer support.'
+  elsif is_policy_hub
+    assign page_summary = 'Clear information to help you understand ordering, delivery, returns and your shopping experience.'
+  endif
+%}
+
+<section class="fom-content-page" aria-labelledby="fom-content-title-{{ section.id }}">
+  <div class="fom-content-page__hero">
+    <div class="fom-content-page__hero-inner">
+      <nav class="fom-content-page__breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span aria-hidden="true">›</span>
+        <span>{{ page.title }}</span>
+      </nav>
+      <p class="fom-content-page__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1 id="fom-content-title-{{ section.id }}">{{ page.title }}</h1>
+      <p class="fom-content-page__summary">{{ page_summary }}</p>
+    </div>
+  </div>
+
+  <div class="fom-content-page__body">
+    <aside class="fom-content-page__nav" aria-label="Helpful information">
+      <h2>Helpful information</h2>
+      <ul class="fom-content-page__nav-list">
+        <li><a href="/pages/about-us"{% if is_about %} aria-current="page"{% endif %}>Our story</a></li>
+        <li><a href="/pages/faqs"{% if is_faq %} aria-current="page"{% endif %}>FAQs</a></li>
+        <li><a href="/pages/shipping-policy"{% if page.handle contains 'shipping' %} aria-current="page"{% endif %}>Shipping</a></li>
+        <li><a href="/pages/returns-refunds"{% if page.handle contains 'return' or page.handle contains 'refund' %} aria-current="page"{% endif %}>Returns & refunds</a></li>
+        <li><a href="/pages/contact">Contact</a></li>
+      </ul>
+    </aside>
+
+    <div class="fom-content-page__main">
+      {% if is_about %}
+        <div class="fom-content-page__story">
+          <div class="fom-content-page__story-visual">
+            <div><span class="fom-content-page__story-mark" aria-hidden="true">❧</span><strong>Freshly prepared.<br>Packed for you.</strong></div>
+          </div>
+          <div class="fom-content-page__story-card">
+            <h2>Food prepared with purpose</h2>
+            {% if page.content != blank %}
+              <div class="rte">{{ page.content }}</div>
+            {% else %}
+              <p>Fresh O Mill brings thoughtfully selected pantry essentials closer to your kitchen. We focus on careful preparation, reliable quality and responsible packing so everyday meals begin with ingredients you can trust.</p>
+              <p>Our aim is simple: make wholesome staples convenient without losing the freshness and care that make them special.</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="fom-content-page__values">
+          <div class="fom-content-page__value"><span class="fom-content-page__value-icon" aria-hidden="true">❧</span><h3>Carefully sourced</h3><p>Ingredients selected with attention to quality, usefulness and everyday nutrition.</p></div>
+          <div class="fom-content-page__value"><span class="fom-content-page__value-icon" aria-hidden="true">◉</span><h3>Freshly prepared</h3><p>Products prepared and packed carefully to preserve their natural character.</p></div>
+          <div class="fom-content-page__value"><span class="fom-content-page__value-icon" aria-hidden="true">⌂</span><h3>Made for your kitchen</h3><p>Practical pantry essentials for wholesome meals and healthier homes.</p></div>
+        </div>
+      {% elsif is_faq %}
+        {% if page.content != blank %}<div class="fom-content-page__article rte" style="margin-bottom: 18px;">{{ page.content }}</div>{% endif %}
+        <div class="fom-content-page__faq-list">
+          <details class="fom-content-page__faq"><summary>When are products prepared and packed?</summary><div class="fom-content-page__faq-answer">Fresh O Mill prioritizes careful preparation and packing. Product-specific preparation and shelf-life information is shown on the product page and packaging.</div></details>
+          <details class="fom-content-page__faq"><summary>How can I check product availability?</summary><div class="fom-content-page__faq-answer">Availability is displayed on product cards and product pages. Inventory can change as orders are placed.</div></details>
+          <details class="fom-content-page__faq"><summary>How are delivery charges calculated?</summary><div class="fom-content-page__faq-answer">Any applicable delivery charge is shown during checkout based on your order and delivery location.</div></details>
+          <details class="fom-content-page__faq"><summary>How can I track an order?</summary><div class="fom-content-page__faq-answer">Use the order link in your confirmation message or sign in to your customer account to view available order updates.</div></details>
+          <details class="fom-content-page__faq"><summary>Can I change or cancel an order?</summary><div class="fom-content-page__faq-answer">Contact us as soon as possible with your order number. We will confirm what can be changed based on the order’s current status.</div></details>
+          <details class="fom-content-page__faq"><summary>How should products be stored?</summary><div class="fom-content-page__faq-answer">Follow the storage instructions printed on the product packaging. Most dry pantry products should be sealed and stored in a cool, dry place.</div></details>
+        </div>
+      {% else %}
+        <article class="fom-content-page__article rte">
+          {% if page.content != blank %}
+            {{ page.content }}
+          {% else %}
+            <h2>Information coming soon</h2>
+            <p>This page is ready for its final content. Please contact Fresh O Mill if you need assistance in the meantime.</p>
+          {% endif %}
+        </article>
+
+        {% if is_policy_hub %}
+          <div class="fom-content-page__policy-grid">
+            {% if shop.shipping_policy.url != blank %}<div class="fom-content-page__policy-card"><h3>Shipping policy</h3><p>Read information about order processing and delivery.</p><a href="{{ shop.shipping_policy.url }}">Read shipping policy →</a></div>{% endif %}
+            {% if shop.refund_policy.url != blank %}<div class="fom-content-page__policy-card"><h3>Refund policy</h3><p>Understand eligibility and the refund process.</p><a href="{{ shop.refund_policy.url }}">Read refund policy →</a></div>{% endif %}
+            {% if shop.privacy_policy.url != blank %}<div class="fom-content-page__policy-card"><h3>Privacy policy</h3><p>Learn how customer information is handled.</p><a href="{{ shop.privacy_policy.url }}">Read privacy policy →</a></div>{% endif %}
+            {% if shop.terms_of_service.url != blank %}<div class="fom-content-page__policy-card"><h3>Terms of service</h3><p>Review the terms governing use of the store.</p><a href="{{ shop.terms_of_service.url }}">Read terms →</a></div>{% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="fom-content-page__support">
+    <div class="fom-content-page__support-inner">
+      <div><h2>Still need help?</h2><p>Contact Fresh O Mill and share the details of your question or order.</p></div>
+      <a href="/pages/contact">Contact our team</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh O Mill content",
+  "settings": [
+    {"type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Fresh O Mill"},
+    {"type": "textarea", "id": "default_summary", "label": "Default summary", "default": "Helpful information from Fresh O Mill, presented clearly and designed for easy reading on every device."}
+  ],
+  "presets": [{"name": "Fresh O Mill content"}]
+}
+{% endschema %}
