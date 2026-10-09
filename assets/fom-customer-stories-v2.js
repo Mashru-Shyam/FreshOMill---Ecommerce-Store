@@ -3,6 +3,20 @@ class FomStories extends HTMLElement {
     this.track = this.querySelector('[data-story-track]');
     this.querySelector('[data-story-previous]')?.addEventListener('click', () => this.previous());
     this.querySelector('[data-story-next]')?.addEventListener('click', () => this.next());
+    this.startX = 0;
+    this.track?.addEventListener('pointerdown', (event) => {
+      this.startX = event.clientX;
+    });
+    this.track?.addEventListener('pointerup', (event) => {
+      const distance = event.clientX - this.startX;
+      if (Math.abs(distance) < 48) return;
+      if (distance < 0) this.next();
+      else this.previous();
+    });
+    this.track?.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') this.next();
+      if (event.key === 'ArrowLeft') this.previous();
+    });
   }
 
   next() {
