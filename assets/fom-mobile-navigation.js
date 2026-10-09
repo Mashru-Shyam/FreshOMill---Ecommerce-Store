@@ -235,7 +235,10 @@ class FomMobileNavigation extends HTMLElement {
       if (!response.ok) return;
       const cart = await response.json();
       if (!this.isConnected || request.signal.aborted) return;
-      this.querySelector('[data-fom-cart-count]').textContent = String(cart.item_count);
+      const badge = this.querySelector('[data-fom-cart-count]');
+      if (!badge) return;
+      badge.textContent = String(cart.item_count);
+      badge.toggleAttribute('data-empty', cart.item_count === 0);
     } catch {}
   }
 }

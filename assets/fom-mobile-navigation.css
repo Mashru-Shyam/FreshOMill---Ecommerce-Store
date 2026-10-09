@@ -135,6 +135,10 @@ fom-mobile-navigation,
     line-height: 1;
   }
 
+  .fom-bottom-nav__badge[data-empty] {
+    display: none;
+  }
+
   #cart-drawer > dialog,
   #search-modal > dialog {
     position: fixed !important;
@@ -316,6 +320,18 @@ fom-mobile-navigation,
         font-weight: 600;
         text-decoration: none;
         white-space: nowrap;
+    }
+
+    @media (max-width: 389px) {
+      #header-component .fom-header-store {
+        min-height: 40px;
+        padding-inline: 10px;
+        font-size: 11px;
+      }
+
+      #header-component .fom-header-store svg {
+        display: none;
+      }
     }
 
     #header-component .fom-header-store svg {

@@ -19,6 +19,7 @@
   },
 
     "fom_header": {
+    "announcements": "Store announcements",
     "search_placeholder": "Search products...",
     "search_button": "Search",
     "navigation": "Main navigation",

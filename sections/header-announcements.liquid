@@ -7,40 +7,9 @@
 <div
   class="fom-marquee"
   style="--fom-duration: {{ section.settings.duration }}s;"
+  role="region"
+  aria-label="{{ 'fom_header.announcements' | t }}"
 >
-  <input
-    class="fom-marquee__toggle"
-    type="checkbox"
-    id="fom-pause-{{ section.id }}"
-    aria-label="{{ section.settings.pause_label | escape }}"
-  >
-
-  <label
-    class="fom-marquee__control"
-    for="fom-pause-{{ section.id }}"
-  >
-    <svg
-      class="fom-marquee__pause"
-      viewBox="0 0 20 20"
-      aria-hidden="true"
-    >
-      <path
-        d="M6 4v12M14 4v12"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="3"
-      />
-    </svg>
-
-    <svg
-      class="fom-marquee__play"
-      viewBox="0 0 20 20"
-      aria-hidden="true"
-    >
-      <path d="M6 3l11 7-11 7z" fill="currentColor"/>
-    </svg>
-  </label>
-
   <div class="fom-marquee__viewport">
     <div class="fom-marquee__track">
       <div class="fom-marquee__group">
@@ -63,7 +32,7 @@
     position: relative;
     background: #18572e;
     color: #fff;
-    padding: 8px 40px 8px 0;
+    padding: 8px 0;
   }
 
   .fom-marquee__viewport {
@@ -82,9 +51,9 @@
     align-items: center;
     justify-content: space-around;
     flex-shrink: 0;
-    gap: 40px;
-    min-width: calc(100vw - 40px);
-    padding-inline: 20px;
+    gap: 0;
+    min-width: 100vw;
+    padding-inline: 0;
     box-sizing: border-box;
   }
 
@@ -103,6 +72,23 @@
     text-align: left;
   }
 
+  .fom-marquee__group > .announcement-bar__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+    padding-inline-start: 24px;
+  }
+
+  .fom-marquee__group > .announcement-bar__slide::after {
+    content: '•';
+    display: inline-block;
+    margin-inline-start: 24px;
+    color: #ee9d1c;
+    font-size: 10px;
+    line-height: 1;
+  }
+
   .fom-marquee .announcement-bar__text {
     margin: 0;
     color: #fff;
@@ -114,63 +100,8 @@
     inset: 0;
   }
 
-  .fom-marquee__toggle {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
-    margin: 0;
-    opacity: 0;
-    z-index: 2;
-    cursor: pointer;
-  }
-
-  .fom-marquee__control {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-  }
-
-  .fom-marquee__control svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .fom-marquee__play {
-    display: none;
-  }
-
-  .fom-marquee__toggle:checked
-    + .fom-marquee__control
-    .fom-marquee__pause {
-    display: none;
-  }
-
-  .fom-marquee__toggle:checked
-    + .fom-marquee__control
-    .fom-marquee__play {
-    display: block;
-  }
-
-  .fom-marquee__toggle:focus-visible
-    + .fom-marquee__control {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-  }
-
   .fom-marquee:hover .fom-marquee__track,
-  .fom-marquee:focus-within .fom-marquee__track,
-  .fom-marquee__toggle:checked
-    ~ .fom-marquee__viewport
-    .fom-marquee__track {
+  .fom-marquee:focus-within .fom-marquee__track {
     animation-play-state: paused;
   }
 
@@ -188,8 +119,6 @@
       padding: 8px 16px;
     }
 
-    .fom-marquee__toggle,
-    .fom-marquee__control,
     .fom-marquee__copy {
       display: none;
     }
@@ -211,29 +140,6 @@
       white-space: normal;
     }
   }
-    .fom-marquee {
-    padding: 8px 0;
-  }
-
-  .fom-marquee__toggle,
-  .fom-marquee__control {
-    display: none;
-  }
-
-  .fom-marquee__group {
-    gap: 0;
-    padding-inline: 0;
-    min-width: 100vw;
-  }
-
-  .fom-marquee__group > .announcement-bar__slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1 0 auto;
-    padding-inline: 24px;
-  }
-
   .fom-marquee .announcement-bar__slide,
   .fom-marquee .announcement-bar__text {
     font-size: 11px !important;
@@ -241,7 +147,11 @@
 
   @media (max-width: 749px) {
     .fom-marquee__group > .announcement-bar__slide {
-      padding-inline: 18px;
+      padding-inline-start: 18px;
+    }
+
+    .fom-marquee__group > .announcement-bar__slide::after {
+      margin-inline-start: 18px;
     }
   }
 
@@ -274,12 +184,6 @@
       "step": 1,
       "unit": "sec",
       "default": 30
-    },
-    {
-      "type": "text",
-      "id": "pause_label",
-      "label": "t:settings.text",
-      "default": "Pause announcements"
     }
   ],
   "presets": [
